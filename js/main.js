@@ -3,6 +3,8 @@
 (function () {
   "use strict";
 
+  document.documentElement.classList.add("js");
+
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var pad = function (n) { return String(n).padStart(2, "0"); };
 
@@ -404,6 +406,23 @@
 
     /* o grade escolhido sobrevive à sessão, como um projeto salvo */
     try { applyLut(localStorage.getItem("rr_lut") || "", false); } catch (e) { /* sem storage */ }
+  }
+
+  /* ---------- cena pós-créditos: revelação do negativo ---------- */
+
+  var filme = document.getElementById("filme");
+  if (filme && "IntersectionObserver" in window) {
+    var filmeObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          filme.classList.add("revelado");
+          filmeObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.45 });
+    filmeObserver.observe(filme);
+  } else if (filme) {
+    filme.classList.add("revelado");
   }
 
   /* ---------- bin de mídia: catálogo do Medium ---------- */

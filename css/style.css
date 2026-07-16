@@ -1677,6 +1677,103 @@ body[data-lut="vhs"] .vhs-osd { display: flex; }
   .knob-label { display: none; }
 }
 
+/* ---------- cena pós-créditos: negativo que se revela ---------- */
+
+.poscreditos {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line);
+  padding-block: clamp(3.5rem, 8vw, 6rem) clamp(4rem, 9vw, 7rem);
+  text-align: center;
+}
+
+.pos-eyebrow {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 1rem;
+}
+
+.pos-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 7vw, 4.2rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.filme {
+  max-width: 400px;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  background: #0a0a0c;
+  border-radius: 6px;
+  padding: 0 14px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .55);
+  transform: rotate(-1.8deg);
+  transition: transform .45s ease;
+}
+
+.filme:hover { transform: rotate(0deg) scale(1.01); }
+
+.filme-furos {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  background-image: repeating-linear-gradient(90deg, rgba(242, 240, 235, .85) 0 15px, transparent 15px 36px);
+  background-size: 36px 11px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+.filme-furos span {
+  position: relative;
+  z-index: 1;
+  background: #0a0a0c;
+  padding-inline: 8px;
+  font-family: var(--font-mono);
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  color: rgba(255, 180, 84, .85);
+}
+
+.filme img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+/* o negativo: só entra com JS ativo, e revela quando a cena aparece */
+html.js .filme:not(.revelado) img {
+  filter: invert(1) hue-rotate(180deg) contrast(.92) sepia(.2);
+}
+
+html.js .filme img { transition: filter 2.6s ease .35s; }
+
+.filme-legenda {
+  padding: 1rem 4px 1.2rem;
+  text-align: left;
+  font-size: .85rem;
+  color: var(--body);
+  line-height: 1.6;
+}
+
+.filme-legenda .mono {
+  display: block;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .5rem;
+}
+
 /* ---------- lab NLP ---------- */
 
 .lab { padding-bottom: clamp(3rem, 7vw, 5rem); }
@@ -1930,6 +2027,8 @@ body[data-lut="vhs"] .vhs-osd { display: flex; }
   body[data-lut="vhs"] .lut-layer::before { animation: none; }
   body[data-lut="vhs"] .lut-layer::after { animation: none; opacity: 0; }
   .osd-play { animation: none; }
+  html.js .filme img { transition: none; }
+  .filme { transition: none; }
   .progress i { box-shadow: none; }
   .cards .card { transition: none; }
   .clip { transition: none; }
