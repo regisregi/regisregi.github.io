@@ -330,11 +330,81 @@
     if (key === "l") { engageShuttle(1); }
     else if (key === "j") { engageShuttle(-1); }
     else if (key === "k") { stopShuttle(); }
+    else if (key === "g") { cycleLut(); }
   });
 
   /* o usuário assume o controle: roda do mouse/toque interrompe o shuttle */
   window.addEventListener("wheel", function () { stopShuttle(true); }, { passive: true });
   window.addEventListener("touchstart", function () { stopShuttle(true); }, { passive: true });
+
+  /* ---------- ilha de cor: o visitante é o colorista ---------- */
+
+  var LUTS = ["", "blockbuster", "noir", "tarde", "giallo", "vhs"];
+  var LUT_NAMES = {
+    "": "REC 709",
+    "blockbuster": "BLOCKBUSTER",
+    "noir": "NOIR",
+    "tarde": "SESSÃO DA TARDE",
+    "giallo": "GIALLO",
+    "vhs": "VHS 1987"
+  };
+
+  var colorKnob = document.getElementById("color-knob");
+  var colorPanel = document.getElementById("color-panel");
+  var lutChips = document.querySelectorAll(".lut-chip");
+
+  function applyLut(lut, announce) {
+    if (LUTS.indexOf(lut) === -1) { lut = ""; }
+    if (lut) {
+      document.body.setAttribute("data-lut", lut);
+    } else {
+      document.body.removeAttribute("data-lut");
+    }
+    lutChips.forEach(function (chip) {
+      var active = (chip.dataset.lut || "") === lut;
+      chip.classList.toggle("is-active", active);
+      chip.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+    try { localStorage.setItem("rr_lut", lut); } catch (e) { /* navegação privada */ }
+    if (announce) { showHud("LUT: " + LUT_NAMES[lut], false); }
+  }
+
+  function cycleLut() {
+    var current = document.body.getAttribute("data-lut") || "";
+    var next = LUTS[(LUTS.indexOf(current) + 1) % LUTS.length];
+    applyLut(next, true);
+  }
+
+  if (colorKnob && colorPanel) {
+    colorKnob.addEventListener("click", function () {
+      var open = colorPanel.hidden;
+      colorPanel.hidden = !open;
+      colorKnob.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    lutChips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        applyLut(chip.dataset.lut || "", true);
+      });
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!colorPanel.hidden && !e.target.closest("#color-suite")) {
+        colorPanel.hidden = true;
+        colorKnob.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !colorPanel.hidden) {
+        colorPanel.hidden = true;
+        colorKnob.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    /* o grade escolhido sobrevive à sessão, como um projeto salvo */
+    try { applyLut(localStorage.getItem("rr_lut") || "", false); } catch (e) { /* sem storage */ }
+  }
 
   /* ---------- bin de mídia: catálogo do Medium ---------- */
 

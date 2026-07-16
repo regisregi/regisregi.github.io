@@ -532,13 +532,36 @@
         </div>
         <div class="footer-bottom">
           <span>© 2026 Régis Regi · Rio de Janeiro</span>
-          <span class="mono footer-hint" title="Como numa ilha de edição: J volta, K pausa, L avança">J · K · L — shuttle de navegação</span>
+          <span class="mono footer-hint" title="Como numa ilha de edição: J volta, K pausa, L avança · G troca o grade de cor">J · K · L — shuttle · G — troca o LUT</span>
           <span class="mono">PICTURE LOCK · 00:08:00:00 · FIM</span>
         </div>
       </div>
     </footer>
 
   </main>
+
+  <!-- ===================== ILHA DE COR ===================== -->
+  <div class="lut-layer" aria-hidden="true"></div>
+  <div class="vhs-osd" aria-hidden="true"><span class="osd-play">▶ PLAY</span><span class="osd-mode">SP 0:00:00</span></div>
+
+  <div class="color-suite" id="color-suite">
+    <div class="color-panel" id="color-panel" hidden aria-label="Ilha de cor: escolha o grade do site">
+      <p class="color-title">Ilha de cor</p>
+      <p class="color-sub">Sente na cadeira do colorista e re-grade este portfólio. Tecla G troca o LUT.</p>
+      <div class="lut-chips">
+        <button class="lut-chip is-active" type="button" data-lut="" aria-pressed="true"><span class="lut-swatch sw-rec709" aria-hidden="true"></span>REC 709 <em>como veio do set</em></button>
+        <button class="lut-chip" type="button" data-lut="blockbuster" aria-pressed="false"><span class="lut-swatch sw-blockbuster" aria-hidden="true"></span>Blockbuster <em>verão explosivo</em></button>
+        <button class="lut-chip" type="button" data-lut="noir" aria-pressed="false"><span class="lut-swatch sw-noir" aria-hidden="true"></span>Noir <em>cinema de bairro</em></button>
+        <button class="lut-chip" type="button" data-lut="tarde" aria-pressed="false"><span class="lut-swatch sw-tarde" aria-hidden="true"></span>Sessão da Tarde <em>35mm quente</em></button>
+        <button class="lut-chip" type="button" data-lut="giallo" aria-pressed="false"><span class="lut-swatch sw-giallo" aria-hidden="true"></span>Giallo <em>terror italiano</em></button>
+        <button class="lut-chip" type="button" data-lut="vhs" aria-pressed="false"><span class="lut-swatch sw-vhs" aria-hidden="true"></span>VHS 1987 <em>fita alugada</em></button>
+      </div>
+    </div>
+    <button class="color-knob" id="color-knob" type="button" aria-expanded="false" aria-controls="color-panel" title="Ilha de cor (G)">
+      <span class="knob-wheels" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="knob-label">Grade</span>
+    </button>
+  </div>
 
   <script src="js/main.js"></script>
 </body>

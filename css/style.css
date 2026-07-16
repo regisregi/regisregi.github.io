@@ -1455,6 +1455,228 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
   .bin-num { display: none; }
 }
 
+/* ---------- ilha de cor: o visitante é o colorista ---------- */
+
+.lut-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1850;
+  pointer-events: none;
+}
+
+/* o grade é aplicado ao conteúdo (main + topbar); overlays fixos ficam intactos */
+main, .topbar { transition: filter .5s ease; }
+
+body[data-lut="blockbuster"] main, body[data-lut="blockbuster"] .topbar { filter: contrast(1.12) saturate(1.5); }
+body[data-lut="noir"]        main, body[data-lut="noir"]        .topbar { filter: grayscale(1) contrast(1.3) brightness(.95); }
+body[data-lut="tarde"]       main, body[data-lut="tarde"]       .topbar { filter: sepia(.42) saturate(1.3) hue-rotate(-8deg) brightness(1.05); }
+body[data-lut="giallo"]      main, body[data-lut="giallo"]      .topbar { filter: saturate(1.6) hue-rotate(-22deg) contrast(1.18); }
+body[data-lut="vhs"]         main, body[data-lut="vhs"]         .topbar { filter: saturate(1.75) contrast(.9) brightness(1.04) blur(.4px); }
+
+/* noir pede grão de película */
+body[data-lut="noir"] .grain { opacity: .12; }
+
+/* VHS: scanlines + flicker */
+body[data-lut="vhs"] .lut-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, .16) 0px,
+    rgba(0, 0, 0, .16) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: vhs-flicker .12s steps(2) infinite;
+}
+
+@keyframes vhs-flicker { 50% { opacity: .82; } }
+
+/* VHS: barra de tracking desajustado que desce de tempos em tempos */
+body[data-lut="vhs"] .lut-layer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -12%;
+  height: 42px;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, .16) 40%,
+    rgba(160, 240, 255, .12) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  filter: blur(1px);
+  animation: vhs-tracking 9s linear infinite;
+}
+
+@keyframes vhs-tracking {
+  0%   { top: -12%; opacity: 0; }
+  4%   { opacity: 1; }
+  26%  { top: 112%; opacity: 1; }
+  27%  { opacity: 0; }
+  100% { top: 112%; opacity: 0; }
+}
+
+.vhs-osd {
+  position: fixed;
+  top: calc(var(--topbar-h) + 18px);
+  left: 18px;
+  z-index: 1860;
+  display: none;
+  flex-direction: column;
+  gap: .2rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: #eef3ff;
+  text-shadow: 0 0 8px rgba(160, 240, 255, .8), 2px 0 0 rgba(255, 60, 60, .5), -2px 0 0 rgba(80, 200, 255, .5);
+  pointer-events: none;
+}
+
+body[data-lut="vhs"] .vhs-osd { display: flex; }
+
+.osd-play { animation: blink 1.2s steps(1) infinite; }
+.osd-mode { font-size: .7rem; }
+
+/* controles do colorista */
+
+.color-suite {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 2250;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .7rem;
+}
+
+.color-knob {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .55rem .95rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  transition: border-color .2s ease, transform .15s ease;
+}
+
+.color-knob:hover { border-color: var(--muted); transform: translateY(-2px); }
+
+.knob-wheels { display: inline-flex; }
+
+.knob-wheels i {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: conic-gradient(#ff4438, #ffb454, #46c8b2, #a48bff, #ff4438);
+}
+.knob-wheels i + i { margin-left: -5px; }
+.knob-wheels i:nth-child(2) { filter: brightness(.75); }
+.knob-wheels i:nth-child(3) { filter: brightness(.5); }
+
+.knob-label {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.color-panel {
+  width: min(320px, calc(100vw - 2.4rem));
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.1rem 1.15rem 1rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .55);
+}
+
+.color-title {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 0 0 .3rem;
+}
+
+.color-sub {
+  font-size: .8rem;
+  color: var(--muted);
+  margin: 0 0 .9rem;
+  line-height: 1.5;
+}
+
+.lut-chips { display: flex; flex-direction: column; gap: .4rem; }
+
+.lut-chip {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: .5rem .7rem;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--body);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+
+.lut-chip em {
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: .02em;
+  color: var(--muted);
+  margin-left: auto;
+  font-size: .66rem;
+}
+
+.lut-chip:hover { border-color: var(--muted); color: var(--text); }
+
+.lut-chip.is-active {
+  border-color: var(--amber);
+  background: rgba(255, 180, 84, .08);
+  color: var(--text);
+}
+
+.lut-swatch {
+  flex: none;
+  width: 22px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, .18);
+}
+
+.sw-rec709      { background: linear-gradient(105deg, #8f9aa8 45%, #5d6570 55%); }
+.sw-blockbuster { background: linear-gradient(105deg, #ff8a3d 45%, #0e6d7e 55%); }
+.sw-noir        { background: linear-gradient(105deg, #f4f4f4 45%, #1a1a1a 55%); }
+.sw-tarde       { background: linear-gradient(105deg, #ffd9a0 45%, #c97b3d 55%); }
+.sw-giallo      { background: linear-gradient(105deg, #ff3b30 45%, #6a0d0d 55%); }
+.sw-vhs         { background: linear-gradient(105deg, #ff5ad1 30%, #29e0e8 70%); }
+
+@media (max-width: 600px) {
+  .color-suite { right: .9rem; bottom: .9rem; }
+  .knob-label { display: none; }
+}
+
 /* ---------- HUD do shuttle J·K·L ---------- */
 
 .shuttle-hud {
@@ -1491,6 +1713,9 @@ button.track-head:hover .solo-badge { border-color: var(--muted); }
   .bin-item > a { animation: none; }
   .monitor-scan { animation: none; opacity: 0; }
   .monitor-frame img { filter: none; transition: none; }
+  body[data-lut="vhs"] .lut-layer::before { animation: none; }
+  body[data-lut="vhs"] .lut-layer::after { animation: none; opacity: 0; }
+  .osd-play { animation: none; }
   .progress i { box-shadow: none; }
   .cards .card { transition: none; }
   .clip { transition: none; }
