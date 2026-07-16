@@ -18,6 +18,7 @@
 <body>
   <a class="skip-link" href="#sobre">Pular para o conteúdo</a>
   <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
 
   <!-- ===================== TOPO ===================== -->
   <header class="topbar">
@@ -34,10 +35,11 @@
       <a href="#contato">Contato</a>
     </nav>
     <div class="topbar-right">
-      <span class="rec" aria-hidden="true"><span class="rec-dot"></span>REC</span>
-      <span class="timecode" id="timecode" aria-hidden="true">00:00:00:00</span>
+      <button class="rec" id="rec-toggle" type="button" aria-pressed="false" title="Alternar modo REC"><span class="rec-dot"></span>REC</button>
+      <span class="timecode" id="timecode" title="Posição do corte" aria-hidden="true">00:00:00:00</span>
       <a class="btn btn-primary btn-small" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV</a>
     </div>
+    <div class="progress" aria-hidden="true"><i id="progressbar"></i></div>
   </header>
 
   <main id="top">
@@ -139,7 +141,7 @@
           <h2>Linha do tempo</h2>
           <span class="section-rule" aria-hidden="true"></span>
         </header>
-        <p class="section-sub reveal">2018 → hoje, montada como uma timeline de edição. Clique em um clipe para abrir a sequência correspondente.</p>
+        <p class="section-sub reveal">2018 → hoje, montada como uma timeline de edição. Passe o mouse para fazer scrubbing, clique num clipe para abrir a sequência — e clique no cabeçalho de uma trilha para dar solo nela.</p>
 
         <div class="nle reveal" id="nle">
           <div class="nle-bar">
@@ -152,10 +154,10 @@
             <div class="nle-inner">
               <div class="heads">
                 <div class="head-spacer" aria-hidden="true"></div>
-                <div class="track-head"><b class="chip chip-coord" aria-hidden="true"></b>V1 · Coordenação &amp; Pós</div>
-                <div class="track-head"><b class="chip chip-roteiro" aria-hidden="true"></b>V2 · Roteiro &amp; Formatos</div>
-                <div class="track-head"><b class="chip chip-edicao" aria-hidden="true"></b>V3 · Edição &amp; Finalização</div>
-                <div class="track-head"><b class="chip chip-curadoria" aria-hidden="true"></b>A1 · Curadoria &amp; Áudio</div>
+                <button class="track-head" type="button" data-lane="0" aria-pressed="false" title="Solo na trilha V1"><b class="chip chip-coord" aria-hidden="true"></b>V1 · Coordenação &amp; Pós<span class="solo-badge" aria-hidden="true">S</span></button>
+                <button class="track-head" type="button" data-lane="1" aria-pressed="false" title="Solo na trilha V2"><b class="chip chip-roteiro" aria-hidden="true"></b>V2 · Roteiro &amp; Formatos<span class="solo-badge" aria-hidden="true">S</span></button>
+                <button class="track-head" type="button" data-lane="2" aria-pressed="false" title="Solo na trilha V3"><b class="chip chip-edicao" aria-hidden="true"></b>V3 · Edição &amp; Finalização<span class="solo-badge" aria-hidden="true">S</span></button>
+                <button class="track-head" type="button" data-lane="3" aria-pressed="false" title="Solo na trilha A1"><b class="chip chip-curadoria" aria-hidden="true"></b>A1 · Curadoria &amp; Áudio<span class="solo-badge" aria-hidden="true">S</span></button>
               </div>
 
               <div class="lanes">
@@ -210,6 +212,14 @@
           <h2>Experiência</h2>
           <span class="section-rule" aria-hidden="true"></span>
         </header>
+
+        <div class="filters reveal" role="group" aria-label="Filtrar experiências por frente de atuação">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">Master</button>
+          <button class="filter" type="button" data-filter="coord" aria-pressed="false"><b class="chip chip-coord" aria-hidden="true"></b>Coordenação &amp; Pós</button>
+          <button class="filter" type="button" data-filter="roteiro" aria-pressed="false"><b class="chip chip-roteiro" aria-hidden="true"></b>Roteiro</button>
+          <button class="filter" type="button" data-filter="edicao" aria-pressed="false"><b class="chip chip-edicao" aria-hidden="true"></b>Edição</button>
+          <button class="filter" type="button" data-filter="curadoria" aria-pressed="false"><b class="chip chip-curadoria" aria-hidden="true"></b>Curadoria</button>
+        </div>
 
         <div class="cards">
 
@@ -480,6 +490,7 @@
         </div>
         <div class="footer-bottom">
           <span>© 2026 Régis Regi · Rio de Janeiro</span>
+          <span class="mono footer-hint" title="Como numa ilha de edição: J volta, K pausa, L avança">J · K · L — shuttle de navegação</span>
           <span class="mono">PICTURE LOCK · 00:08:00:00 · FIM</span>
         </div>
       </div>

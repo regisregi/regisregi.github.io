@@ -969,6 +969,277 @@ dl, dt, dd { margin: 0; }
   .timecode { display: none; }
 }
 
+/* ============================================================
+   INTERATIVIDADE · a página como uma sessão de edição
+   ============================================================ */
+
+/* ---------- scrubber de progresso no topo ---------- */
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: transparent;
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--rec), var(--amber));
+  box-shadow: 0 0 8px rgba(255, 68, 56, .5);
+}
+
+/* ---------- navegação: seção ativa ---------- */
+
+.topnav a.active {
+  color: var(--text);
+  text-shadow: 0 0 18px rgba(255, 68, 56, .35);
+}
+
+.topnav a {
+  position: relative;
+  padding-bottom: 3px;
+}
+
+.topnav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 1px;
+  background: var(--rec);
+  transition: right .25s ease;
+}
+
+.topnav a.active::after,
+.topnav a:hover::after { right: 0; }
+
+/* ---------- botão REC + modo gravação ---------- */
+
+button.rec {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s ease;
+  background:
+    radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, .6) 100%);
+}
+
+body.recording .vignette { opacity: 1; }
+body.recording .grain { opacity: .09; }
+body.recording .timecode { color: var(--rec); }
+
+/* ---------- nome em RGB split no hover ---------- */
+
+@keyframes rgb-split {
+  0%, 100% { text-shadow: -5px 0 rgba(255, 68, 56, .5), 5px 0 rgba(70, 200, 178, .45); }
+  50%      { text-shadow: -2px 0 rgba(255, 68, 56, .5), 2px 0 rgba(70, 200, 178, .45); }
+}
+
+.hero-name:hover { animation: rgb-split .55s steps(2) infinite; }
+
+/* ---------- letreiro: pausa para leitura ---------- */
+
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* ---------- timeline: scrubbing + solo ---------- */
+
+.lanes { cursor: crosshair; }
+
+.scrub-tip {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 7;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: .28rem .55rem;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+
+.scrub-tip.show { opacity: 1; }
+
+.nle.scrubbed .playhead { animation: none; opacity: 1; }
+
+button.track-head {
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 0 0 0 .3rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+
+button.track-head:hover { color: var(--text); }
+
+.solo-badge {
+  flex: none;
+  margin-left: auto;
+  margin-right: .55rem;
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: .55rem;
+  color: var(--muted);
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+button.track-head:hover .solo-badge { border-color: var(--muted); }
+
+.track-head.solo { color: var(--text); }
+
+.track-head.solo .solo-badge {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--bg);
+}
+
+.clip { transition: filter .15s ease, opacity .3s ease; }
+
+.lane.muted .clip {
+  opacity: .12;
+  filter: saturate(0);
+  pointer-events: none;
+}
+
+/* ---------- filtros de experiência ---------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  margin-bottom: 1.6rem;
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .45rem 1rem;
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, transform .15s ease;
+}
+
+.filter:hover {
+  color: var(--text);
+  border-color: var(--muted);
+  transform: translateY(-1px);
+}
+
+.filter.is-active {
+  color: var(--text);
+  background: var(--panel-2);
+  border-color: var(--muted);
+}
+
+.cards .card {
+  transition: opacity .22s ease, transform .22s ease, border-color .2s ease;
+}
+
+.card.hide {
+  opacity: 0 !important;
+  transform: translateY(10px) scale(.985) !important;
+}
+
+/* ---------- spotlight seguindo o mouse ---------- */
+
+.card, .skill-panel, .ficha {
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after, .skill-panel::after, .ficha::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--tc, var(--rec)) 9%, transparent),
+    transparent 68%
+  );
+}
+
+.card:hover::after, .skill-panel:hover::after, .ficha:hover::after { opacity: 1; }
+
+/* ---------- HUD do shuttle J·K·L ---------- */
+
+.shuttle-hud {
+  position: fixed;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 2100;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .5rem .85rem;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+
+.shuttle-hud.show {
+  opacity: 1;
+  transform: none;
+}
+
+.footer-hint { color: var(--muted); cursor: help; }
+
+/* ---------- movimento reduzido (interatividade) ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-name:hover { animation: none; }
+  .progress i { box-shadow: none; }
+  .cards .card { transition: none; }
+  .clip { transition: none; }
+  .scrub-tip { transition: none; }
+  .card::after, .skill-panel::after, .ficha::after { transition: none; }
+}
+
 /* ---------- movimento reduzido ---------- */
 
 @media (prefers-reduced-motion: reduce) {
