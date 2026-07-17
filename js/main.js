@@ -461,23 +461,6 @@
     });
   }
 
-  /* ---------- cena pós-créditos: revelação do negativo ---------- */
-
-  var filme = document.getElementById("filme");
-  if (filme && "IntersectionObserver" in window) {
-    var filmeObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          filme.classList.add("revelado");
-          filmeObserver.disconnect();
-        }
-      });
-    }, { threshold: 0.45 });
-    filmeObserver.observe(filme);
-  } else if (filme) {
-    filme.classList.add("revelado");
-  }
-
   /* ---------- bin de mídia: catálogo do Medium ---------- */
 
   var binList = document.getElementById("bin-list");
