@@ -1969,6 +1969,14 @@ body.projetando { overflow: hidden; }
   max-width: 72ch;
 }
 
+.lab-contato {
+  margin-top: 1.6rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--line);
+  font-size: .95rem;
+  color: var(--body);
+}
+
 .lab-tip {
   position: fixed;
   z-index: 3000;

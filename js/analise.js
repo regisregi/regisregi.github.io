@@ -390,7 +390,7 @@
       var nota = document.getElementById("nota-rastreio");
       if (termoAtivo) {
         var n = barrasTamanho.filter(function (b) { return b.artigo.freq[termoAtivo]; }).length;
-        nota.textContent = "Rastreando “" + termoAtivo + "” — aparece em " + n + " de " + artigos.length + " textos. Clique de novo para soltar.";
+        nota.textContent = "Rastreando “" + termoAtivo + "”: aparece em " + n + " de " + artigos.length + " textos. Clique de novo para soltar.";
         nota.hidden = false;
       } else {
         nota.hidden = true;
