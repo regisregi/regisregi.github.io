@@ -3,6 +3,8 @@
 (function () {
   "use strict";
 
+  document.documentElement.classList.add("js");
+
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var pad = function (n) { return String(n).padStart(2, "0"); };
 
@@ -404,6 +406,59 @@
 
     /* o grade escolhido sobrevive à sessão, como um projeto salvo */
     try { applyLut(localStorage.getItem("rr_lut") || "", false); } catch (e) { /* sem storage */ }
+  }
+
+  /* ---------- sala de projeção: player dos materiais ---------- */
+
+  var projecao = document.getElementById("projecao");
+  var projecaoTela = document.getElementById("projecao-tela");
+  var projecaoTitulo = document.getElementById("projecao-titulo");
+  var projecaoFocoAnterior = null;
+
+  function abrirProjecao(btn) {
+    if (!projecao) { return; }
+    var src;
+    if (btn.dataset.yt) {
+      src = "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?autoplay=1&rel=0";
+    } else if (btn.dataset.list) {
+      src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + btn.dataset.list + "&autoplay=1&rel=0";
+    } else { return; }
+
+    var iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.title = "Player: " + (btn.textContent || "material");
+
+    projecaoTela.textContent = "";
+    projecaoTela.appendChild(iframe);
+    projecaoTitulo.textContent = "PROJECAO_" + (btn.dataset.title || "MATERIAL") + ".mov";
+    projecao.hidden = false;
+    document.body.classList.add("projetando");
+    projecaoFocoAnterior = btn;
+    var fechar = projecao.querySelector(".projecao-fechar");
+    if (fechar) { fechar.focus(); }
+  }
+
+  function fecharProjecao() {
+    if (!projecao || projecao.hidden) { return; }
+    projecao.hidden = true;
+    projecaoTela.textContent = ""; /* remove o iframe e interrompe o áudio */
+    document.body.classList.remove("projetando");
+    if (projecaoFocoAnterior) { projecaoFocoAnterior.focus(); projecaoFocoAnterior = null; }
+  }
+
+  document.querySelectorAll(".tag-play").forEach(function (btn) {
+    btn.addEventListener("click", function () { abrirProjecao(btn); });
+  });
+
+  if (projecao) {
+    projecao.querySelectorAll("[data-close]").forEach(function (el) {
+      el.addEventListener("click", fecharProjecao);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { fecharProjecao(); }
+    });
   }
 
   /* ---------- bin de mídia: catálogo do Medium ---------- */

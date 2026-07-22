@@ -1677,6 +1677,127 @@ body[data-lut="vhs"] .vhs-osd { display: flex; }
   .knob-label { display: none; }
 }
 
+/* ---------- sala de projeção: materiais das produções ---------- */
+
+.tags li.tag-media { padding: 0; border: none; }
+
+.tag-play, .tag-ext {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  letter-spacing: .05em;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .28rem .75rem;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+
+.tag-play::before {
+  content: "▸";
+  color: var(--tc, var(--rec));
+  font-size: .8rem;
+  line-height: 1;
+}
+
+.tag-ext::after {
+  content: "↗";
+  color: var(--muted);
+  font-size: .7rem;
+  transition: color .2s ease;
+}
+
+.tag-play:hover, .tag-play:focus-visible,
+.tag-ext:hover, .tag-ext:focus-visible {
+  border-color: var(--tc, var(--rec));
+  background: color-mix(in srgb, var(--tc, var(--rec)) 8%, transparent);
+}
+
+.tag-ext:hover::after { color: var(--text); }
+
+.projecao {
+  position: fixed;
+  inset: 0;
+  z-index: 2600;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+}
+
+.projecao[hidden] { display: none; }
+
+.projecao-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 12, .82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.projecao-panel {
+  position: relative;
+  width: min(960px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, .6);
+  animation: projecao-in .28s ease both;
+}
+
+@keyframes projecao-in {
+  from { opacity: 0; transform: translateY(14px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+.projecao-fechar {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: .8rem;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.projecao-fechar:hover { color: var(--text); border-color: var(--muted); }
+
+.projecao-tela {
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.projecao-tela iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.projecao-legenda {
+  margin: 0;
+  padding: .7rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+body.projetando { overflow: hidden; }
+
 /* ---------- lab NLP ---------- */
 
 .lab { padding-bottom: clamp(3rem, 7vw, 5rem); }
@@ -1930,6 +2051,7 @@ body[data-lut="vhs"] .vhs-osd { display: flex; }
   body[data-lut="vhs"] .lut-layer::before { animation: none; }
   body[data-lut="vhs"] .lut-layer::after { animation: none; opacity: 0; }
   .osd-play { animation: none; }
+  .projecao-panel { animation: none; }
   .progress i { box-shadow: none; }
   .cards .card { transition: none; }
   .clip { transition: none; }
