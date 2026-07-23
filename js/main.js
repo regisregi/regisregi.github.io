@@ -418,10 +418,11 @@
   function abrirProjecao(btn) {
     if (!projecao) { return; }
     var src;
+    /* cc_load_policy liga as legendas por padrão quando o vídeo as tem */
     if (btn.dataset.yt) {
-      src = "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?autoplay=1&rel=0";
+      src = "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?autoplay=1&rel=0&cc_load_policy=1&cc_lang_pref=pt&hl=pt";
     } else if (btn.dataset.list) {
-      src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + btn.dataset.list + "&autoplay=1&rel=0";
+      src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + btn.dataset.list + "&autoplay=1&rel=0&cc_load_policy=1&cc_lang_pref=pt&hl=pt";
     } else { return; }
 
     var iframe = document.createElement("iframe");
@@ -465,7 +466,6 @@
 
   var binList = document.getElementById("bin-list");
   var binCount = document.getElementById("bin-count");
-  var binSearch = document.getElementById("bin-search");
 
   if (binList) {
     var MEDIUM_USER = "extvnerd";
@@ -600,19 +600,6 @@
 
         renderBin(posts);
         updateCount(posts.length, posts.length);
-
-        if (binSearch) {
-          binSearch.addEventListener("input", function () {
-            var q = binSearch.value.trim().toLowerCase();
-            var visible = 0;
-            binList.querySelectorAll(".bin-item").forEach(function (li) {
-              var hit = !q || li.textContent.toLowerCase().indexOf(q) !== -1;
-              li.classList.toggle("off", !hit);
-              if (hit) { visible += 1; }
-            });
-            updateCount(visible, posts.length);
-          });
-        }
       })
       .catch(binFail);
   }

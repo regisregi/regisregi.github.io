@@ -6,19 +6,19 @@
   var FEED_API = "https://api.rss2json.com/v1/api.json?rss_url=" +
     encodeURIComponent("https://medium.com/feed/@extvnerd");
 
-  /* paleta de dados validada para o dark (validate_palette.js, superfície #1b1b21):
+  /* paleta de dados validada para o dark (validate_palette.js, superfície escura):
      #c07f24 âmbar · #2a9a85 teal · #f0392c vermelho · #8474e8 violeta */
   var C = {
     amber: "#c07f24",
     teal: "#2a9a85",
     rec: "#f0392c",
     violet: "#8474e8",
-    ink: "#f2f0eb",
-    ink2: "#c9c8cf",
-    muted: "#9c9ca6",
-    grid: "#2c2c35",
-    surface: "#1b1b21",
-    dim: "#4a4a55"
+    ink: "#f2f0f7",
+    ink2: "#c9c5d6",
+    muted: "#9d94ab",
+    grid: "#2b2438",
+    surface: "#16121f",
+    dim: "#4a4457"
   };
 
   var STOP = ("a o e é de do da dos das em no na nos nas um uma uns umas por para com sem sob sobre entre até após " +
@@ -443,7 +443,7 @@
       /* reserva 52px por braço para o valor não colidir com os rótulos */
       var escala = ((PLOT_W - padL - padR) / 2 - 52) / maxAbs;
 
-      svgEl("line", { x1: cx, y1: padT, x2: cx, y2: h - 20, stroke: "#3a3a44", "stroke-width": 1 }, svg);
+      svgEl("line", { x1: cx, y1: padT, x2: cx, y2: h - 20, stroke: "#372f4a", "stroke-width": 1 }, svg);
       textoSvg(svg, cx, h - 8, "neutro", { anchor: "middle", size: 10 });
 
       dados.forEach(function (a, i) {
