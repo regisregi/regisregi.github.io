@@ -1,0 +1,32 @@
+/* ============================================================
+   RÉGIS REGI · portfólio — design tokens
+   Preto absoluto, tipografia como imagem, um único acento.
+   ============================================================ */
+
+:root {
+  /* superfícies e texto */
+  --bg: #000000;      /* preto absoluto — a página é a sala escura */
+  --ink: #f4f2f8;     /* texto principal */
+  --dim: #7d7688;     /* texto de apoio, metadados */
+  --line: #1c1826;    /* fios e divisores */
+
+  /* acento — violeta, ÚNICA cor de interface.
+     Usar apenas em: foco, hover, estado ativo, número de seção, e-mail. */
+  --accent: #a48bff;
+
+  /* cores de frente de atuação — IDENTIDADE (trilhas de NLE),
+     usadas SOMENTE nos quatro pontos sob o nome. Não decorar com elas. */
+  --coord: #ff4438;
+  --roteiro: #ffb454;
+  --edicao: #46c8b2;
+  --curadoria: #a48bff;
+
+  /* tipografia — display condensada + grotesca + mono técnica */
+  --display: "Anton", "Arial Narrow", sans-serif;
+  --body: "Archivo", "Helvetica Neue", sans-serif;
+  --mono: "Space Mono", "Courier New", monospace;
+
+  /* ritmo */
+  --edge: clamp(1.5rem, 6vw, 6rem);   /* margem lateral única de toda a página */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}

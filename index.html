@@ -4,602 +4,338 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Régis Regi · Pós-Produção, Roteiro e Curadoria</title>
-  <meta name="description" content="Régis Regi é coordenador de pós-produção, editor, roteirista e curador no Rio de Janeiro. 8 anos de audiovisual, com produções na Netflix, Disney+, Star+, Max, Paramount+ e Porta dos Fundos.">
+  <meta name="description" content="Régis Regi é coordenador de pós-produção, editor, roteirista e curador no Rio de Janeiro. Oito anos de audiovisual, com produções na Netflix, Disney+, Star+, Max, Paramount+ e Porta dos Fundos.">
   <meta property="og:title" content="Régis Regi · Pós-Produção, Roteiro e Curadoria">
-  <meta property="og:description" content="8 anos de audiovisual entre streamings globais e projetos independentes. Coordenação de pós, roteiro de formatos, edição e curadoria.">
+  <meta property="og:description" content="Oito anos de audiovisual entre streamings globais e projetos independentes. Coordenação de pós, roteiro de formatos, edição e curadoria.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://regisregi.com/">
   <meta property="og:locale" content="pt_BR">
+  <link rel="canonical" href="https://regisregi.com/">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <!-- Google Analytics 4 · para ativar: crie a propriedade em analytics.google.com,
+       troque G-XXXXXXXXXX pelo ID de medição real e descomente o bloco abaixo.
+       (Mesmo bloco em analise.html; instruções completas no README.)
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+  </script>
+  -->
 </head>
 <body>
-  <a class="skip-link" href="#sobre">Pular para o conteúdo</a>
+  <a class="skip" href="#trabalho">Pular para o trabalho</a>
   <div class="grain" aria-hidden="true"></div>
-  <div class="vignette" aria-hidden="true"></div>
 
-  <!-- ===================== TOPO ===================== -->
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Voltar ao início">
-      <span class="brand-mark" aria-hidden="true">RR</span>
-      <span class="brand-name">Régis Regi</span>
-    </a>
-    <nav class="topnav" aria-label="Seções do portfólio">
-      <a href="#sobre">Sobre</a>
-      <a href="#timeline">Timeline</a>
-      <a href="#experiencia">Experiência</a>
-      <a href="#formacao">Formação</a>
-      <a href="#publicacoes">Publicações</a>
-      <a href="#medium">Medium</a>
-      <a href="#contato">Contato</a>
-    </nav>
-    <div class="topbar-right">
-      <button class="rec" id="rec-toggle" type="button" aria-pressed="false" title="Alternar modo REC"><span class="rec-dot"></span>REC</button>
-      <span class="timecode" id="timecode" title="Posição do corte" aria-hidden="true">00:00:00:00</span>
-      <a class="btn btn-primary btn-small" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV</a>
-    </div>
-    <div class="progress" aria-hidden="true"><i id="progressbar"></i></div>
+  <nav class="rail" aria-label="Índice de cenas">
+    <a href="#sobre" data-sec="sobre">01</a>
+    <a href="#trabalho" data-sec="trabalho">02</a>
+    <a href="#competencias" data-sec="competencias">03</a>
+    <a href="#escrita" data-sec="escrita">04</a>
+    <a href="#contato" data-sec="contato">05</a>
+  </nav>
+
+  <header class="top">
+    <a class="wm" href="#top">Régis Regi</a>
+    <a class="cv" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV</a>
   </header>
 
   <main id="top">
 
-    <!-- ===================== HERO ===================== -->
-    <section class="hero">
-      <div class="container">
-        <div class="slate" role="presentation">
-          <div class="slate-cell"><span class="slate-label">Produção</span><span class="slate-value">Portfólio 2026</span></div>
-          <div class="slate-cell"><span class="slate-label">Cena</span><span class="slate-value">01</span></div>
-          <div class="slate-cell"><span class="slate-label">Tomada</span><span class="slate-value">Única</span></div>
-          <div class="slate-cell"><span class="slate-label">Locação</span><span class="slate-value">Rio de Janeiro</span></div>
-        </div>
+    <!-- HERO -->
+    <section class="hero" aria-label="Abertura">
+      <div class="hero-eyebrow">
+        <span class="mono">Rio de Janeiro</span>
+        <span class="mono">Pós-produção · Roteiro · Curadoria</span>
+        <span class="mono">2018 → hoje</span>
+      </div>
+      <h1 class="hero-name"><span class="ln">Régis</span><span class="ln">Regi</span></h1>
 
-        <div class="hero-mid">
-          <div class="hero-copy">
-            <h1 class="hero-name">Régis<br>Regi</h1>
+      <p class="hero-roles">
+        <span><span class="dot dot-coord" aria-hidden="true"></span>Coordenador de Pós-Produção</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span><span class="dot dot-roteiro" aria-hidden="true"></span>Roteirista</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span><span class="dot dot-edicao" aria-hidden="true"></span>Editor</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span><span class="dot dot-curadoria" aria-hidden="true"></span>Curador</span>
+      </p>
 
-            <p class="hero-roles">
-              <span class="dot dot-coord"></span>Coordenador de Pós-Produção
-              <span class="sep">·</span><span class="dot dot-roteiro"></span>Roteirista
-              <span class="sep">·</span><span class="dot dot-edicao"></span>Editor
-              <span class="sep">·</span><span class="dot dot-curadoria"></span>Curador
-            </p>
-
-            <p class="hero-lead">
-              Oito anos organizando o caminho entre a ilha de edição e a tela: da entrega semanal
-              do Porta dos Fundos ao conform de originais para Netflix, Paramount+ e Disney+.
-              Coordenação de pós, roteiro de formatos e curadoria, do streaming global à cena
-              eletrônica underground carioca.
-            </p>
-
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV em PDF</a>
-              <a class="btn btn-ghost" href="#contato">Vamos conversar</a>
-            </div>
-          </div>
-
-          <aside class="monitor" aria-label="Retrato de Régis Regi">
-            <figure class="monitor-frame">
-              <img src="assets/regis-retrato.jpg" alt="Retrato de Régis Regi sorrindo, de óculos e suéter azul, sobre fundo cinza de estúdio" width="1040" height="774" fetchpriority="high">
-              <span class="monitor-corners" aria-hidden="true"></span>
-              <span class="monitor-hud hud-tl" aria-hidden="true">CAM A · TAKE 01</span>
-              <span class="monitor-hud hud-tr" aria-hidden="true"><span class="rec-dot"></span>REC</span>
-              <span class="monitor-hud hud-bl" aria-hidden="true" id="monitor-tc">00:00:00:00</span>
-              <span class="monitor-hud hud-br" aria-hidden="true">4K · 23.976</span>
-              <span class="monitor-scan" aria-hidden="true"></span>
-            </figure>
-            <p class="monitor-caption" aria-hidden="true">REGIS_REGI_RETRATO.braw<span class="monitor-lut"> · passe o mouse para aplicar o LUT</span></p>
-          </aside>
-        </div>
-
-        <dl class="stats">
-          <div class="stat"><dt>Anos de audiovisual</dt><dd>08</dd></div>
-          <div class="stat"><dt>Plataformas &amp; canais</dt><dd>09</dd></div>
-          <div class="stat"><dt>Produções entregues</dt><dd>20+</dd></div>
-          <div class="stat"><dt>Frentes de atuação</dt><dd>04</dd></div>
-        </dl>
+      <div class="hero-foot">
+        <p>Coordenador de pós-produção, editor, roteirista e curador. Oito anos entre streamings globais e a cena independente, do conform de originais para Netflix e Paramount+ à curadoria da eletrônica underground carioca.</p>
+        <span class="mono hero-scroll">↓ Role</span>
       </div>
     </section>
 
-    <!-- ===================== LETREIRO DE PLATAFORMAS ===================== -->
-    <div class="marquee" aria-label="Trabalhos exibidos em Netflix, Disney+, Star+, Max, Paramount+, Discovery+, A&amp;E, Canal Brasil, Canal OFF e Porta dos Fundos">
-      <div class="marquee-track" aria-hidden="true">
-        <span>Netflix</span><i>·</i><span>Disney+</span><i>·</i><span>Star+</span><i>·</i><span>Max</span><i>·</i><span>Paramount+</span><i>·</i><span>Discovery+</span><i>·</i><span>A&amp;E</span><i>·</i><span>Canal Brasil</span><i>·</i><span>Canal OFF</span><i>·</i><span>Porta dos Fundos</span><i>·</i>
-        <span>Netflix</span><i>·</i><span>Disney+</span><i>·</i><span>Star+</span><i>·</i><span>Max</span><i>·</i><span>Paramount+</span><i>·</i><span>Discovery+</span><i>·</i><span>A&amp;E</span><i>·</i><span>Canal Brasil</span><i>·</i><span>Canal OFF</span><i>·</i><span>Porta dos Fundos</span><i>·</i>
-      </div>
+    <!-- ESTATÍSTICAS -->
+    <div class="stats-band" aria-label="Panorama">
+      <dl class="stats">
+        <div class="stat"><dt>Anos de audiovisual</dt><dd>08</dd></div>
+        <div class="stat"><dt>Plataformas &amp; canais</dt><dd>09</dd></div>
+        <div class="stat"><dt>Produções entregues</dt><dd>20+</dd></div>
+        <div class="stat"><dt>Frentes de atuação</dt><dd>04</dd></div>
+      </dl>
     </div>
 
-    <!-- ===================== 01 · SOBRE ===================== -->
-    <section class="section" id="sobre">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">01</span>
-          <h2>Sobre</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
+    <!-- 01 SOBRE -->
+    <section id="sobre">
+      <div class="head"><span class="n">01</span><h2>Sobre</h2></div>
+      <div class="about-wrap cut">
+        <div class="about">
+          <p>Coordenação de pós-produção entre produtoras, ilhas de edição e plataformas: cronograma macro, gestão de ativos, conform técnico e controle de qualidade sob os padrões de streamings globais. Ao lado disso, roteiro de formatos originais e curadoria de conteúdo, em produções para Netflix, Disney+, Star+, Max, Paramount+ e Porta dos Fundos.</p>
+          <p class="rest">Formação em Cinema (UFF) e especialização em Roteiro (AIC), somadas a um perfil técnico, estético e estratégico. No fluxo de trabalho, ferramentas de IA entram como aceleradores da pós: transcrição e decupagem automatizadas, edição baseada em texto e controle de qualidade assistido, sempre a serviço do padrão técnico e da narrativa.</p>
+        </div>
+        <figure class="retrato">
+          <img src="assets/regis-retrato.jpg" alt="Retrato de Régis Regi" loading="lazy">
+          <figcaption>Régis Regi · Rio de Janeiro</figcaption>
+        </figure>
+      </div>
+    </section>
 
-        <div class="sobre-grid">
-          <div class="sobre-texto reveal">
-            <p>
-              Profissional multidisciplinar com forte atuação no audiovisual, de streamings
-              globais a iniciativas independentes. Especializado em pós-produção, edição
-              criativa, roteirização de formatos originais e curadoria de conteúdo, com
-              trabalhos em produções da Netflix, Disney+, Star+, Max, Discovery Networks,
-              Paramount+ e Porta dos Fundos.
-            </p>
-            <p>
-              Também atuo como curador e editor audiovisual na Maracutaia.fm, projeto
-              independente dedicado à cena eletrônica underground carioca. Minha formação em
-              Cinema (UFF) e especialização em Roteiro (AIC) somam-se a um perfil técnico,
-              estético e estratégico, com domínio das etapas-chave do desenvolvimento
-              audiovisual.
-            </p>
-          </div>
+    <!-- 02 TRABALHO -->
+    <section id="trabalho">
+      <div class="head"><span class="n">02</span><h2>Trabalho</h2></div>
+      <ul class="work cut">
 
-          <aside class="ficha reveal" aria-label="Ficha técnica">
-            <h3 class="ficha-title">Ficha técnica</h3>
-            <dl>
-              <div class="ficha-row"><dt>Base</dt><dd>Rio de Janeiro / RJ</dd></div>
-              <div class="ficha-row"><dt>Formação</dt><dd>Cinema e Audiovisual (UFF)<br>Especialização em Roteiro (AIC)</dd></div>
-              <div class="ficha-row"><dt>Ferramentas</dt><dd>DaVinci Resolve · Adobe Premiere Pro</dd></div>
-              <div class="ficha-row"><dt>Idiomas</dt><dd>Português (nativo) · Inglês (fluente)</dd></div>
-              <div class="ficha-row"><dt>Frentes</dt><dd>Coordenação · Roteiro · Edição · Curadoria</dd></div>
-            </dl>
-          </aside>
+        <li class="row">
+          <span class="row-idx">01</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-mellin">Mellin Studio</button>
+          <span class="row-meta">Coord. de Pós · 2025 → hoje</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-mellin"><div><div class="panel-inner">
+            <span class="tagline">Canal OFF · branded content</span>
+            <p>Supervisão dos fluxos de pós de séries documentais e programas lifestyle, com prazos, alocação de equipe e entregas aderentes aos padrões técnicos do Canal OFF. Em paralelo, condução dos fluxos de edição e finalização de campanhas para <strong>Banco C6</strong>, <strong>Cerveja Praya</strong> e <strong>BSC</strong>, com controle de processos, gestão de ativos e otimização das entregas da agência.</p>
+            <div class="mat">
+              <a href="https://www.instagram.com/mellinstudio.br/reel/DPkCyBqEtCL/" target="_blank" rel="noopener">Reel no Instagram</a>
+              <a href="https://www.instagram.com/p/DPMf_8aDmNV/" target="_blank" rel="noopener">Post no Instagram</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">02</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-mara">Maracutaia.fm</button>
+          <span class="row-meta">Curadoria · 2025 → hoje</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-mara"><div><div class="panel-inner">
+            <span class="tagline">Cena eletrônica underground carioca</span>
+            <p>Curadoria musical e visual dos sets audiovisuais, com seleção de artistas da cena eletrônica independente e definição da linha estética de cada sessão. Edição e finalização dos sets para o YouTube e criação de peças promocionais para Instagram, sustentando consistência de identidade entre os episódios e o alcance da marca.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye" target="_blank" rel="noopener">Sets no YouTube</a>
+              <a href="https://www.instagram.com/reel/DCkTfXAx_Wl/" target="_blank" rel="noopener">Reel no Instagram</a>
+              <a href="https://www.instagram.com/p/DQEdCi7jiX0/" target="_blank" rel="noopener">Post no Instagram</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">03</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-fabrica">A Fábrica</button>
+          <span class="row-meta">Coord. de Pós · 2025</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
+            <span class="tagline">Séries e longas nacionais</span>
+            <p>Coordenação do ciclo integral de pós de séries e longas (<strong>Galera FC</strong>, <strong>Agentes Muito Especiais</strong>, <strong>Temporada de Bônus</strong>, <strong>A Estranha na Cama</strong>), do planejamento à entrega final, respondendo pela viabilidade técnica e financeira de cada projeto. Formulação e monitoramento de cronograma macro e orçamento, com análise de desvios e realocação de recursos. Ponto focal entre a produção executiva e as áreas técnicas, com padronização de pipeline e dos fluxos de gestão de ativos.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=bZp_isvYVZc" target="_blank" rel="noopener">Galera FC</a>
+              <a href="https://www.youtube.com/watch?v=LvlqcTjahDE" target="_blank" rel="noopener">Agentes Muito Especiais</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">04</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-gruposal">Grupo Sal</button>
+          <span class="row-meta">Assist. Coord. · 2024 › 2025</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-gruposal"><div><div class="panel-inner">
+            <span class="tagline">Canal OFF</span>
+            <p>Organização e supervisão dos fluxos de pós de séries documentais e programas lifestyle, alinhando prazos, equipes e entregas aos padrões do Canal OFF. Atuação em <strong>É Tudo Delas</strong>, <strong>Ninguém Me Domina</strong>, <strong>Histórias do Coletivo</strong> e <strong>Por Trás do Desafio</strong>, sustentando a coesão técnica e narrativa entre os episódios.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">05</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-dot">DOT Cine</button>
+          <span class="row-meta">Assist. Coord. · 2023 › 2024</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-dot"><div><div class="panel-inner">
+            <span class="tagline">Netflix · Disney+ · Star+ · Max</span>
+            <p>Gestão do fluxo de materiais e entregáveis para plataformas globais em projetos multiepisódicos, sob padrões técnicos internacionais e cronogramas de entrega rigorosos. Interlocução entre produtoras independentes, ilhas de edição e plataformas, traduzindo demandas executivas em requisitos operacionais. Monitoramento das etapas de pós com antecipação de gargalos, além de organização de mídias e conform técnico para aderência às especificações de cada parceiro.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=4oDn5TBJA84" target="_blank" rel="noopener">Bom Dia, Verônica</a>
+              <a href="https://www.youtube.com/watch?v=q9xURvz3fCM" target="_blank" rel="noopener">A Magia de Aruna</a>
+              <a href="https://www.youtube.com/watch?v=isSQESXVgQ4" target="_blank" rel="noopener">Desejos S.A.</a>
+              <a href="https://www.youtube.com/watch?v=HggZDpcmeO4" target="_blank" rel="noopener">O Lado Bom de Ser Traída</a>
+              <a href="https://www.youtube.com/watch?v=TDi4yirmR00" target="_blank" rel="noopener">Luva de Pedreiro</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">06</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-porta">Porta dos Fundos</button>
+          <span class="row-meta">Coord. de Pós · 2022 › 2023</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-porta"><div><div class="panel-inner">
+            <span class="tagline">Humor · multiplataforma</span>
+            <p>Condução da operação de entrega semanal de esquetes para múltiplas plataformas, em regime de alta demanda e prazos críticos, alinhada à estratégia de exibição digital. Coordenação de equipes de edição, motion e finalização, com alocação de horas e interface direta com o time criativo. Padronização dos processos entre criação, produção e pós para eliminar gargalos, e relatórios de fluxo e de controle de qualidade que subsidiaram decisões de capacidade produtiva.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=h26072NTKvQ" target="_blank" rel="noopener">Assistir esquete</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">07</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-para">Paramount+</button>
+          <span class="row-meta">Assist. Coord. · 2021 › 2022</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-para"><div><div class="panel-inner">
+            <span class="tagline">Originais brasileiros</span>
+            <p>Em <strong>As Seguidoras</strong>, primeira produção original de ficção da Paramount+ no Brasil, conformação de materiais ao longo de todas as etapas da pós e supervisão da criação e integração das telas de dispositivos, elemento dramático central da série, além de controle de qualidade técnico e revisão de conteúdo sob as especificações da plataforma.</p>
+            <p>Em <strong>Coração Suburbano</strong>, série documental estrelada por Rafael Portugal, organização e conformação de materiais, revisão técnica dos episódios e padronização das entregas dentro dos prazos da plataforma, com suporte contínuo à equipe de pós.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/watch?v=8ZNqLAqp_Y8" target="_blank" rel="noopener">As Seguidoras</a>
+              <a href="https://www.youtube.com/watch?v=HC9PjbCKTT0" target="_blank" rel="noopener">Coração Suburbano</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">08</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-dafinaf">Dafina · Formatos</button>
+          <span class="row-meta">Roteiro · 2021</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-dafinaf"><div><div class="panel-inner">
+            <span class="tagline">Descomplica · NotCo · Discovery</span>
+            <p>Desenvolvimento e roteiro de formatos originais em três frentes: <strong>Descomplica</strong>, traduzindo conteúdo pedagógico em linguagem audiovisual com foco em retenção do público estudantil; <strong>NotCo</strong>, articulando alimentação, tecnologia e branding em narrativa de marca; e <strong>Discovery+</strong>, com formatos alinhados à linha editorial do canal no ambiente de streaming.</p>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">09</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-dafinae">Dafina · Finalização</button>
+          <span class="row-meta">Edição · 2019 › 2021</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-dafinae"><div><div class="panel-inner">
+            <span class="tagline">Canal Brasil · A&amp;E</span>
+            <p>Nas séries <strong>302</strong> e <strong>502</strong> (Canal Brasil), organização e preparação técnica dos episódios até a finalização, sustentando consistência visual e narrativa entre temporadas, além do roteiro de promos e conteúdos digitais para redes.</p>
+            <p>Em <strong>Era de Ouro: O Nascimento dos Super-Heróis</strong> (A&amp;E), apoio à finalização técnica dos episódios e colaboração na construção e no refinamento do roteiro e da edição, em parceria com o Omelete.</p>
+            <div class="mat">
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener">Série 302</a>
+              <a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6" target="_blank" rel="noopener">Série 502</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">10</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-desco">Descomplica</button>
+          <span class="row-meta">Roteiro · 2019</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-desco"><div><div class="panel-inner">
+            <span class="tagline">Game show educacional ao vivo</span>
+            <p>Roteiro diário do game show ao vivo <strong>Dez Segundos</strong>: estrutura de episódio, dinâmica de perguntas e interações desenhadas para o ritmo da transmissão e para a retenção do público jovem e digital, convertendo conteúdo de estudo em entretenimento.</p>
+            <div class="mat">
+              <a href="https://www.techtudo.com.br/dicas-e-tutoriais/2019/10/temas-que-podem-cair-no-enem-2019-estude-no-10-segundos-do-descomplica.ghtml" target="_blank" rel="noopener">Na imprensa · TechTudo</a>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">11</span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-mqe">Mulheres que Escrevem</button>
+          <span class="row-meta">Edição · 2018 › 2022</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-mqe"><div><div class="panel-inner">
+            <span class="tagline">Podcast literário independente</span>
+            <p>Edição e finalização dos episódios ao longo de mais de quatro anos, construindo a identidade sonora do podcast e mantendo padrão de escuta consistente entre as temporadas, em um projeto dedicado à valorização de vozes femininas na literatura.</p>
+          </div></div></div>
+        </li>
+
+      </ul>
+    </section>
+
+    <!-- 03 COMPETÊNCIAS -->
+    <section id="competencias">
+      <div class="head"><span class="n">03</span><h2>Competências</h2></div>
+      <div class="cols cut">
+        <div class="col">
+          <h3>Edição &amp; finalização</h3>
+          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li><li>Soluções de backup</li></ul>
+        </div>
+        <div class="col">
+          <h3>Operação &amp; gestão</h3>
+          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Relatórios de fluxo e QC</li><li>Padrões de streaming</li></ul>
+        </div>
+        <div class="col">
+          <h3>Conteúdo &amp; editorial</h3>
+          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria de conteúdo</li><li>Escrita crítica e curatorial</li></ul>
+        </div>
+        <div class="col">
+          <h3>IA no audiovisual</h3>
+          <ul><li>Transcrição e decupagem</li><li>Edição baseada em texto</li><li>Magic Mask · Voice Isolation</li><li>QC assistido</li><li>NLP aplicado a conteúdo</li></ul>
         </div>
       </div>
     </section>
 
-    <!-- ===================== 02 · TIMELINE ===================== -->
-    <section class="section" id="timeline">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">02</span>
-          <h2>Linha do tempo</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
-        <p class="section-sub reveal">2018 → hoje, montada como uma timeline de edição. Passe o mouse para fazer scrubbing, clique num clipe para abrir a sequência e clique no cabeçalho de uma trilha para dar solo nela.</p>
+    <!-- 04 ESCRITA -->
+    <section id="escrita">
+      <div class="head"><span class="n">04</span><h2>Escrita</h2></div>
+      <ul class="work cut">
+        <li class="row">
+          <span class="row-idx">01</span>
+          <a class="row-name row-link" href="https://extvnerd.medium.com" target="_blank" rel="noopener">Ex-TV Nerd</a>
+          <span class="row-meta">Medium · crítica de TV</span>
+          <span class="row-plus row-ext" aria-hidden="true"></span>
+        </li>
+        <li class="row">
+          <span class="row-idx">02</span>
+          <a class="row-name row-link" href="https://www.academia.edu/30951846/A_Televis%C3%A3o_de_Qualidade_e_a_Com%C3%A9dia_na_TV_Paga_Norte_Americana_Quando_com%C3%A9dias_se_tornaram_dramas_de_30_minutos" target="_blank" rel="noopener">TV de Qualidade</a>
+          <span class="row-meta">Monografia · HBO / Enlightened</span>
+          <span class="row-plus row-ext" aria-hidden="true"></span>
+        </li>
+        <li class="row">
+          <span class="row-idx">03</span>
+          <a class="row-name row-link" href="https://www.academia.edu/36102539/HBO_e_a_Ruptura_do_Discurso_de_Diferencia%C3%A7%C3%A3o_o_caso_Enlightened_" target="_blank" rel="noopener">Ruptura da HBO</a>
+          <span class="row-meta">Artigo · discurso de diferenciação</span>
+          <span class="row-plus row-ext" aria-hidden="true"></span>
+        </li>
+        <li class="row">
+          <span class="row-idx">04</span>
+          <a class="row-name row-link" href="analise.html">Lab NLP</a>
+          <span class="row-meta">O Ex-TV Nerd sob análise</span>
+          <span class="row-plus row-go" aria-hidden="true"></span>
+        </li>
+      </ul>
+    </section>
 
-        <div class="nle reveal" id="nle">
-          <div class="nle-bar">
-            <span class="nle-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="nle-file">TIMELINE_REGIS_2018-2026.drp</span>
-            <span class="nle-tc" aria-hidden="true">FPS 24 · IN 2018 · OUT HOJE</span>
-          </div>
-
-          <div class="nle-scroll">
-            <div class="nle-inner">
-              <div class="heads">
-                <div class="head-spacer" aria-hidden="true"></div>
-                <button class="track-head" type="button" data-lane="0" aria-pressed="false" title="Solo na trilha V1"><b class="chip chip-coord" aria-hidden="true"></b>V1 · Coordenação &amp; Pós<span class="solo-badge" aria-hidden="true">S</span></button>
-                <button class="track-head" type="button" data-lane="1" aria-pressed="false" title="Solo na trilha V2"><b class="chip chip-roteiro" aria-hidden="true"></b>V2 · Roteiro &amp; Formatos<span class="solo-badge" aria-hidden="true">S</span></button>
-                <button class="track-head" type="button" data-lane="2" aria-pressed="false" title="Solo na trilha V3"><b class="chip chip-edicao" aria-hidden="true"></b>V3 · Edição &amp; Finalização<span class="solo-badge" aria-hidden="true">S</span></button>
-                <button class="track-head" type="button" data-lane="3" aria-pressed="false" title="Solo na trilha A1"><b class="chip chip-curadoria" aria-hidden="true"></b>A1 · Curadoria &amp; Áudio<span class="solo-badge" aria-hidden="true">S</span></button>
-              </div>
-
-              <div class="lanes">
-                <div class="ruler" aria-hidden="true">
-                  <span style="left:0%">2018</span>
-                  <span style="left:11.63%">2019</span>
-                  <span style="left:23.26%">2020</span>
-                  <span style="left:34.88%">2021</span>
-                  <span style="left:46.51%">2022</span>
-                  <span style="left:58.14%">2023</span>
-                  <span style="left:69.77%">2024</span>
-                  <span style="left:81.4%">2025</span>
-                  <span style="left:93.02%">2026</span>
-                </div>
-
-                <div class="lane">
-                  <a class="clip clip-coord" href="#exp-paramount" style="left:41.66%;width:13.57%;--d:.24s" title="Paramount+ · ago 2021 → out 2022"><span>Paramount+</span></a>
-                  <a class="clip clip-coord" href="#exp-porta" style="left:56.2%;width:4.85%;--d:.3s" title="Porta dos Fundos · nov 2022 → abr 2023"><span>Porta dos Fundos</span></a>
-                  <a class="clip clip-coord" href="#exp-dot" style="left:61.05%;width:10.66%;--d:.36s" title="DOT Cine · abr 2023 → mar 2024"><span>DOT Cine</span></a>
-                  <a class="clip clip-coord" href="#exp-gruposal" style="left:78.49%;width:3.88%;--d:.42s" title="Grupo Sal · out 2024 → fev 2025"><span>Grupo Sal</span></a>
-                  <a class="clip clip-coord" href="#exp-fabrica" style="left:87.21%;width:4.84%;--d:.54s" title="A Fábrica · jul → dez 2025"><span>A Fábrica</span></a>
-                  <a class="clip clip-coord" href="#exp-mellin" style="left:92.06%;width:7.94%;--d:.6s" title="Mellin Studio · dez 2025 → hoje"><span>Mellin</span></a>
-                </div>
-
-                <div class="lane">
-                  <a class="clip clip-roteiro" href="#exp-descomplica" style="left:16.47%;width:5.81%;--d:.12s" title="Descomplica · jun → dez 2019"><span>Descomplica</span></a>
-                  <a class="clip clip-roteiro" href="#exp-dafina-formatos" style="left:34.88%;width:5.81%;--d:.18s" title="Dafina · Formatos · jan → jul 2021"><span>Dafina</span></a>
-                </div>
-
-                <div class="lane">
-                  <a class="clip clip-edicao" href="#exp-dafina-final" style="left:11.63%;width:23.26%;--d:.06s" title="Dafina Produções · jan 2019 → jan 2021"><span>Dafina Produções</span></a>
-                </div>
-
-                <div class="lane">
-                  <a class="clip clip-curadoria" href="#exp-mqe" style="left:2.91%;width:51.36%;--d:0s" title="Mulheres que Escrevem · abr 2018 → set 2022"><span>Mulheres que Escrevem</span></a>
-                  <a class="clip clip-curadoria" href="#exp-maracutaia" style="left:81.4%;width:18.6%;--d:.48s" title="Maracutaia.fm · 2025 → hoje"><span>Maracutaia.fm</span></a>
-                </div>
-
-                <div class="playhead" aria-hidden="true"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- 05 CONTATO -->
+    <section class="end" id="contato">
+      <h2 class="end-big">Vamos<br><a class="mail" href="mailto:regispereiraregi@gmail.com">conversar.</a></h2>
+      <div class="end-links">
+        <a href="mailto:regispereiraregi@gmail.com">regispereiraregi@gmail.com</a>
+        <a href="https://www.linkedin.com/in/regisregi" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://wa.me/5521969470476" target="_blank" rel="noopener">WhatsApp ↗</a>
+        <a href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>CV em PDF ↓</a>
       </div>
     </section>
 
-    <!-- ===================== 03 · EXPERIÊNCIA ===================== -->
-    <section class="section" id="experiencia">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">03</span>
-          <h2>Experiência</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
-
-        <div class="filters reveal" role="group" aria-label="Filtrar experiências por frente de atuação">
-          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">Master</button>
-          <button class="filter" type="button" data-filter="coord" aria-pressed="false"><b class="chip chip-coord" aria-hidden="true"></b>Coordenação &amp; Pós</button>
-          <button class="filter" type="button" data-filter="roteiro" aria-pressed="false"><b class="chip chip-roteiro" aria-hidden="true"></b>Roteiro</button>
-          <button class="filter" type="button" data-filter="edicao" aria-pressed="false"><b class="chip chip-edicao" aria-hidden="true"></b>Edição</button>
-          <button class="filter" type="button" data-filter="curadoria" aria-pressed="false"><b class="chip chip-curadoria" aria-hidden="true"></b>Curadoria</button>
-        </div>
-
-        <div class="cards">
-
-          <article class="card card-coord reveal" id="exp-mellin">
-            <div class="card-top">
-              <div>
-                <h3>Mellin Studio</h3>
-                <p class="card-role">Assistente de Coordenação de Pós-Produção</p>
-              </div>
-              <p class="card-date">dez 2025 → hoje</p>
-            </div>
-            <p class="card-context">Canal OFF · branded content</p>
-            <p>Organização e supervisão dos fluxos de pós-produção de séries documentais e programas lifestyle, alinhando prazos, equipes e entregas com os padrões do Canal OFF.</p>
-            <p>Organização de fluxos de edição e finalização para campanhas de marketing de alta relevância, com foco em controle de processos, gestão de ativos e otimização das entregas da agência.</p>
-            <ul class="tags">
-              <li>Canal OFF</li><li>Banco C6</li><li>Cerveja Praya</li><li>BSC</li>
-              <li class="tag-media"><a class="tag-ext" href="https://www.instagram.com/mellinstudio.br/reel/DPkCyBqEtCL/" target="_blank" rel="noopener">Reel no Instagram</a></li>
-              <li class="tag-media"><a class="tag-ext" href="https://www.instagram.com/p/DPMf_8aDmNV/" target="_blank" rel="noopener">Post no Instagram</a></li>
-            </ul>
-          </article>
-
-          <article class="card card-curadoria reveal" id="exp-maracutaia">
-            <div class="card-top">
-              <div>
-                <h3>Maracutaia.fm</h3>
-                <p class="card-role">Curador e Audiovisual</p>
-              </div>
-              <p class="card-date">2025 → hoje</p>
-            </div>
-            <p class="card-context">Cena eletrônica underground carioca</p>
-            <p>Desenvolvimento da curadoria musical e visual de sets audiovisuais, integrando artistas da cena eletrônica independente.</p>
-            <p>Edição de vídeos para YouTube e criação de peças promocionais para Instagram, ampliando o alcance e a identidade da marca.</p>
-            <ul class="tags">
-              <li>Curadoria</li>
-              <li class="tag-media"><button class="tag-play" type="button" data-list="PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye" data-title="MARACUTAIA_SETS">Sets no YouTube</button></li>
-              <li class="tag-media"><a class="tag-ext" href="https://www.instagram.com/reel/DCkTfXAx_Wl/" target="_blank" rel="noopener">Reel no Instagram</a></li>
-              <li class="tag-media"><a class="tag-ext" href="https://www.instagram.com/p/DQEdCi7jiX0/" target="_blank" rel="noopener">Post no Instagram</a></li>
-            </ul>
-          </article>
-
-          <article class="card card-coord reveal" id="exp-fabrica">
-            <div class="card-top">
-              <div>
-                <h3>A Fábrica</h3>
-                <p class="card-role">Coordenador de Pós-Produção</p>
-              </div>
-              <p class="card-date">jul → dez 2025</p>
-            </div>
-            <p class="card-context">Séries de TV e longas nacionais</p>
-            <p>Gestão executiva e operacional de projetos de alta complexidade: acompanhamento integral do ciclo de vida de séries e longas, garantindo a viabilidade técnica e financeira do planejamento à entrega final.</p>
-            <p>Controle orçamentário e de cronograma macro, com análise de desvios e otimização de recursos. Ponto focal entre a produção executiva e as áreas técnicas, com padronização da pipeline e da gestão de ativos.</p>
-            <ul class="tags">
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="bZp_isvYVZc" data-title="GALERA_FC_TRAILER">Galera FC</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="LvlqcTjahDE" data-title="AGENTES_MUITO_ESPECIAIS_TRAILER">Agentes Muito Especiais</button></li>
-              <li>Temporada de Bônus</li><li>A Estranha na Cama</li>
-            </ul>
-          </article>
-
-          <article class="card card-coord reveal" id="exp-gruposal">
-            <div class="card-top">
-              <div>
-                <h3>Grupo Sal</h3>
-                <p class="card-role">Assistente de Coordenação de Pós-Produção</p>
-              </div>
-              <p class="card-date">out 2024 → fev 2025</p>
-            </div>
-            <p class="card-context">Canal OFF</p>
-            <p>Organização e supervisão dos fluxos de pós-produção de séries documentais e programas lifestyle, reforçando a coesão técnica e narrativa das obras.</p>
-            <ul class="tags">
-              <li>É Tudo Delas</li><li>Ninguém Me Domina</li><li>Histórias do Coletivo</li><li>Por Trás do Desafio</li>
-            </ul>
-          </article>
-
-          <article class="card card-coord reveal" id="exp-dot">
-            <div class="card-top">
-              <div>
-                <h3>DOT Cine</h3>
-                <p class="card-role">Assistente de Coordenação de Pós-Produção</p>
-              </div>
-              <p class="card-date">abr 2023 → mar 2024</p>
-            </div>
-            <p class="card-context">Netflix · Disney+ · Star+ · Max</p>
-            <p>Gestão executiva do fluxo de materiais e entregáveis para plataformas globais de streaming, cumprindo padrões técnicos internacionais e cronogramas rigorosos.</p>
-            <p>Interlocução entre produtoras independentes, ilhas de edição e plataformas, com monitoramento de cronogramas, mitigação de riscos e controle de qualidade do conform técnico.</p>
-            <ul class="tags">
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="4oDn5TBJA84" data-title="BOM_DIA_VERONICA_T3_TRAILER">Bom Dia, Verônica</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="q9xURvz3fCM" data-title="A_MAGIA_DE_ARUNA_TRAILER">A Magia de Aruna</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="isSQESXVgQ4" data-title="DESEJOS_SA_TRAILER">Desejos S.A.</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="HggZDpcmeO4" data-title="O_LADO_BOM_DE_SER_TRAIDA_TRAILER">O Lado Bom de Ser Traída</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="TDi4yirmR00" data-title="LUVA_DE_PEDREIRO_TRAILER">Luva de Pedreiro: O Rei da Jogada</button></li>
-            </ul>
-          </article>
-
-          <article class="card card-coord reveal" id="exp-porta">
-            <div class="card-top">
-              <div>
-                <h3>Porta dos Fundos</h3>
-                <p class="card-role">Coordenador de Pós-Produção</p>
-              </div>
-              <p class="card-date">nov 2022 → abr 2023</p>
-            </div>
-            <p class="card-context">Humor · multiplataforma</p>
-            <p>Liderança da operação de entrega semanal de esquetes para múltiplas plataformas, garantindo prazos críticos e alinhamento com a estratégia de exibição digital.</p>
-            <p>Coordenação de equipes de edição, motion e finalização, com alocação eficiente de horas, fluxos integrados entre criação, produção e pós, e relatórios de fluxo e QC para apoiar decisões de capacidade produtiva.</p>
-            <ul class="tags">
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="h26072NTKvQ" data-title="PORTA_DOS_FUNDOS_MATERIAL">Assistir esquete</button></li>
-            </ul>
-          </article>
-
-          <article class="card card-coord reveal" id="exp-paramount">
-            <div class="card-top">
-              <div>
-                <h3>Paramount+</h3>
-                <p class="card-role">Assistente de Coordenação de Pós-Produção</p>
-              </div>
-              <p class="card-date">ago 2021 → out 2022</p>
-            </div>
-            <p class="card-context">Originais brasileiros</p>
-            <p><strong>As Seguidoras</strong>, primeira produção original de ficção da Paramount+ no Brasil: conform ao longo de todas as etapas, supervisão da criação e integração de telas (celulares, computadores) e controle de qualidade técnico das entregas.</p>
-            <p><strong>Coração Suburbano</strong>, série documental estrelada por Rafael Portugal: organização e conformação de materiais, revisão técnica dos episódios e padronização das entregas dentro dos prazos da plataforma.</p>
-            <ul class="tags">
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="8ZNqLAqp_Y8" data-title="AS_SEGUIDORAS_MATERIAL">As Seguidoras</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-yt="HC9PjbCKTT0" data-title="CORACAO_SUBURBANO_MATERIAL">Coração Suburbano</button></li>
-            </ul>
-          </article>
-
-          <article class="card card-roteiro reveal" id="exp-dafina-formatos">
-            <div class="card-top">
-              <div>
-                <h3>Dafina Produções</h3>
-                <p class="card-role">Criador de Formatos / Roteirista</p>
-              </div>
-              <p class="card-date">jan → jul 2021</p>
-            </div>
-            <p class="card-context">Descomplica · NotCo · Discovery</p>
-            <p>Desenvolvimento e roteiro de formatos educacionais criativos para o Descomplica, com foco em retenção e engajamento do público estudantil.</p>
-            <p>Criação de formatos originais para a NotCo, integrando alimentação, tecnologia e branding, e de formatos para o Discovery+, alinhados à identidade editorial do canal.</p>
-          </article>
-
-          <article class="card card-edicao reveal" id="exp-dafina-final">
-            <div class="card-top">
-              <div>
-                <h3>Dafina Produções</h3>
-                <p class="card-role">Assistente de Finalização / Roteirista</p>
-              </div>
-              <p class="card-date">jan 2019 → jan 2021</p>
-            </div>
-            <p class="card-context">Canal Brasil · A&amp;E</p>
-            <p>Séries <strong>302</strong> e <strong>502</strong> (Canal Brasil): organização, preparação técnica e finalização dos episódios, além do roteiro de conteúdos digitais e promos para redes sociais.</p>
-            <p><strong>Era de Ouro: O Nascimento dos Super-Heróis</strong> (A&amp;E): apoio à finalização técnica e colaboração na construção do roteiro e da edição, em parceria com o Omelete.</p>
-            <ul class="tags">
-              <li class="tag-media"><button class="tag-play" type="button" data-list="PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" data-title="SERIE_302">Série 302</button></li>
-              <li class="tag-media"><button class="tag-play" type="button" data-list="PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6" data-title="SERIE_502">Série 502</button></li>
-            </ul>
-          </article>
-
-          <article class="card card-roteiro reveal" id="exp-descomplica">
-            <div class="card-top">
-              <div>
-                <h3>Descomplica</h3>
-                <p class="card-role">Roteirista</p>
-              </div>
-              <p class="card-date">jun → dez 2019</p>
-            </div>
-            <p class="card-context">Game show educacional ao vivo</p>
-            <p>Roteiro do game show <strong>Dez Segundos</strong>, com episódios diários, linguagem ágil e questões que transformaram aprendizado em entretenimento para o público jovem e digital.</p>
-            <ul class="tags">
-              <li class="tag-media"><a class="tag-ext" href="https://www.techtudo.com.br/dicas-e-tutoriais/2019/10/temas-que-podem-cair-no-enem-2019-estude-no-10-segundos-do-descomplica.ghtml" target="_blank" rel="noopener">Na imprensa · TechTudo</a></li>
-            </ul>
-          </article>
-
-          <article class="card card-curadoria reveal" id="exp-mqe">
-            <div class="card-top">
-              <div>
-                <h3>Mulheres que Escrevem</h3>
-                <p class="card-role">Editor</p>
-              </div>
-              <p class="card-date">abr 2018 → set 2022</p>
-            </div>
-            <p class="card-context">Podcast literário independente</p>
-            <p>Edição e finalização de episódios, construindo consistência e identidade sonora ao longo das temporadas, em um projeto dedicado à valorização de vozes femininas na literatura.</p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== 04 · FORMAÇÃO & COMPETÊNCIAS ===================== -->
-    <section class="section" id="formacao">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">04</span>
-          <h2>Formação &amp; Competências</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
-
-        <div class="formacao-list reveal">
-          <div class="formacao-item">
-            <span class="formacao-ano">2021</span>
-            <div>
-              <h3>Academia Internacional de Cinema (AIC)</h3>
-              <p>Especialização em Roteiro</p>
-            </div>
-          </div>
-          <div class="formacao-item">
-            <span class="formacao-ano">2013 → 2017</span>
-            <div>
-              <h3>Universidade Federal Fluminense (UFF)</h3>
-              <p>Bacharelado em Cinema e Audiovisual</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="skills-grid">
-          <div class="skill-panel reveal">
-            <h3><b class="chip chip-edicao"></b>Edição &amp; Finalização</h3>
-            <ul class="tags">
-              <li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li><li>Soluções de backup</li>
-            </ul>
-          </div>
-          <div class="skill-panel reveal">
-            <h3><b class="chip chip-coord"></b>Operação &amp; Gestão</h3>
-            <ul class="tags">
-              <li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Relatórios de fluxo e QC</li><li>Interlocução produtoras · ilhas · plataformas</li><li>Padrões técnicos de streaming</li>
-            </ul>
-          </div>
-          <div class="skill-panel reveal">
-            <h3><b class="chip chip-roteiro"></b>Conteúdo &amp; Editorial</h3>
-            <ul class="tags">
-              <li>Roteiro de formatos originais</li><li>Promos</li><li>Curadoria de conteúdo</li><li>Escrita crítica e curatorial</li>
-            </ul>
-          </div>
-          <div class="skill-panel reveal">
-            <h3><b class="chip chip-curadoria"></b>Idiomas</h3>
-            <ul class="tags">
-              <li>Português (nativo)</li><li>Inglês (fluente)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== 05 · PUBLICAÇÕES ===================== -->
-    <section class="section" id="publicacoes">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">05</span>
-          <h2>Publicações</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
-
-        <div class="pubs">
-          <article class="pub reveal">
-            <span class="pub-tipo">Medium</span>
-            <h3>Ex-TV Nerd</h3>
-            <p>Reflexões sobre a evolução do audiovisual, com destaque para TV, séries e streaming. Inovações narrativas, mudanças de consumo e um olhar crítico sobre o entretenimento contemporâneo.</p>
-            <a class="pub-link" href="https://extvnerd.medium.com" target="_blank" rel="noopener">Ler no Medium ↗</a>
-          </article>
-
-          <article class="pub reveal">
-            <span class="pub-tipo">Monografia</span>
-            <h3>A "Televisão de Qualidade" e a "Comédia" na TV Paga Norte-Americana</h3>
-            <p>Quando comédias se tornaram dramas de 30 minutos? Usando Enlightened (HBO) como estudo de caso, propõe uma releitura do conceito de "televisão de qualidade" e revela a dramédia como peça-chave na evolução da TV paga.</p>
-            <a class="pub-link" href="https://www.academia.edu/30951846/A_Televis%C3%A3o_de_Qualidade_e_a_Com%C3%A9dia_na_TV_Paga_Norte_Americana_Quando_com%C3%A9dias_se_tornaram_dramas_de_30_minutos" target="_blank" rel="noopener">Ler a monografia ↗</a>
-          </article>
-
-          <article class="pub reveal">
-            <span class="pub-tipo">Artigo</span>
-            <h3>HBO e a Ruptura do Discurso de Diferenciação: o caso Enlightened</h3>
-            <p>Investigação de como Enlightened expõe os limites do prestígio televisivo associado à HBO, questionando o discurso de diferenciação que sustenta a "televisão de qualidade" e apontando os paradoxos da dramédia na TV por assinatura.</p>
-            <a class="pub-link" href="https://www.academia.edu/36102539/HBO_e_a_Ruptura_do_Discurso_de_Diferencia%C3%A7%C3%A3o_o_caso_Enlightened_" target="_blank" rel="noopener">Ler o artigo ↗</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== 06 · MEDIUM ===================== -->
-    <section class="section" id="medium">
-      <div class="container">
-        <header class="section-head reveal">
-          <span class="section-num">06</span>
-          <h2>Ex-TV Nerd</h2>
-          <span class="section-rule" aria-hidden="true"></span>
-        </header>
-        <p class="section-sub reveal">O bin de mídia do blog: os textos publicados no Medium, carregados ao vivo direto do feed. Busque como numa media pool.</p>
-
-        <div class="bin reveal" id="bin">
-          <div class="nle-bar">
-            <span class="nle-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="nle-file">BIN_EXTVNERD.medium</span>
-            <span class="nle-tc" id="bin-count" aria-hidden="true">SINCRONIZANDO…</span>
-          </div>
-          <div class="bin-toolbar">
-            <input type="search" id="bin-search" class="bin-search" placeholder="Buscar no bin…" aria-label="Buscar artigos do Medium" autocomplete="off">
-            <a class="bin-open" href="analise.html">Lab NLP →</a>
-            <a class="bin-open" href="https://extvnerd.medium.com" target="_blank" rel="noopener">Abrir o Medium ↗</a>
-          </div>
-          <ol class="bin-list" id="bin-list">
-            <li class="bin-status" id="bin-status">Sincronizando catálogo com o Medium…</li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== CONTATO ===================== -->
-    <footer class="footer" id="contato">
-      <div class="container">
-        <p class="footer-eyebrow">Cena final</p>
-        <h2 class="footer-title">Vamos<br>conversar?</h2>
-        <div class="footer-links">
-          <a href="mailto:regispereiraregi@gmail.com">regispereiraregi@gmail.com</a>
-          <a href="https://wa.me/5521969470476" target="_blank" rel="noopener">(21) 96947-0476</a>
-          <a href="https://www.linkedin.com/in/regisregi" target="_blank" rel="noopener">linkedin.com/in/regisregi</a>
-          <a href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV em PDF ↓</a>
-        </div>
-        <div class="footer-bottom">
-          <span>© 2026 Régis Regi · Rio de Janeiro</span>
-          <span class="mono footer-hint" title="Como numa ilha de edição: J volta, K pausa, L avança · G troca o grade de cor">J·K·L: shuttle · G: troca o LUT</span>
-          <span class="mono">PICTURE LOCK · 00:08:00:00 · FIM</span>
-        </div>
-      </div>
+    <footer class="foot">
+      <span>© 2026 Régis Regi · Rio de Janeiro</span>
+      <span>Portfólio 2026</span>
     </footer>
 
   </main>
 
-  <!-- ===================== SALA DE PROJEÇÃO ===================== -->
-  <div class="projecao" id="projecao" hidden role="dialog" aria-modal="true" aria-label="Sala de projeção">
-    <div class="projecao-backdrop" data-close></div>
-    <div class="projecao-panel">
-      <div class="nle-bar">
-        <span class="nle-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="nle-file" id="projecao-titulo">PROJECAO.mov</span>
-        <button class="projecao-fechar" type="button" data-close aria-label="Fechar a sala de projeção">✕</button>
-      </div>
-      <div class="projecao-tela" id="projecao-tela"></div>
-      <p class="projecao-legenda">Material público da produção · reproduzido do YouTube · Esc fecha a sala</p>
-    </div>
-  </div>
-
-  <!-- ===================== ILHA DE COR ===================== -->
-  <div class="lut-layer" aria-hidden="true"></div>
-  <div class="vhs-osd" aria-hidden="true"><span class="osd-play">▶ PLAY</span><span class="osd-mode">SP 0:00:00</span></div>
-
-  <div class="color-suite" id="color-suite">
-    <div class="color-panel" id="color-panel" hidden aria-label="Ilha de cor: escolha o grade do site">
-      <p class="color-title">Ilha de cor</p>
-      <p class="color-sub">Sente na cadeira do colorista e re-grade este portfólio. Tecla G troca o LUT.</p>
-      <div class="lut-chips">
-        <button class="lut-chip is-active" type="button" data-lut="" aria-pressed="true"><span class="lut-swatch sw-rec709" aria-hidden="true"></span>REC 709 <em>como veio do set</em></button>
-        <button class="lut-chip" type="button" data-lut="blockbuster" aria-pressed="false"><span class="lut-swatch sw-blockbuster" aria-hidden="true"></span>Blockbuster <em>verão explosivo</em></button>
-        <button class="lut-chip" type="button" data-lut="noir" aria-pressed="false"><span class="lut-swatch sw-noir" aria-hidden="true"></span>Noir <em>cinema de bairro</em></button>
-        <button class="lut-chip" type="button" data-lut="tarde" aria-pressed="false"><span class="lut-swatch sw-tarde" aria-hidden="true"></span>Sessão da Tarde <em>35mm quente</em></button>
-        <button class="lut-chip" type="button" data-lut="giallo" aria-pressed="false"><span class="lut-swatch sw-giallo" aria-hidden="true"></span>Giallo <em>terror italiano</em></button>
-        <button class="lut-chip" type="button" data-lut="vhs" aria-pressed="false"><span class="lut-swatch sw-vhs" aria-hidden="true"></span>VHS 1987 <em>fita alugada</em></button>
-      </div>
-    </div>
-    <button class="color-knob" id="color-knob" type="button" aria-expanded="false" aria-controls="color-panel" title="Ilha de cor (G)">
-      <span class="knob-wheels" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="knob-label">Grade</span>
-    </button>
-  </div>
-
-  <script src="js/main.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

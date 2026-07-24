@@ -1,63 +1,66 @@
 # Régis Regi · Portfólio 2026
 
-Site estático de página única (HTML + CSS + JS puros, sem build) pensado para o GitHub Pages. O conceito visual é uma **sala de edição**: paleta de suíte escura, timecode rodando no topo, slate no hero e a carreira montada como uma **timeline de NLE**, com trilhas (V1 Coordenação, V2 Roteiro, V3 Edição, A1 Curadoria) e clipes coloridos clicáveis que levam à experiência correspondente.
+Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como **user site** (`regisregi.github.io`) com domínio próprio `regisregi.com`. O conceito visual é **minimalista em preto absoluto**: o trabalho vira um índice tipográfico gigante, com um único acento violeta, rail lateral de cenas e um efeito assinatura na abertura (o nome entra letra a letra). As quatro cores de frente de atuação (coordenação, roteiro, edição, curadoria) aparecem apenas nos pontos sob o nome, como identidade herdada das trilhas de NLE.
 
 ## Estrutura
 
 ```
 ├── index.html                  → página única com todas as seções
-├── css/style.css               → estilos (cores e fontes nas variáveis em :root)
-├── js/main.js                  → timecode, reveals e animação da timeline
+├── analise.html                → Lab NLP (análise dos textos do Medium no navegador)
+├── css/tokens.css              → design tokens (cores, fontes, ritmo) do index
+├── css/site.css                → estilos do index
+├── css/style.css               → estilos do Lab NLP (analise.html)
+├── js/site.js                  → interação do index (assinatura, reveals, rail, índice, contagem)
+├── js/analise.js               → motor de NLP + gráficos SVG do Lab
 ├── assets/
 │   ├── RE_GIS_REGI_PORTFOLIO_CV_2026.pdf   → CV linkado nos botões "Baixar CV"
+│   ├── regis-retrato.jpg       → retrato na seção Sobre
 │   └── favicon.svg
+├── CNAME                       → domínio custom (regisregi.com); não remover
 ├── .nojekyll                   → evita processamento Jekyll no Pages
 └── README.md
 ```
 
-## Como publicar no GitHub Pages
+## Deploy
 
-**Opção A · site principal (regisregi.github.io)**
+Este repositório é o user site da conta `regisregi`: **todo push na `main` publica direto**, sem workflow e sem branch `gh-pages`. O Pages está configurado em Settings → Pages com *Deploy from a branch* (`main`, `/ (root)`) e o domínio custom `regisregi.com`.
 
-1. Crie um repositório público chamado exatamente `SEUUSUARIO.github.io` (ex.: `regisregi.github.io`).
-2. Envie o **conteúdo** desta pasta para a raiz do repositório (o `index.html` precisa ficar na raiz):
+- O arquivo `CNAME` na raiz mantém o domínio configurado entre deploys. Não apagar.
+- A branch `gh-pages` e o workflow antigos (herdados do project site) foram aposentados; se a branch `gh-pages` ainda existir no remoto, pode ser excluída.
+- Depois que o certificado TLS do domínio for emitido pelo GitHub, marcar **Enforce HTTPS** em Settings → Pages.
 
-```bash
-cd regis-regi-portfolio
-git init
-git add .
-git commit -m "Portfólio 2026"
-git branch -M main
-git remote add origin https://github.com/SEUUSUARIO/SEUUSUARIO.github.io.git
-git push -u origin main
-```
+## Google Analytics (planejado, ainda não ativo)
 
-3. Pronto. Em 1 ou 2 minutos o site sobe em `https://SEUUSUARIO.github.io`.
+O bloco do GA4 já está pronto, comentado, no `<head>` de `index.html` e `analise.html`. Para ativar:
 
-**Opção B · repositório com outro nome**
+1. Criar a propriedade GA4 em [analytics.google.com](https://analytics.google.com) (conta do Régis) e copiar o **ID de medição** (`G-...`).
+2. Nos dois arquivos, trocar `G-XXXXXXXXXX` pelo ID real (duas ocorrências por arquivo).
+3. Descomentar o bloco nos dois arquivos e fazer push.
 
-1. Suba os arquivos para qualquer repositório.
-2. Em **Settings → Pages → Build and deployment**, escolha *Deploy from a branch*, branch `main`, pasta `/ (root)` e salve.
-3. O site sobe em `https://SEUUSUARIO.github.io/NOME-DO-REPO`.
+O snippet usa `anonymize_ip`. Se o tráfego da UE/LGPD virar preocupação, avaliar um aviso de cookies antes de ativar.
+
+## Pendências (TODO)
+
+- **Vídeos hospedados localmente**: hoje os materiais das produções abrem via links do YouTube dentro de cada experiência (mapeados a partir dos hyperlinks do PDF do CV). O Régis vai baixar os vídeos ele mesmo mais tarde; quando existirem os arquivos, servir localmente (ou via storage próprio) e trocar os links por `<video>`.
+- **Enforce HTTPS**: aguardando emissão do certificado do domínio (ver Deploy).
 
 ## Para testar localmente
 
 ```bash
-cd regis-regi-portfolio
 python3 -m http.server 8080
 # abra http://localhost:8080
 ```
 
+O Lab NLP depende de `api.rss2json.com` (o Medium bloqueia leitura server-side, então o feed é lido no navegador). Modo demo do Lab: `analise.html?demo=1`.
+
 ## O que personalizar
 
-- **Links pendentes** (estão como `#`, marcados com comentários `<!-- TODO -->` no `index.html`):
-  - Publicações: blog *Ex-TV Nerd* no Medium, monografia e artigo sobre a HBO.
-  - Se quiser, dá para linkar Maracutaia.fm, As Seguidoras, 302/502 etc. nos cards de experiência.
-- **CV**: para atualizar, basta substituir o PDF em `assets/` mantendo o mesmo nome de arquivo (ou trocar o nome nos três links `href="assets/..."` do `index.html`).
-- **Cores**: tudo em `:root` no topo do `css/style.css`. As quatro cores de trilha são `--rec` (coordenação), `--amber` (roteiro), `--teal` (edição) e `--violet` (curadoria).
-- **Timeline**: cada clipe é um `<a class="clip">` com `left` e `width` em % (escala: 2018 = 0% e meados de 2026 ≈ 100%, ou seja, 1 ano ≈ 11,63%). Para adicionar um trabalho novo, copie um clipe, ajuste posição, título e o `href` para o id do card.
-- **Contato**: e-mail, WhatsApp e LinkedIn estão no rodapé (`#contato`).
+- **CV**: substituir o PDF em `assets/` mantendo o mesmo nome de arquivo.
+- **Cores do index**: tudo em `css/tokens.css`, com a regra de uso de cada cor comentada. `--accent` (violeta) é a única cor de interface; as quatro cores de frente (`--coord`, `--roteiro`, `--edicao`, `--curadoria`) só aparecem nos pontos sob o nome.
+- **Cores do Lab**: `:root` no topo do `css/style.css` (paleta de dados validada para daltonismo).
+- **Trabalhos**: cada experiência é um `<li class="row">` no `index.html` (número, nome-botão, meta, painel expansível com descrição e links de material). Para adicionar, copiar uma linha e renumerar.
+- **Contato**: e-mail, WhatsApp e LinkedIn na seção `#contato`.
 
 ## Créditos técnicos
 
-Fontes via Google Fonts (Anton, Archivo e Space Mono). Sem dependências, sem frameworks, acessível (skip link, foco visível) e com `prefers-reduced-motion` respeitado.
+Fontes via Google Fonts (Anton, Archivo e Space Mono). Sem dependências, sem frameworks, com skip link, foco visível, contraste AA, paleta de dados do Lab validada para daltonismo e `prefers-reduced-motion` respeitado (a abertura letra a letra e a contagem dos números desligam).
