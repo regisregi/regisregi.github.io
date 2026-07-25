@@ -14,7 +14,6 @@ Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como
 ├── js/analise.js               → motor de NLP + gráficos SVG do Lab
 ├── assets/
 │   ├── RE_GIS_REGI_PORTFOLIO_CV_2026.pdf   → CV linkado nos botões "Baixar CV"
-│   ├── regis-retrato.jpg       → retrato na seção Sobre
 │   └── favicon.svg
 ├── CNAME                       → domínio custom (regisregi.com); não remover
 ├── .nojekyll                   → evita processamento Jekyll no Pages
@@ -59,7 +58,7 @@ O Lab NLP depende de `api.rss2json.com` (o Medium bloqueia leitura server-side, 
 - **Cores do index**: tudo em `css/tokens.css`, com a regra de uso de cada cor comentada. `--accent` (violeta) é a única cor de interface; as quatro cores de frente (`--coord`, `--roteiro`, `--edicao`, `--curadoria`) só aparecem nos pontos sob o nome.
 - **Cores do Lab**: `:root` no topo do `css/style.css` (paleta de dados validada para daltonismo).
 - **Trabalhos**: cada experiência é um `<li class="row">` no `index.html` (número, nome-botão, meta, painel expansível com descrição e links de material). Para adicionar, copiar uma linha e renumerar.
-- **Contato**: e-mail, WhatsApp e LinkedIn na seção `#contato`.
+- **Contato**: e-mail e LinkedIn na seção `#contato`. Por decisão do dono, o site não expõe telefone nem retrato; não reintroduzir.
 
 ## Créditos técnicos
 

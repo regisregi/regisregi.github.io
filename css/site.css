@@ -152,27 +152,11 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 .cut.in > * { opacity: 1; transform: none; }
 
 /* ---------- sobre ---------- */
-.about-wrap {
-  display: grid; grid-template-columns: minmax(0, 62ch) auto;
-  gap: clamp(2rem, 5vw, 5rem); align-items: start;
-}
 .about {
-  display: grid; gap: clamp(1.5rem, 3vw, 3rem);
+  display: grid; gap: clamp(1.5rem, 3vw, 3rem); max-width: 62ch;
   font-size: clamp(1.1rem, 1.7vw, 1.5rem); line-height: 1.5; color: var(--ink);
 }
 .about .rest { color: var(--dim); font-size: .9em; }
-.retrato { margin: 0; width: clamp(150px, 18vw, 230px); }
-.retrato img {
-  width: 100%; display: block;
-  filter: grayscale(1) contrast(1.06);
-}
-.retrato figcaption {
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--dim); margin-top: .7rem;
-}
-@media (max-width: 720px) {
-  .about-wrap { grid-template-columns: 1fr; }
-}
 
 /* ---------- índice de trabalho ---------- */
 .work { border-top: 1px solid var(--line); }
