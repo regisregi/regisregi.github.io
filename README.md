@@ -28,15 +28,17 @@ Este repositório é o user site da conta `regisregi`: **todo push na `main` pub
 - A branch `gh-pages` e o workflow antigos (herdados do project site) foram aposentados; se a branch `gh-pages` ainda existir no remoto, pode ser excluída.
 - Depois que o certificado TLS do domínio for emitido pelo GitHub, marcar **Enforce HTTPS** em Settings → Pages.
 
-## Google Analytics (planejado, ainda não ativo)
+## Google Analytics
 
-O bloco do GA4 já está pronto, comentado, no `<head>` de `index.html` e `analise.html`. Para ativar:
+GA4 ativo nas duas páginas, propriedade `G-R19SB2FGP1`, com o bloco `gtag.js` no `<head>` de `index.html` e `analise.html`.
 
-1. Criar a propriedade GA4 em [analytics.google.com](https://analytics.google.com) (conta do Régis) e copiar o **ID de medição** (`G-...`).
-2. Nos dois arquivos, trocar `G-XXXXXXXXXX` pelo ID real (duas ocorrências por arquivo).
-3. Descomentar o bloco nos dois arquivos e fazer push.
+A medição aprimorada do GA4 já cobre sozinha as visualizações de página, a rolagem, os cliques em links externos (YouTube, Instagram, Academia, LinkedIn) e o download do CV em PDF. Não há código nosso para nada disso.
 
-O snippet usa `anonymize_ip`. Se o tráfego da UE/LGPD virar preocupação, avaliar um aviso de cookies antes de ativar.
+O único evento manual é **`abrir_projeto`**, em `js/site.js`: expandir uma linha do índice não gera navegação, então o GA4 não enxerga sozinho qual projeto interessou a quem visitou. O evento sai só na abertura (não ao fechar), leva o parâmetro `projeto` com o nome da produção, e só dispara se `window.gtag` existir, de modo que nada quebra com o Analytics desligado ou bloqueado no navegador.
+
+Para ver `projeto` como dimensão nos relatórios, é preciso registrá-la uma vez em Administrador → Definições personalizadas → Dimensão personalizada, com o parâmetro `projeto` e escopo de evento. Sem isso o evento é contado, mas o nome do projeto não aparece quebrado por produção.
+
+Não há aviso de cookies no site. Se o tráfego da UE/LGPD virar preocupação, avaliar um banner de consentimento.
 
 ## Pendências (TODO)
 
