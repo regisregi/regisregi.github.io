@@ -5,7 +5,8 @@ Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como
 ## Estrutura
 
 ```
-├── index.html                  → página única com todas as seções
+├── index.html                  → página única com todas as seções (pt-BR)
+├── en/index.html               → mesma página em inglês, servida em /en/
 ├── analise.html                → Lab NLP (análise dos textos do Medium no navegador)
 ├── css/tokens.css              → design tokens (cores, fontes, ritmo) do index
 ├── css/site.css                → estilos do index
@@ -27,6 +28,17 @@ Este repositório é o user site da conta `regisregi`: **todo push na `main` pub
 - O arquivo `CNAME` na raiz mantém o domínio configurado entre deploys. Não apagar.
 - A branch `gh-pages` e o workflow antigos (herdados do project site) foram aposentados; se a branch `gh-pages` ainda existir no remoto, pode ser excluída.
 - Depois que o certificado TLS do domínio for emitido pelo GitHub, marcar **Enforce HTTPS** em Settings → Pages.
+
+## Idiomas
+
+O português vive em `/` e o inglês em `/en/`, cada um com URL própria e HTML próprio. Não há tradução por JavaScript: a página inglesa é indexável e não pisca no idioma errado ao carregar.
+
+- Os dois arquivos se apontam com `hreflang` (`pt-BR`, `en` e `x-default` no português), e o seletor `PT` / `EN` fica no cabeçalho.
+- CSS, JS e assets são compartilhados. A página em `/en/` referencia tudo com `../`.
+- Os ids das seções são traduzidos (`about`, `work`, `skills`, `writing`, `contact`). O scrollspy do `js/site.js` lê esses ids do próprio rail, então não há lista de ids fixa no código e o mesmo script serve aos dois idiomas.
+- As classes de cor de trilha (`dot-roteiro`, `dot-curadoria`) seguem em português nos dois: são nomes de classe do CSS, não texto visível.
+- Ao editar um trabalho, editar nos dois arquivos. São páginas independentes de propósito.
+- O CV em PDF é o mesmo nos dois idiomas e está em português.
 
 ## Google Analytics
 

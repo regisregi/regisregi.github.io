@@ -90,7 +90,9 @@
         if (link) { link.classList.add("on"); }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
-    ["sobre", "trabalho", "competencias", "escrita", "contato"].forEach(function (id) {
+    /* os ids das seções vêm do próprio rail, então o mesmo script serve
+       para a página em português e para a versão em inglês em /en/ */
+    Object.keys(railLinks).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) { spy.observe(el); }
     });
