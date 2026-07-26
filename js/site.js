@@ -106,6 +106,13 @@
       if (e.target.closest("a")) { return; }
       var open = row.classList.toggle("open");
       btn.setAttribute("aria-expanded", open ? "true" : "false");
+
+      /* medição: abrir o painel não gera navegação, então o Analytics não
+         enxerga sozinho. Enviamos só na abertura. Se o gtag não estiver
+         ativo (bloco do GA ainda comentado, ou bloqueador), não faz nada. */
+      if (open && typeof window.gtag === "function") {
+        window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim() });
+      }
     });
   });
 })();
