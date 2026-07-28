@@ -228,16 +228,13 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 .panel-inner strong { color: var(--ink); font-weight: 600; }
 .tagline { color: var(--accent); font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
 
-/* material: hyperlinks do trabalho */
-.mat { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; padding-top: .2rem; }
-.mat a {
-  font-family: var(--mono); font-size: .68rem; letter-spacing: .05em;
-  text-transform: uppercase; color: var(--dim); text-decoration: none;
-  transition: color .3s var(--ease);
+/* material: hyperlinks do trabalho, inline no corpo do texto (estilo do
+   CV em PDF). Azul deliberado: não é cor de trilha, é convenção de link. */
+.panel-inner .plink {
+  color: #4d9fff; font-style: italic; text-decoration: underline;
+  text-underline-offset: 2px; transition: color .2s var(--ease);
 }
-.mat a::after { content: " ↗"; }
-.mat a.dl::after { content: " ↓"; }
-.mat a:hover { color: var(--accent); }
+.panel-inner .plink:hover, .panel-inner .plink:focus-visible { color: #8ec2ff; }
 
 /* ---------- competências ---------- */
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
