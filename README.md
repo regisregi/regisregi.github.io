@@ -7,7 +7,7 @@ Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como
 ```
 ├── index.html                  → página única com todas as seções (pt-BR)
 ├── en/index.html               → mesma página em inglês, servida em /en/
-├── analise.html                → Lab NLP (análise dos textos do Medium no navegador)
+├── analise.html                → Lab NLP (fora do ar: link comentado no index, ver Idiomas)
 ├── css/tokens.css              → design tokens (cores, fontes, ritmo) do index
 ├── css/site.css                → estilos do index
 ├── css/style.css               → estilos do Lab NLP (analise.html)
@@ -42,7 +42,7 @@ O português vive em `/` e o inglês em `/en/`, cada um com URL própria e HTML 
 
 ## Google Analytics
 
-GA4 ativo nas duas páginas, propriedade `G-R19SB2FGP1`, com o bloco `gtag.js` no `<head>` de `index.html` e `analise.html`.
+GA4 ativo, propriedade `G-R19SB2FGP1`, com o mesmo bloco `gtag.js` no `<head>` de três arquivos: `index.html`, `en/index.html` e `analise.html`. Ao mexer no snippet, mexer nos três.
 
 A medição aprimorada do GA4 já cobre sozinha as visualizações de página, a rolagem, os cliques em links externos (YouTube, Instagram, Academia, LinkedIn) e o download do CV em PDF. Não há código nosso para nada disso.
 
@@ -66,12 +66,16 @@ python3 -m http.server 8080
 
 O Lab NLP depende de `api.rss2json.com` (o Medium bloqueia leitura server-side, então o feed é lido no navegador). Modo demo do Lab: `analise.html?demo=1`.
 
+**O Lab está fora do ar por decisão do Régis.** A página e o `js/analise.js` continuam versionados e acessíveis pela URL direta; o que saiu foi o link na seção Escrita, comentado em HTML nos dois idiomas. Para religar, descomentar o bloco marcado nos dois arquivos (atenção ao caminho: `analise.html` no pt, `../analise.html` no en).
+
 ## O que personalizar
 
 - **CV**: substituir o PDF em `assets/` mantendo o mesmo nome de arquivo.
 - **Cores do index**: tudo em `css/tokens.css`, com a regra de uso de cada cor comentada. `--accent` (violeta) é a única cor de interface; as quatro cores de frente (`--coord`, `--roteiro`, `--edicao`, `--curadoria`) só aparecem nos pontos sob o nome.
 - **Cores do Lab**: `:root` no topo do `css/style.css` (paleta de dados validada para daltonismo).
 - **Trabalhos**: cada experiência é um `<li class="row">` no `index.html` (número, nome-botão, meta, painel expansível com descrição). Para adicionar, copiar uma linha e renumerar.
+- **Dois tipos de linha**: a que **expande** um painel é `<li class="row">` com `<button class="row-name">` e afordância `+`. A que **leva para fora** é `<li class="row row-out">` com um único `<a class="row-hit">` envolvendo os quatro spans: o `<a>` assume o grid e o padding, então a faixa inteira é clicável, e o nome vem sublinhado com a seta `↗` em violeta. Não misturar os dois numa linha só.
+- **Recuo do índice**: `.work` recebe `margin-left` acima de 861px para os números não colidirem com o rail de cenas, que é fixo à esquerda e some abaixo desse ponto. O título da seção fica na margem, a lista recua: o degrau é intencional.
 - **Links de material**: inline no corpo do parágrafo, com a classe `.plink` (itálico, sublinhado, azul, seta ↗), no lugar exato onde o título do projeto é citado — não em lista de chips no fim do parágrafo. Se o texto não citar o título por nome, inserir a citação para o link ter onde pousar (ver DOT Cine e Porta dos Fundos como exemplo). Sem link conhecido, o título fica só em `<strong>`.
 - **Contato**: e-mail e LinkedIn na seção `#contato`. Por decisão do dono, o site não expõe telefone nem retrato; não reintroduzir.
 

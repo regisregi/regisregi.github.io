@@ -168,7 +168,14 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 .about .rest { color: var(--dim); font-size: .9em; }
 
 /* ---------- índice de trabalho ---------- */
+/* o índice recua da margem para os números não competirem com o rail de
+   cenas, que fica fixo à esquerda. A consulta é o complemento exato da que
+   esconde o rail, senão larguras fracionárias entre 860 e 861 ficariam com
+   rail visível e lista sem recuo, que é justamente a colisão a evitar. */
 .work { border-top: 1px solid var(--line); }
+@media not all and (max-width: 860px) {
+  .work { margin-left: clamp(2rem, 5vw, 5.5rem); }
+}
 .row {
   display: grid; grid-template-columns: 2.6rem 1fr auto 1.6rem; align-items: baseline;
   gap: .8rem 1.2rem; padding: clamp(.9rem, 2vh, 1.5rem) 0;
@@ -207,19 +214,47 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 .row:hover::after, .row:focus-within::after { width: 100%; }
 .row.open .row-name { color: var(--accent); }
 
+/* ---------- linhas que são um link inteiro (escrita) ----------
+   O <a> assume o grid e o respiro da linha, então a área clicável cobre a
+   faixa toda, não só o nome. A linha continua sendo o <li>, que mantém o
+   fio de baixo, o position: relative e a varredura do ::after.
+   Este bloco precisa vir ANTES do @media de telas estreitas: .row-hit e
+   .row têm a mesma especificidade, então quem estiver por último vence, e
+   o grid de 3 colunas do mobile seria anulado se o bloco viesse depois. */
+.row-out { display: block; padding: 0; }
+.row-hit {
+  display: grid; grid-template-columns: 2.6rem 1fr auto 1.6rem; align-items: baseline;
+  gap: .8rem 1.2rem; padding: clamp(.9rem, 2vh, 1.5rem) 0;
+  color: inherit; text-decoration: none;
+}
+.row-hit:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* afordância de link: aqui o nome é sublinhado, o que separa à primeira
+   vista "isso abre fora" de "isso expande um painel" (+ nas outras linhas).
+   A espessura é em em para acompanhar o clamp do corpo do Anton. */
+.row-out .row-name {
+  text-decoration: underline; text-decoration-thickness: .045em;
+  text-underline-offset: .1em; text-decoration-color: var(--dim);
+  transition: color .3s var(--ease), transform .4s var(--ease),
+              text-decoration-color .3s var(--ease);
+}
+.row-out:hover .row-name, .row-out:focus-within .row-name { text-decoration-color: var(--accent); }
+/* a seta acende e sobe na diagonal no hover, gesto de "sai daqui". Em
+   repouso fica em --dim como o +, porque o token reserva o acento para
+   foco, hover e estado ativo. Quem separa link de painel é o sublinhado. */
+.row-out:hover .row-ext, .row-out:focus-within .row-ext {
+  color: var(--accent); transform: translate(.15rem, -.15rem);
+}
+
 /* em telas estreitas a meta desce para baixo do nome, senão a linha estoura */
 @media (max-width: 640px) {
-  .row { grid-template-columns: 2.6rem 1fr 1.6rem; }
+  .row, .row-hit { grid-template-columns: 2.6rem 1fr 1.6rem; }
   .row-idx { grid-column: 1; grid-row: 1; }
   .row-name { grid-column: 2; grid-row: 1; }
   .row-plus { grid-column: 3; grid-row: 1; }
   .row-meta { grid-column: 2; grid-row: 2; text-align: left; white-space: normal; }
   .panel { grid-column: 1 / -1; grid-row: 3; }
 }
-
-/* linhas que apenas linkam para fora (escrita) */
-.row-link { all: unset; cursor: pointer; }
-.row-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .panel { grid-column: 1 / -1; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
 .panel > div { overflow: hidden; }
 .row.open .panel { grid-template-rows: 1fr; }
@@ -262,6 +297,9 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .cut > * { opacity: 1; transform: none; transition: none; }
-  .row-name { transition: none; }
+  /* .row-out .row-name precisa da mesma especificidade da regra que liga a
+     transição lá em cima, senão ela vence aqui e o movimento sobrevive */
+  .row-name, .row-out .row-name { transition: none; }
+  .row-out:hover .row-ext, .row-out:focus-within .row-ext { transform: none; }
   .hero-name.split .ch { transform: none; transition: none; }
 }
