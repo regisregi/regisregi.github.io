@@ -263,6 +263,42 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
 .panel-inner strong { color: var(--ink); font-weight: 600; }
 .tagline { color: var(--accent); font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
 
+/* ---------- contact sheet: pôsteres das produções ----------
+   Ficam DENTRO do painel, então o índice segue sendo tipografia pura e a
+   imagem só aparece quando a linha é aberta. Em repouso entram
+   dessaturados, para 17 pôsteres coloridos não virarem colagem em cima do
+   preto absoluto; ganham cor quando você olha de perto. É a mesma gramática
+   do contact sheet de ilha: miniatura fria, cor no take escolhido. */
+/* grade de 5 colunas fixas: a célula tem o mesmo tamanho em todos os
+   painéis, com ou sem 5 pôsteres, que é como um contact sheet se comporta.
+   Painel com 2 pôsteres deixa 3 células vazias, e isso é o ritmo, não erro. */
+.sheet {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(.6rem, 1.4vw, .95rem); padding-top: .3rem; align-items: start;
+}
+.sheet figure { margin: 0; }
+.sheet a { display: block; text-decoration: none; }
+.sheet img {
+  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; display: block;
+  background: var(--line);
+  filter: grayscale(1) contrast(1.04); opacity: .72;
+  transition: filter .5s var(--ease), opacity .5s var(--ease);
+}
+.sheet a:hover img, .sheet a:focus-visible img { filter: none; opacity: 1; }
+.sheet a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sheet figcaption {
+  font-family: var(--mono); font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); margin-top: .5rem; line-height: 1.4;
+  /* reserva duas linhas: título comprido não desalinha o pé da fileira */
+  min-height: 2.8em;
+}
+/* em tela estreita cabem três por fileira sem apertar a legenda */
+@media (max-width: 640px) {
+  .sheet { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* pôster sem material público não é link: fica um pouco mais apagado */
+.sheet figure.mute img { opacity: .5; }
+
 /* material: hyperlinks do trabalho, inline no corpo do texto (estilo do
    CV em PDF). Azul deliberado: não é cor de trilha, é convenção de link. */
 .panel-inner .plink {
@@ -301,5 +337,7 @@ section { padding: clamp(3rem, 7vh, 5.5rem) var(--edge); }
      transição lá em cima, senão ela vence aqui e o movimento sobrevive */
   .row-name, .row-out .row-name { transition: none; }
   .row-out:hover .row-ext, .row-out:focus-within .row-ext { transform: none; }
+  /* a cor do pôster continua chegando no hover, mas sem a transição */
+  .sheet img { transition: none; }
   .hero-name.split .ch { transform: none; transition: none; }
 }
