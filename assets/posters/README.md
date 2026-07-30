@@ -1,7 +1,7 @@
 # Pôsteres das produções
 
-18 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
-qualidade 82. Total 1,50 MB. Entram no contact sheet dentro de cada painel de
+19 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
+qualidade 82. Total 1,69 MB. Entram no contact sheet dentro de cada painel de
 trabalho do `index.html` e do `en/index.html`.
 
 Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
@@ -26,6 +26,7 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `coracao-suburbano.jpg` | Coração Suburbano | Paramount+ |
 | `serie-302.jpg` | Série 302 | Dafina · Finalização |
 | `serie-502.jpg` | Série 502 | Dafina · Finalização |
+| `era-de-ouro.jpg` | Era de Ouro: O Nascimento dos Super-Heróis | Dafina · Finalização |
 
 ## Como foram normalizados
 
@@ -44,9 +45,13 @@ O tratamento foi feito para deixar tudo igual sem perder rosto nem título:
    ficam no alto e o corte centralizado comeria o título. Isabella: o Caso
    Nardoni (0,562, o mais alto de todos) leva `center`, porque nela o título
    fica no meio exato e as duas tarjas de topo e pé sobrevivem ao corte de
-   15,7%. Todas as outras usam `center` sem ter o que perder.
+   15,7%. Todas as outras usam `center` sem ter o que perder. Era de Ouro
+   chegou em 0,671, a 0,6% de 2:3: o corte é de meia dúzia de pixels e o
+   `center` preserva do topo (título) ao pé (assinatura Omelete e A&E). É o
+   arquivo mais pesado da pasta, 199 KB, porque é ilustração cheia de detalhe
+   fino, que o JPG não compacta bem; carrega em `lazy` dentro do painel.
 
-Cada uma das 18 foi conferida visualmente numa montagem depois do processo,
+Cada uma das 19 foi conferida visualmente numa montagem depois do processo,
 para garantir que rosto e nome da produção continuam legíveis na miniatura.
 
 Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura,
