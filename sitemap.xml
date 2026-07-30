@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Só as duas páginas públicas. O analise.html está fora do ar por decisão
+  do dono e marcado como noindex, então não entra aqui.
+  Ao publicar mudança grande de conteúdo, atualizar o lastmod.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://regisregi.com/</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://regisregi.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://regisregi.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://regisregi.com/"/>
+  </url>
+
+  <url>
+    <loc>https://regisregi.com/en/</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://regisregi.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://regisregi.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://regisregi.com/"/>
+  </url>
+
+</urlset>

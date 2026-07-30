@@ -10,6 +10,12 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://regisregi.com/en/">
   <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="pt_BR">
+  <meta property="og:site_name" content="Régis Regi">
+  <!-- No og:image yet: the card shows title and description only. Once the
+       1200x630 image exists, wire it here and in index.html, and switch both
+       to twitter:card=summary_large_image. -->
+  <meta name="twitter:card" content="summary">
   <link rel="canonical" href="https://regisregi.com/en/">
   <link rel="alternate" hreflang="pt-BR" href="https://regisregi.com/">
   <link rel="alternate" hreflang="en" href="https://regisregi.com/en/">
@@ -28,6 +34,44 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-R19SB2FGP1');
+  </script>
+  <!-- Structured data for search engines (schema.org). Not rendered.
+       The @id is deliberately the same as in index.html: it tells Google both
+       pages describe the same person, not two people with the same name.
+       Only assert here what the page already states in text. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://regisregi.com/#regis",
+    "name": "Régis Regi",
+    "url": "https://regisregi.com/en/",
+    "email": "regispereiraregi@gmail.com",
+    "jobTitle": ["Post-Production Coordinator", "Screenwriter", "Editor", "Curator"],
+    "description": "Post-production coordinator, screenwriter, editor and curator based in Rio de Janeiro, with eight years in film and television between global streamers and the independent scene.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Rio de Janeiro",
+      "addressRegion": "RJ",
+      "addressCountry": "BR"
+    },
+    "knowsLanguage": ["pt-BR", "en"],
+    "knowsAbout": [
+      "Post-production",
+      "Screenwriting",
+      "Editing",
+      "Content curation",
+      "Television criticism"
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Mellin Studio"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/regisregi",
+      "https://extvnerd.medium.com/"
+    ]
+  }
   </script>
 </head>
 <body>
