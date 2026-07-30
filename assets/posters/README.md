@@ -1,9 +1,10 @@
 # Pôsteres das produções
 
-O `index.html` e o `en/index.html` já esperam estes 17 arquivos, com estes
-nomes exatos. Enquanto eles não existirem, o contact sheet aparece quebrado.
+17 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
+qualidade 82. Total 1,44 MB. Entram no contact sheet dentro de cada painel de
+trabalho do `index.html` e do `en/index.html`.
 
-Nome do arquivo, tudo minúsculo, sem acento, `.jpg`:
+Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 
 | Arquivo | Produção | Painel |
 |---|---|---|
@@ -25,15 +26,26 @@ Nome do arquivo, tudo minúsculo, sem acento, `.jpg`:
 | `serie-302.jpg` | Série 302 | Dafina · Finalização |
 | `serie-502.jpg` | Série 502 | Dafina · Finalização |
 
-## Formato
+## Como foram normalizados
 
-A célula do contact sheet é recortada em 2:3 por `object-fit: cover`, então
-pôster de qualquer proporção funciona; o corte tira das bordas, não deforma.
-Como o corte é centralizado, pôster com o título muito na borda inferior pode
-perder o texto na miniatura. Isso não é problema: a miniatura é chamariz, o
-nome da produção vem na legenda embaixo.
+Os originais vinham em proporções de 0,605 a 0,802, e em PNG de até 8,9 MB.
+O tratamento foi feito para deixar tudo igual sem perder rosto nem título:
 
-Recomendado: **600px de largura**, JPG qualidade 80, abaixo de 150 KB cada.
-Os 17 juntos devem ficar por volta de 1,5 MB. Todos entram com
-`loading="lazy"` e só carregam quando a linha do trabalho é aberta, então não
-pesam na primeira visita.
+1. **Moldura aparada.** Alguns arquivos traziam moldura branca sólida (Galera
+   FC e A Estranha na Cama). Detectada pelos quatro cantos e removida, senão
+   viravam bloco claro no fundo preto e quebravam a uniformidade da fileira.
+2. **Recorte para 2:3, sempre centralizado na horizontal.** Onze pôsteres já
+   estavam entre 0,667 e 0,680, então o corte é desprezível. Os três mais
+   largos (Coração Suburbano 0,727, Desejos S.A. 0,796, O Lado Bom 0,802)
+   perdem só laterais, e a altura inteira sobrevive, o que preserva o título.
+3. **Âncora vertical por imagem.** Só A Magia de Aruna (0,605) exigia corte
+   vertical de verdade. Ela leva `top`, porque a marca Disney e o título estão
+   no alto; corte centralizado comeria o título. Todas as outras usam
+   `center`.
+
+Cada uma das 17 foi conferida visualmente numa montagem depois do processo,
+para garantir que rosto e nome da produção continuam legíveis na miniatura.
+
+Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura,
+recortar para 600×900 escolhendo a âncora que preserva o título, salvar JPG
+qualidade 82 progressivo, e olhar a miniatura antes de publicar.
