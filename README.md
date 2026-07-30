@@ -76,6 +76,36 @@ Para ver `projeto` como dimensão nos relatórios, é preciso registrá-la uma v
 
 Não há aviso de cookies no site. Se o tráfego da UE/LGPD virar preocupação, avaliar um banner de consentimento.
 
+## Pixel da Meta (instalado e desligado)
+
+Conjunto de dados **`RegisRegiHome`**, ID `4734001130163052`, no portfólio
+Maratonistas Podcast do Meta Business. O código está em `js/site.js`, no
+objeto `META_PIXEL`, e hoje vai ao ar com **`ATIVO: false`**.
+
+Desligado quer dizer desligado de verdade: nada é baixado da Meta, nenhuma
+requisição sai e nenhum cookie de anúncio é criado. Não é evento suprimido, é
+o pixel inexistente para quem visita. Para ligar, trocar `ATIVO` para `true`;
+o mesmo interruptor vale para os dois idiomas, porque o arquivo serve as duas
+páginas.
+
+Eventos ligados aos gestos que já existem na página:
+
+| Evento | Gatilho |
+|---|---|
+| `PageView` | carga da página |
+| `Contact` | clique em qualquer link `mailto:` |
+| `Lead` | clique no botão "Baixar CV" |
+| `ViewContent` | abrir uma linha do índice; leva o nome da produção |
+
+`Contact` e `Lead` saem de um único listener no `document`, então valem para
+os dois idiomas e para link novo que apareça depois, sem religar nada.
+
+**Antes de ligar, decidir o aviso de cookies.** Isto é rastreamento
+publicitário de terceiro, categoria diferente do Analytics, e o site não pede
+consentimento a ninguém. Sem campanha rodando, o pixel também não mostra
+relatório de visitantes: ele acumula público de remarketing para uso futuro.
+Quem responde "quem visitou o site" é o GA4.
+
 ## Pendências (TODO)
 
 - **Vídeos hospedados localmente**: hoje os materiais das produções abrem via links do YouTube dentro de cada experiência (mapeados a partir dos hyperlinks do PDF do CV). O Régis vai baixar os vídeos ele mesmo mais tarde; quando existirem os arquivos, servir localmente (ou via storage próprio) e trocar os links por `<video>`.

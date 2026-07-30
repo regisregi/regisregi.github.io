@@ -7,6 +7,67 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* PIXEL DA META — instalado e DESLIGADO.
+
+     Interruptor único do site. Com ATIVO em false nada é baixado da Meta,
+     nenhuma requisição sai e nenhum cookie de anúncio é criado: o pixel não
+     existe para quem visita. Para ligar, trocar para true. Vale para os dois
+     idiomas de uma vez, porque este arquivo serve as duas páginas.
+
+     Antes de ligar, decidir o aviso de cookies. Isto é rastreamento
+     publicitário de terceiro, categoria diferente do Analytics, e hoje o site
+     não pede consentimento a ninguém. */
+  var META_PIXEL = {
+    ATIVO: false,
+    ID: "4734001130163052"          // conjunto de dados "RegisRegiHome"
+  };
+
+  /* Fila oficial do fbq: segura as chamadas até o fbevents.js terminar de
+     carregar, então evento disparado no primeiro segundo não se perde. */
+  function carregarPixel() {
+    if (window.fbq) { return; }
+    var fbq = window.fbq = function () {
+      if (fbq.callMethod) { fbq.callMethod.apply(fbq, arguments); }
+      else { fbq.queue.push(arguments); }
+    };
+    window._fbq = window._fbq || fbq;
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = "2.0";
+    fbq.queue = [];
+
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://connect.facebook.net/en_US/fbevents.js";
+    document.head.appendChild(s);
+
+    fbq("init", META_PIXEL.ID);
+    fbq("track", "PageView");
+  }
+
+  /* Ponto único de envio. Com o pixel desligado, bloqueado por extensão ou
+     fora do ar, vira no-op e nada no site quebra. */
+  function pixel(evento, dados) {
+    if (META_PIXEL.ATIVO && typeof window.fbq === "function") {
+      window.fbq("track", evento, dados || {});
+    }
+  }
+
+  if (META_PIXEL.ATIVO) { carregarPixel(); }
+
+  /* Contact: clique em qualquer e-mail da página. Lead: download do CV.
+     Um listener só no documento cobre os dois idiomas e qualquer link novo
+     que apareça depois, sem precisar religar nada. */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a") : null;
+    if (!a) { return; }
+    if (a.protocol === "mailto:") {
+      pixel("Contact");
+    } else if (a.classList.contains("cv")) {
+      pixel("Lead", { content_name: "CV em PDF" });
+    }
+  });
+
   /* assinatura: quebra cada linha do nome em letras com atraso escalonado.
      O h1 leva aria-label com o nome íntegro; as letras ficam aria-hidden. */
   var name = document.querySelector(".hero-name");
@@ -114,6 +175,9 @@
          ativo (bloco do GA ainda comentado, ou bloqueador), não faz nada. */
       if (open && typeof window.gtag === "function") {
         window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim() });
+      }
+      if (open) {
+        pixel("ViewContent", { content_name: btn.textContent.trim() });
       }
     });
   });
