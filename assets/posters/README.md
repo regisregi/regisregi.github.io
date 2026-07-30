@@ -1,7 +1,7 @@
 # Pôsteres das produções
 
-17 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
-qualidade 82. Total 1,44 MB. Entram no contact sheet dentro de cada painel de
+18 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
+qualidade 82. Total 1,50 MB. Entram no contact sheet dentro de cada painel de
 trabalho do `index.html` e do `en/index.html`.
 
 Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
@@ -21,6 +21,7 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `desejos-sa.jpg` | Desejos S.A. | DOT Cine |
 | `o-lado-bom-de-ser-traida.jpg` | O Lado Bom de Ser Traída | DOT Cine |
 | `luva-de-pedreiro.jpg` | Luva de Pedreiro | DOT Cine |
+| `isabella-o-caso-nardoni.jpg` | Isabella: o Caso Nardoni | DOT Cine |
 | `as-seguidoras.jpg` | As Seguidoras | Paramount+ |
 | `coracao-suburbano.jpg` | Coração Suburbano | Paramount+ |
 | `serie-302.jpg` | Série 302 | Dafina · Finalização |
@@ -38,12 +39,14 @@ O tratamento foi feito para deixar tudo igual sem perder rosto nem título:
    estavam entre 0,667 e 0,680, então o corte é desprezível. Os três mais
    largos (Coração Suburbano 0,727, Desejos S.A. 0,796, O Lado Bom 0,802)
    perdem só laterais, e a altura inteira sobrevive, o que preserva o título.
-3. **Âncora vertical por imagem.** Só A Magia de Aruna (0,605) exigia corte
-   vertical de verdade. Ela leva `top`, porque a marca Disney e o título estão
-   no alto; corte centralizado comeria o título. Todas as outras usam
-   `center`.
+3. **Âncora vertical por imagem.** Duas exigiam corte vertical de verdade.
+   A Magia de Aruna (0,605) leva `top`, porque a marca Disney e o título
+   ficam no alto e o corte centralizado comeria o título. Isabella: o Caso
+   Nardoni (0,562, o mais alto de todos) leva `center`, porque nela o título
+   fica no meio exato e as duas tarjas de topo e pé sobrevivem ao corte de
+   15,7%. Todas as outras usam `center` sem ter o que perder.
 
-Cada uma das 17 foi conferida visualmente numa montagem depois do processo,
+Cada uma das 18 foi conferida visualmente numa montagem depois do processo,
 para garantir que rosto e nome da produção continuam legíveis na miniatura.
 
 Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura,
