@@ -1,0 +1,86 @@
+name: Atualiza o CV a partir do Drive
+
+# Mantém assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf igual ao arquivo do Drive,
+# então o botão "Baixar CV" continua apontando para o mesmo caminho de sempre
+# e o site segue servindo o PDF localmente, sem depender do Drive na hora do
+# clique. Basta subir versão nova NO MESMO arquivo do Drive.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # todo dia às 06:00 UTC (03:00 em Brasília)
+  workflow_dispatch:      # botão manual, para usar logo depois de atualizar o Drive
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualiza-cv
+  cancel-in-progress: false
+
+env:
+  DRIVE_FILE_ID: 1rFvt5moub2Rd0O8FeGOeOcEiWTjZURKF
+  DESTINO: assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Baixar o PDF do Drive
+        run: |
+          set -uo pipefail
+          # endpoint atual do Drive; o uc?export fica de reserva caso mude
+          novo=$(mktemp)
+          baixou=0
+          for url in \
+            "https://drive.usercontent.google.com/download?id=${DRIVE_FILE_ID}&export=download" \
+            "https://drive.google.com/uc?export=download&id=${DRIVE_FILE_ID}"
+          do
+            if curl -sSL --max-time 120 --retry 3 --retry-delay 5 -o "$novo" "$url"; then
+              baixou=1
+              echo "baixado de: $url"
+              break
+            fi
+            echo "falhou em: $url"
+          done
+          [ "$baixou" = "1" ] || { echo "::error::não consegui baixar o arquivo do Drive"; exit 1; }
+          echo "NOVO=$novo" >> "$GITHUB_ENV"
+
+      - name: Conferir que é um PDF íntegro
+        run: |
+          set -euo pipefail
+          # o Drive devolve uma página HTML quando o link perde o
+          # compartilhamento público. Sem esta checagem, esse HTML entraria no
+          # lugar do CV e o botão passaria a baixar lixo.
+          head -c 5 "$NOVO" | grep -aq '%PDF' || {
+            echo "::error::a resposta não é um PDF (link privado ou interstício do Drive?)"
+            head -c 400 "$NOVO"
+            exit 1
+          }
+          tam=$(stat -c%s "$NOVO")
+          echo "tamanho: $tam bytes"
+          [ "$tam" -ge 50000 ]    || { echo "::error::PDF pequeno demais ($tam bytes)"; exit 1; }
+          [ "$tam" -le 26214400 ] || { echo "::error::PDF grande demais ($tam bytes)"; exit 1; }
+          # PDF truncado não tem o marcador de fim
+          tail -c 2048 "$NOVO" | grep -aq '%%EOF' || {
+            echo "::error::PDF truncado, sem %%EOF no fim"
+            exit 1
+          }
+
+      - name: Publicar apenas se mudou
+        run: |
+          set -euo pipefail
+          if cmp -s "$NOVO" "$DESTINO"; then
+            echo "CV idêntico ao que já está no repositório, nada a fazer"
+            exit 0
+          fi
+          cp "$NOVO" "$DESTINO"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DESTINO"
+          git commit -m "Atualiza o CV a partir do Drive
+
+          Sincronizado automaticamente pelo workflow atualiza-cv.yml."
+          git push
+          echo "CV atualizado e publicado"

@@ -16,18 +16,42 @@ Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como
 ├── assets/
 │   ├── RE_GIS_REGI_PORTFOLIO_CV_2026.pdf   → CV linkado nos botões "Baixar CV"
 │   └── favicon.svg
+├── .github/workflows/atualiza-cv.yml → sincroniza o CV do Drive todo dia
 ├── CNAME                       → domínio custom (regisregi.com); não remover
 ├── .nojekyll                   → evita processamento Jekyll no Pages
 └── README.md
 ```
 
+## CV sincronizado do Drive
+
+O `assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf` é mantido igual ao arquivo do
+Google Drive pelo workflow `.github/workflows/atualiza-cv.yml`. O caminho do
+arquivo nunca muda, então os botões "Baixar CV" continuam apontando para o
+mesmo lugar e o site serve o PDF localmente, sem depender do Drive no clique.
+
+Roda todo dia às 06:00 UTC e também no botão **Run workflow** da aba Actions,
+para usar logo depois de atualizar o Drive sem esperar o dia seguinte.
+
+**Como atualizar o CV:** no Drive, abrir o menu do arquivo e usar
+**Gerenciar versões → Fazer upload de nova versão**. Não apagar e subir de
+novo: arquivo novo ganha ID novo, e o workflow continuaria buscando o ID
+antigo. O ID em uso está na variável `DRIVE_FILE_ID` do workflow.
+
+O compartilhamento precisa continuar em **qualquer pessoa com o link, leitor**.
+Se virar restrito, o Drive passa a responder HTML em vez do PDF; o workflow
+detecta e falha em vez de gravar lixo por cima do CV bom.
+
+Antes de gravar, o workflow confere que a resposta começa com `%PDF`, que tem
+entre 50 KB e 25 MB e que termina com `%%EOF`. Só faz commit se o conteúdo
+mudou de verdade, então dia sem alteração não gera commit nem rebuild.
+
 ## Deploy
 
-Este repositório é o user site da conta `regisregi`: **todo push na `main` publica direto**, sem workflow e sem branch `gh-pages`. O Pages está configurado em Settings → Pages com *Deploy from a branch* (`main`, `/ (root)`) e o domínio custom `regisregi.com`.
+Este repositório é o user site da conta `regisregi`: **todo push na `main` publica direto**, sem workflow de build e sem branch `gh-pages`. O único workflow é o que sincroniza o CV, e ele publica dando push na `main` como qualquer commit. O Pages está configurado em Settings → Pages com *Deploy from a branch* (`main`, `/ (root)`) e o domínio custom `regisregi.com`.
 
 - O arquivo `CNAME` na raiz mantém o domínio configurado entre deploys. Não apagar.
 - A branch `gh-pages` e o workflow antigos (herdados do project site) foram aposentados; se a branch `gh-pages` ainda existir no remoto, pode ser excluída.
-- Depois que o certificado TLS do domínio for emitido pelo GitHub, marcar **Enforce HTTPS** em Settings → Pages.
+- Certificado TLS emitido e **Enforce HTTPS** ativo: `http://regisregi.com` redireciona para `https://`.
 
 ## Idiomas
 
@@ -55,7 +79,6 @@ Não há aviso de cookies no site. Se o tráfego da UE/LGPD virar preocupação,
 ## Pendências (TODO)
 
 - **Vídeos hospedados localmente**: hoje os materiais das produções abrem via links do YouTube dentro de cada experiência (mapeados a partir dos hyperlinks do PDF do CV). O Régis vai baixar os vídeos ele mesmo mais tarde; quando existirem os arquivos, servir localmente (ou via storage próprio) e trocar os links por `<video>`.
-- **Enforce HTTPS**: aguardando emissão do certificado do domínio (ver Deploy).
 
 ## Para testar localmente
 
@@ -70,7 +93,7 @@ O Lab NLP depende de `api.rss2json.com` (o Medium bloqueia leitura server-side, 
 
 ## O que personalizar
 
-- **CV**: substituir o PDF em `assets/` mantendo o mesmo nome de arquivo.
+- **CV**: não trocar o PDF na mão. Ele é sincronizado do Google Drive por GitHub Actions (ver *CV sincronizado do Drive*). Basta subir a versão nova no Drive.
 - **Cores do index**: tudo em `css/tokens.css`, com a regra de uso de cada cor comentada. `--accent` (violeta) é a única cor de interface; as quatro cores de frente (`--coord`, `--roteiro`, `--edicao`, `--curadoria`) só aparecem nos pontos sob o nome.
 - **Cores do Lab**: `:root` no topo do `css/style.css` (paleta de dados validada para daltonismo).
 - **Trabalhos**: cada experiência é um `<li class="row">` no `index.html` (número, nome-botão, meta, painel expansível com descrição). Para adicionar, copiar uma linha e renumerar.
