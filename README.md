@@ -100,6 +100,29 @@ Para ver `projeto` como dimensão nos relatórios, é preciso registrá-la uma v
 
 Não há aviso de cookies no site. Se o tráfego da UE/LGPD virar preocupação, avaliar um banner de consentimento.
 
+## Topo do site: glitch e faixa de marcas
+
+Duas peças novas na hero, escolhidas entre variantes prototipadas:
+
+- **Glitch "corte de fita"** no nome (`.hero-name .ln::before/::after` em
+  `css/site.css`). Duas fatias saltam na lateral em amarelo (`--roteiro`) e
+  violeta (`--curadoria`), como emenda mal alinhada na ilha de edição. Ciclo
+  de 3,5s. As cópias nascem de `content: attr(data-txt)`, então o HTML
+  carrega o `data-txt` em cada `.ln` com o mesmo texto visível — se um dia
+  o nome mudar, mudar os dois juntos ou o glitch mostra o nome antigo.
+- **Faixa de marcas com rótulo fixo** (`.marcas` logo abaixo do `.hero-foot`).
+  Rolagem infinita sem JavaScript: a lista de marcas existe duas vezes dentro
+  de `.marcas-trilho` e a faixa anda `-50%`, então o ponto de emenda cai onde
+  a segunda cópia começa e o laço não salta. A segunda cópia é
+  `aria-hidden="true"`, para não duplicar para leitor de tela. As marcas são
+  wordmark tipográfico, não logo de arquivo, e vêm só do que o CV lista:
+  Netflix, Disney+, Star+, HBO Max, Paramount+, Discovery+, A&E, Canal
+  Brasil, Canal OFF, TNT, Porta dos Fundos. Em telas até 640px o rótulo some
+  e só a faixa fica, para não brigar por espaço com o nome.
+
+Os dois desligam em `prefers-reduced-motion: reduce`: o glitch para e some,
+a faixa vira lista estática sem a segunda cópia oculta.
+
 ## Pixel da Meta (ligado)
 
 Conjunto de dados **`RegisRegiHome`**, ID `4734001130163052`, no portfólio

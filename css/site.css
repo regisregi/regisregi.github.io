@@ -135,6 +135,82 @@ dl, dt, dd { margin: 0; }
 .hero-foot p { max-width: 46ch; font-size: clamp(.95rem, 1.3vw, 1.1rem); color: var(--ink); }
 .hero-scroll { white-space: nowrap; }
 
+/* ---------- glitch do nome: "corte de fita" ----------
+   Duas fatias do nome saltam na lateral em amarelo (roteiro) e violeta
+   (curadoria), como emenda mal alinhada na ilha de edição. As cópias
+   nascem de ::before/::after com o texto em data-txt, então não duplicam
+   markup nem atrapalham o efeito assinatura (letra a letra) que já mora
+   em .ln/.ch. Ciclo de 3,5s, valores calibrados no navegador: em .08em
+   a fatia saía do bloco do nome e virava letra fantasma; .045em mantém
+   a leitura. */
+.hero-name .ln { position: relative; }
+.hero-name .ln::before, .hero-name .ln::after {
+  content: attr(data-txt); position: absolute; left: 0; top: 0; width: 100%;
+  pointer-events: none; mix-blend-mode: screen;
+}
+.hero-name .ln::before {
+  color: var(--roteiro);
+  animation: corte-fita-a 3.5s var(--ease) infinite;
+  clip-path: inset(42% 0 38% 0);
+}
+.hero-name .ln::after {
+  color: var(--curadoria);
+  animation: corte-fita-b 3.5s var(--ease) infinite;
+  clip-path: inset(68% 0 12% 0);
+}
+@keyframes corte-fita-a {
+  0%, 90%, 100% { transform: none; opacity: 0; }
+  91% { transform: translateX(-.045em); opacity: 1; }
+  93% { transform: translateX(.022em); opacity: 1; }
+  95% { transform: none; opacity: 0; }
+}
+@keyframes corte-fita-b {
+  0%, 92%, 100% { transform: none; opacity: 0; }
+  93% { transform: translateX(.035em); opacity: 1; }
+  95% { transform: translateX(-.018em); opacity: 1; }
+  97% { transform: none; opacity: 0; }
+}
+
+/* ---------- faixa de marcas: rótulo fixo ----------
+   Rolagem infinita sem JavaScript: a lista de marcas existe duas vezes
+   dentro de .trilho e a faixa anda -50%; o ponto de emenda cai onde a
+   segunda cópia começa, então o laço não salta. O rótulo fica fixo à
+   esquerda para responder "que lista é essa" sem precisar de legenda
+   separada. */
+.marcas { display: flex; align-items: stretch; margin-top: clamp(1.4rem, 3.5vh, 2.4rem); }
+.marcas-rot {
+  flex: 0 0 auto; display: flex; align-items: center;
+  padding: 0 clamp(1rem, 2.5vw, 1.8rem) 0 var(--edge);
+  border-top: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--accent); white-space: nowrap;
+}
+.marcas-faixa {
+  flex: 1 1 auto; overflow: hidden; padding: .85rem 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.marcas-trilho { display: flex; width: max-content; animation: marcas-correr 46s linear infinite; }
+.marcas-faixa:hover .marcas-trilho, .marcas-faixa:focus-within .marcas-trilho { animation-play-state: paused; }
+.marcas-trilho ul {
+  display: flex; align-items: center; gap: clamp(1.6rem, 3.5vw, 3rem);
+  padding-right: clamp(1.6rem, 3.5vw, 3rem); margin: 0; list-style: none;
+}
+.marcas-trilho li {
+  font-family: var(--mono); font-weight: 700; font-size: clamp(.66rem, 1.05vw, .78rem);
+  letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+  white-space: nowrap; transition: color .3s var(--ease);
+}
+.marcas-trilho li:hover { color: var(--ink); }
+.marcas-trilho li::after { content: "·"; margin-left: clamp(1.6rem, 3.5vw, 3rem); color: var(--line); }
+.marcas-trilho li:last-child::after { content: none; }
+@keyframes marcas-correr { to { transform: translateX(-50%); } }
+@media (max-width: 640px) {
+  .marcas-rot { display: none; }
+  .marcas-faixa { border-left: 1px solid var(--line); }
+}
+
 /* ---------- estatísticas ---------- */
 .stats-band { padding: 0 var(--edge) clamp(1.3rem, 3vh, 2.2rem); }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
@@ -359,4 +435,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   /* o fio de acento continua acendendo no hover, mas sem a transição */
   .sheet img { transition: none; }
   .hero-name.split .ch { transform: none; transition: none; }
+  .hero-name .ln::before, .hero-name .ln::after { animation: none; opacity: 0; }
+  .marcas-trilho { animation: none; }
+  .marcas-faixa { -webkit-mask-image: none; mask-image: none; }
+  .marcas-trilho ul:last-child { display: none; }
+  .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
 }
