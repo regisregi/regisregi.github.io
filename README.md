@@ -17,6 +17,8 @@ Site estático (HTML + CSS + JS puros, sem build) servido pelo GitHub Pages como
 │   ├── RE_GIS_REGI_PORTFOLIO_CV_2026.pdf   → CV linkado nos botões "Baixar CV"
 │   └── favicon.svg
 ├── .github/workflows/atualiza-cv.yml → sincroniza o CV do Drive todo dia
+├── robots.txt                  → libera os buscadores e aponta o sitemap
+├── sitemap.xml                 → as duas páginas públicas, com hreflang
 ├── CNAME                       → domínio custom (regisregi.com); não remover
 ├── .nojekyll                   → evita processamento Jekyll no Pages
 └── README.md
@@ -63,6 +65,28 @@ O português vive em `/` e o inglês em `/en/`, cada um com URL própria e HTML 
 - As classes de cor de trilha (`dot-roteiro`, `dot-curadoria`) seguem em português nos dois: são nomes de classe do CSS, não texto visível.
 - Ao editar um trabalho, editar nos dois arquivos. São páginas independentes de propósito.
 - O CV em PDF é o mesmo nos dois idiomas e está em português.
+
+## Busca (SEO)
+
+Cada página tem `title`, `description`, `canonical` e o par `hreflang` ligando
+português e inglês. Além disso:
+
+- **`robots.txt`** libera tudo e aponta o `sitemap.xml`. O que não deve ser
+  indexado é marcado com `noindex` na própria página, nunca bloqueado aqui:
+  página bloqueada no `robots.txt` não chega a ser lida, então o buscador
+  nunca veria o `noindex`.
+- **`sitemap.xml`** lista só `/` e `/en/`, cada uma com os três `hreflang`.
+  Ao publicar mudança grande de conteúdo, atualizar o `lastmod`.
+- **`analise.html` está `noindex,follow`** enquanto o Lab estiver fora do ar,
+  para não competir com a home. Ao religar o Lab, voltar a `index,follow` e
+  reincluir a URL no sitemap.
+- **Ficha `Person` (JSON-LD)** no `<head>` dos dois index. O `@id` é o mesmo
+  nos dois de propósito: diz ao Google que as páginas descrevem a mesma
+  pessoa, não dois homônimos. Regra ao editar: só afirmar ali o que o site já
+  afirma em texto visível. Ao mudar cargo, cidade ou perfis, mudar nos dois.
+- **Não há `og:image`.** O cartão de compartilhamento sai só com texto, e o
+  `twitter:card` está em `summary`. Quando existir a imagem 1200x630, ligar
+  `og:image` nos dois index e trocar os dois para `summary_large_image`.
 
 ## Google Analytics
 

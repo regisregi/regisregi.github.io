@@ -1,0 +1,9 @@
+# Site aberto a buscadores. O que não deve ser indexado é marcado com
+# <meta name="robots" content="noindex"> na própria página (caso do
+# analise.html). Não bloquear essas páginas aqui: página bloqueada no
+# robots.txt não chega a ser lida, então o buscador nunca vê o noindex.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://regisregi.com/sitemap.xml
