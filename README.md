@@ -123,6 +123,45 @@ Duas peças novas na hero, escolhidas entre variantes prototipadas:
 Os dois desligam em `prefers-reduced-motion: reduce`: o glitch para e some,
 a faixa vira lista estática sem a segunda cópia oculta.
 
+## Incentivo a abrir as linhas de Trabalho
+
+Feedback real: no celular ninguém percebia que cada linha de trabalho abre
+(o único sinal era um "+" pequeno). Decidido por um painel de design com
+quatro abordagens independentes, julgadas e sintetizadas em duas camadas
+que reusam o vocabulário visual que o site já tem, sem inventar cor, ícone
+ou tooltip novo (`css/site.css`):
+
+- **Peso Assentado (permanente, sem JS/animação).** O `.row-plus` ("+") para
+  de se comportar como metadado sussurrado (mono pequeno, `--dim`) e passa a
+  pesar como controle secundário: `font-weight: 700`,
+  `font-size: clamp(1.3rem, 3vw, 1.9rem)`, `color: var(--ink)`. Escopado com
+  `:not(.row-ext):not(.row-go)` porque essas duas classes reusam `.row-plus`
+  só pelo grid, na seta de saída de Escrita (↗ →), que precisa continuar
+  leve. Funciona em toda linha, sempre, com ou sem JavaScript, com ou sem
+  `prefers-reduced-motion` — é a correção que nunca falha.
+- **Varredura de entrada (reforço animado, uma vez por carregamento).** Ao
+  a lista de Trabalho entrar em cena, uma passagem única de cima a baixo
+  reproduz, linha a linha, os MESMOS valores que `.row:hover` já usa (cor
+  accent, deslocamento do nome, fio embaixo) — não é vocabulário novo, é o
+  estado de interação real acontecendo sem precisar de dedo ou mouse.
+  Reaproveita o `IntersectionObserver` que já existe para `.cut` em
+  `js/site.js` (fire-once, nenhum observer novo). Escopado com
+  `:is(#trabalho, #work)` porque o id da seção muda por idioma (`#trabalho`
+  no pt-BR, `#work` no en) e as duas páginas carregam este mesmo CSS.
+
+Também corrigido no caminho, pré-requisito técnico independente da escolha
+acima: `.row:hover` não estava escopado a dispositivo com hover de verdade.
+Sem esse escopo, um toque no celular deixava a linha "presa" na cor de hover
+até o próximo toque em outro lugar da tela, porque touch simula hover ao
+tocar mas não tem como "tirar o mouse de cima" para sair dele. Agora vive em
+`@media (hover: hover) and (pointer: fine)`; `:focus-within` continua fora
+do escopo, porque navegação por teclado não deve depender de hover.
+
+As quatro propostas descartadas (incluindo um coachmark de abertura
+automática e um efeito de dobradiça ligado ao scroll via
+`animation-timeline: view()`) e o raciocínio completo do julgamento ficam
+fora do repositório — foram avaliação de processo, não decisão final.
+
 ## Pixel da Meta (ligado)
 
 Conjunto de dados **`RegisRegiHome`**, ID `4734001130163052`, no portfólio

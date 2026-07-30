@@ -277,6 +277,19 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   color: var(--dim); transition: color .3s var(--ease), transform .4s var(--ease);
 }
 .row-plus::before { content: "+"; }
+/* o "+" deixa de ser metadado sussurrado (mono pequeno, --dim) e passa a
+   pesar como segunda massa tipográfica da linha — controle secundário com
+   o mesmo rigor do nome, não ícone decorativo. Feedback real: no celular
+   ninguém percebia que a linha abre; isto é permanente e 100% CSS, então
+   funciona em toda linha, sempre, sem depender de pegar quem visita no
+   momento certo de scroll. :not(.row-ext):not(.row-go) porque essas duas
+   classes reusam .row-plus só pelo grid/posição (a seta de saída em
+   Escrita) e precisam continuar leves, não competir com o nome. Vem antes
+   de .row.open .row-plus de propósito: mesma especificidade, e o estado
+   aberto (cor accent) precisa vencer no empate. */
+.row-plus:not(.row-ext):not(.row-go) {
+  font-weight: 700; font-size: clamp(1.3rem, 3vw, 1.9rem); color: var(--ink);
+}
 .row.open .row-plus { color: var(--accent); transform: rotate(45deg); }
 .row-ext::before { content: "↗"; font-size: .9rem; }
 .row-go::before { content: "→"; font-size: .9rem; }
@@ -285,10 +298,63 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 0;
   background: var(--accent); transition: width .45s var(--ease);
 }
-.row:hover .row-name, .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
-.row:hover .row-plus { color: var(--accent); }
-.row:hover::after, .row:focus-within::after { width: 100%; }
+/* :hover escopado a dispositivo com hover de verdade: sem isto, um toque no
+   celular deixa a linha "presa" na cor de hover até o usuário tocar em outro
+   lugar da tela, porque touch não tem estado de :hover, só simula ao tocar e
+   não sai sozinho. :focus-within continua fora do escopo, teclado não deve
+   depender de hover. */
+@media (hover: hover) and (pointer: fine) {
+  .row:hover .row-name { color: var(--accent); transform: translateX(.4rem); }
+  .row:hover .row-plus { color: var(--accent); }
+  .row:hover::after { width: 100%; }
+}
+.row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
+.row:focus-within::after { width: 100%; }
 .row.open .row-name { color: var(--accent); }
+
+/* ---------- varredura de entrada: mostra a interação em vez de anunciá-la ----------
+   Ao entrar em cena, a lista de Trabalho recebe uma passagem única de cima
+   pra baixo que reproduz, linha a linha, os MESMOS valores que .row:hover já
+   usa (cor accent, translateX, largura do fio) — não inventa vocabulário
+   novo, é o estado de interação real acontecendo sem precisar de dedo ou
+   mouse, a tradução do sinal de hover de desktop pro toque. Reaproveita o
+   IntersectionObserver que já existe para .cut em js/site.js (fire-once,
+   nenhum observer novo). Escopado à seção de Trabalho para não repetir em
+   Escrita, que já tem sublinhado e seta sempre visíveis, não precisa do
+   reforço. :is(#trabalho, #work) porque o id da seção muda por idioma
+   (#trabalho no pt-BR, #work no en) — index.html e en/index.html carregam
+   este mesmo arquivo de CSS, então a regra precisa cobrir os dois nomes.
+   Duração 380ms, passo de 65ms entre linhas: a proporção (~5,8×) é o que
+   faz o efeito ler como luz corrida contínua, não como piscadas em sequência
+   tipo onda de estádio — não alterar o passo sem alterar a duração junto. */
+:is(#trabalho, #work) .work.cut.in .row:nth-child(1)  { --sweep-i: 0; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(2)  { --sweep-i: 1; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(3)  { --sweep-i: 2; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(4)  { --sweep-i: 3; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(5)  { --sweep-i: 4; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(6)  { --sweep-i: 5; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(7)  { --sweep-i: 6; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(8)  { --sweep-i: 7; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(9)  { --sweep-i: 8; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(10) { --sweep-i: 9; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(11) { --sweep-i: 10; }
+:is(#trabalho, #work) .work.cut.in .row:nth-child(n+12) { --sweep-i: 11; }
+
+:is(#trabalho, #work) .work.cut.in .row-name {
+  animation: varre-nome .38s var(--ease);
+  animation-delay: calc(var(--sweep-i, 0) * 65ms + .26s);
+}
+:is(#trabalho, #work) .work.cut.in .row-plus {
+  animation: varre-plus .38s var(--ease);
+  animation-delay: calc(var(--sweep-i, 0) * 65ms + .26s);
+}
+:is(#trabalho, #work) .work.cut.in .row::after {
+  animation: varre-fio .38s var(--ease);
+  animation-delay: calc(var(--sweep-i, 0) * 65ms + .26s);
+}
+@keyframes varre-nome { 50% { color: var(--accent); transform: translateX(.4rem); } }
+@keyframes varre-plus { 50% { color: var(--accent); } }
+@keyframes varre-fio  { 50% { width: 100%; } }
 
 /* ---------- linhas que são um link inteiro (escrita) ----------
    O <a> assume o grid e o respiro da linha, então a área clicável cobre a
@@ -322,9 +388,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   color: var(--accent); transform: translate(.15rem, -.15rem);
 }
 
-/* em telas estreitas a meta desce para baixo do nome, senão a linha estoura */
+/* em telas estreitas a meta desce para baixo do nome, senão a linha estoura.
+   3ª coluna alargada de 1.6rem pra 2.2rem: dá respiro pro "+" maior (Peso
+   Assentado); a seta de Escrita (.row-ext/.row-go) fica só com mais espaço
+   sobrando à direita, sem quebrar, porque continua com justify-self: end. */
 @media (max-width: 640px) {
-  .row, .row-hit { grid-template-columns: 2.6rem 1fr 1.6rem; }
+  .row, .row-hit { grid-template-columns: 2.6rem 1fr 2.2rem; }
   .row-idx { grid-column: 1; grid-row: 1; }
   .row-name { grid-column: 2; grid-row: 1; }
   .row-plus { grid-column: 3; grid-row: 1; }
@@ -440,4 +509,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .marcas-faixa { -webkit-mask-image: none; mask-image: none; }
   .marcas-trilho ul:last-child { display: none; }
   .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
+  /* a varredura de entrada some inteira; o peso permanente do "+" (Camada 1,
+     fora deste bloco) continua de pé como única pista, sem movimento */
+  :is(#trabalho, #work) .work.cut.in .row-name,
+  :is(#trabalho, #work) .work.cut.in .row-plus,
+  :is(#trabalho, #work) .work.cut.in .row::after { animation: none; }
 }
