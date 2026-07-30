@@ -76,17 +76,16 @@ Para ver `projeto` como dimensão nos relatórios, é preciso registrá-la uma v
 
 Não há aviso de cookies no site. Se o tráfego da UE/LGPD virar preocupação, avaliar um banner de consentimento.
 
-## Pixel da Meta (instalado e desligado)
+## Pixel da Meta (ligado)
 
 Conjunto de dados **`RegisRegiHome`**, ID `4734001130163052`, no portfólio
 Maratonistas Podcast do Meta Business. O código está em `js/site.js`, no
-objeto `META_PIXEL`, e hoje vai ao ar com **`ATIVO: false`**.
+objeto `META_PIXEL`, hoje com **`ATIVO: true`**.
 
-Desligado quer dizer desligado de verdade: nada é baixado da Meta, nenhuma
-requisição sai e nenhum cookie de anúncio é criado. Não é evento suprimido, é
-o pixel inexistente para quem visita. Para ligar, trocar `ATIVO` para `true`;
-o mesmo interruptor vale para os dois idiomas, porque o arquivo serve as duas
-páginas.
+O interruptor é único e não tem meio-termo: em `false`, nada é baixado da
+Meta, nenhuma requisição sai e nenhum cookie de anúncio é criado. Não é evento
+suprimido, é o pixel inexistente para quem visita. Vale para os dois idiomas
+de uma vez, porque o arquivo serve as duas páginas.
 
 Eventos ligados aos gestos que já existem na página:
 
@@ -100,11 +99,15 @@ Eventos ligados aos gestos que já existem na página:
 `Contact` e `Lead` saem de um único listener no `document`, então valem para
 os dois idiomas e para link novo que apareça depois, sem religar nada.
 
-**Antes de ligar, decidir o aviso de cookies.** Isto é rastreamento
-publicitário de terceiro, categoria diferente do Analytics, e o site não pede
-consentimento a ninguém. Sem campanha rodando, o pixel também não mostra
-relatório de visitantes: ele acumula público de remarketing para uso futuro.
-Quem responde "quem visitou o site" é o GA4.
+**Não há aviso de cookies, e o pixel está ligado assim mesmo, por decisão do
+dono.** Isto é rastreamento publicitário de terceiro, categoria diferente do
+Analytics. Se um dia entrar um banner de consentimento, o ponto de amarrar o
+disparo ao aceite é a chamada de `carregarPixel()`, não os eventos: o certo é
+não carregar nada antes do aceite.
+
+Sem campanha rodando, o pixel não mostra relatório de visitantes: ele acumula
+público de remarketing para uso futuro. Quem responde "quem visitou o site" é
+o GA4.
 
 ## Pendências (TODO)
 

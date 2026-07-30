@@ -7,18 +7,19 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* PIXEL DA META — instalado e DESLIGADO.
+  /* PIXEL DA META — LIGADO.
 
-     Interruptor único do site. Com ATIVO em false nada é baixado da Meta,
-     nenhuma requisição sai e nenhum cookie de anúncio é criado: o pixel não
-     existe para quem visita. Para ligar, trocar para true. Vale para os dois
-     idiomas de uma vez, porque este arquivo serve as duas páginas.
+     Interruptor único do site: trocar ATIVO para false desliga de verdade,
+     sem meio-termo. Nada é baixado da Meta, nenhuma requisição sai e nenhum
+     cookie de anúncio é criado. Vale para os dois idiomas de uma vez, porque
+     este arquivo serve as duas páginas.
 
-     Antes de ligar, decidir o aviso de cookies. Isto é rastreamento
-     publicitário de terceiro, categoria diferente do Analytics, e hoje o site
-     não pede consentimento a ninguém. */
+     Isto é rastreamento publicitário de terceiro, categoria diferente do
+     Analytics, e o site não pede consentimento a ninguém. Ligado por decisão
+     do dono. Se um dia entrar aviso de cookies, o lugar de amarrar o disparo
+     ao aceite é aqui, na chamada de carregarPixel(). */
   var META_PIXEL = {
-    ATIVO: false,
+    ATIVO: true,
     ID: "4734001130163052"          // conjunto de dados "RegisRegiHome"
   };
 
