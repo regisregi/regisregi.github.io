@@ -4,9 +4,8 @@
 qualidade 82. Total 1,70 MB. Entram no contact sheet dentro de cada painel de
 trabalho do `index.html` e do `en/index.html`.
 
-Um deles, `maracutaia.jpg`, não é pôster de produção: é a marca da
-Maracutaia.fm, recortada de um mockup de página (16:9) que não segue o
-formato dos outros. Ver a seção própria abaixo.
+`maracutaia-banner.jpg` foge do padrão 2:3: é um mockup de página inteira
+em 16:9, não pôster de produção. Ver a seção própria abaixo.
 
 Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 
@@ -31,7 +30,7 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `serie-302.jpg` | Série 302 | Dafina · Finalização |
 | `serie-502.jpg` | Série 502 | Dafina · Finalização |
 | `era-de-ouro.jpg` | Era de Ouro: O Nascimento dos Super-Heróis | Dafina · Finalização |
-| `maracutaia.jpg` | Maracutaia.fm (marca, não pôster) | Maracutaia.fm |
+| `maracutaia-banner.jpg` | Maracutaia.fm (mockup 16:9, não pôster) | Maracutaia.fm |
 
 ## Como foram normalizados
 
@@ -77,25 +76,28 @@ Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura
 para 600×900 escolhendo a âncora que preserva o título, salvar JPG qualidade
 82 progressivo, e olhar a miniatura antes de publicar.
 
-## Maracutaia.fm: marca, não pôster
+## Maracutaia.fm: mockup 16:9, não pôster
 
-`maracutaia.jpg` não é uma foto de produção: é o símbolo da Maracutaia.fm
-(o traço preto em forma de meia-lua) recortado de um mockup de página inteira
-(16:9, com título "SETS AUDIOVISUAIS", grade de seis fotos de DJs e botão
-"Ver a playlist completa") que estava na mesma pasta dos pôsteres. Esse
-mockup inteiro não cabe no formato 2:3 do contact sheet sem espremer a
-tipografia a ilegibilidade, e as seis fotos nele são de outros artistas
-(Azo, Caiao, Marta Supernova, Rafael Não Existe e mais dois), não do Régis,
-então não fazia sentido usá-las como "pôster" da entrada dele no portfólio.
+`maracutaia-banner.jpg` é o arquivo `maracutaia.png` original inteiro
+(1920×1080, mockup de página com o título "SETS AUDIOVISUAIS", a grade de
+seis fotos de DJs — Azo, Caiao, Marta Supernova, Rafael Não Existe e mais
+dois — e o botão "Ver a playlist completa"), só redimensionado para 1600px
+de largura (132 KB, qualidade 88), sem cortar nada.
 
-O recorte usado é só o quadrado da marca, fundo violeta sólido, sem rosto de
-ninguém. Coincidência feliz: a cor de fundo desse quadrado no mockup
-(`rgb(164, 139, 255)`) é exatamente o `--accent` do site (`#a48bff`). O
-quadrado foi redimensionado para 600px de largura e colado centralizado
-numa tela 600×900 preenchida com a mesma cor, então não há upscale
-forçado nem corte do símbolo.
+Primeira tentativa foi recortar só o símbolo da marca (quadrado violeta) e
+tratá-lo como pôster 2:3, para não usar a foto de artistas que não são o
+Régis. Ficou pequeno demais para reconhecer como "o arquivo" ao ver no site,
+e o mockup já credita o trabalho dele em texto ("RÉGIS REGI · CURADORIA,
+EDIÇÃO E FINALIZAÇÃO"), então mostrar a peça inteira é mais honesto que um
+recorte abstrato: documenta a curadoria visual e não faz identidade alheia
+de "pôster de produção".
 
-O pôster está ligado ao mesmo player embutido dos outros: clicar nele abre
+Por não ser 2:3, ganhou modificador próprio: `<figure class="wide">` dentro
+do mesmo `.sheet` (CSS em `css/site.css`, regra `.sheet figure.wide`).
+Continua dentro de `.sheet` de propósito, para o seletor `.sheet a[href]`
+que liga pôsteres à sala de projeção alcançar sem precisar de JS novo.
+
+O banner está ligado ao mesmo player embutido dos outros: clicar nele abre
 a playlist "Sets Maracutaia.fm" dentro do site, com índice dos 9 episódios
 (ver `## Sala de projeção` no README principal para o porquê de 7 dos 9
 vídeos não tocarem embutidos, e o que fazer se isso mudar).

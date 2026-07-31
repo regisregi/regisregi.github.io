@@ -463,6 +463,13 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   width: 100%; max-width: 1240px; margin-inline: auto;
 }
 .sheet figure { flex: 1 1 130px; max-width: 185px; margin: 0; }
+/* pôster largo: único caso em que o material não é pôster 2:3, é um mockup
+   16:9 de página inteira (ver assets/posters/README.md, painel Maracutaia.fm).
+   Mesma moldura, mesmo hover do resto do contact sheet, só a proporção e a
+   largura mudam; continua dentro de .sheet de propósito, para o JS que liga
+   os pôsteres à sala de projeção (.sheet a[href]) alcançar sem mudança. */
+.sheet figure.wide { flex-basis: 100%; max-width: 100%; }
+.sheet figure.wide img { aspect-ratio: 16 / 9; }
 
 .sheet a { display: block; text-decoration: none; }
 .sheet img {
