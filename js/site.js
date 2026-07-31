@@ -182,4 +182,330 @@
       }
     });
   });
+
+  /* ---------- sala de projeção ----------
+     Clicar num pôster abre o vídeo aqui dentro em vez de mandar o visitante
+     para o YouTube. O <a href> continua no HTML: sem JS, sem <dialog> ou com
+     data-embed="off", o clique volta a levar para fora, que é a degradação
+     honesta. Nenhum iframe existe antes do clique e nenhum sobrevive ao
+     fechamento, então a página em repouso continua sem player nenhum. */
+  var proj = document.getElementById("proj");
+  if (proj && typeof proj.showModal === "function") (function () {
+
+    /* INSTAGRAM DESLIGADO. O embed carrega como documento cross-origin
+       legítimo, mas nunca foi confirmado VISUALMENTE o que ele desenha, e o
+       modo de falha é o pior possível num portfólio: a sala abre bonita e no
+       meio dela um retângulo branco ou um pedido de login, e quem olha conclui
+       que o material não existe. São 4 pôsteres contra 13, e o painel do Grupo
+       Sal é 100% Instagram, então a falha não seria um pôster estranho, seria
+       um trabalho inteiro quebrado. Enquanto for false, esses 4 seguem como
+       link externo, que é o comportamento conhecido e correto de hoje.
+       Para ligar: conferir os quatro embeds em janela anônima e no celular, e
+       trocar para true. Vale para os dois idiomas de uma vez. */
+    var EMBED_IG = false;
+
+    var room = proj.querySelector(".proj-room"), slot = proj.querySelector(".proj-slot");
+    var elIdx = proj.querySelector(".proj-idx"), elSrc = proj.querySelector(".proj-src");
+    var elTit = proj.querySelector(".proj-title"), elOut = proj.querySelector(".proj-out");
+    var elBlind = proj.querySelector(".proj-blind"), btnX = proj.querySelector(".proj-x");
+    var elNav = proj.querySelector(".proj-nav"), elCount = proj.querySelector(".proj-count");
+    var btnPrev = proj.querySelector(".proj-prev"), btnNext = proj.querySelector(".proj-next");
+    var elLive = proj.querySelector(".proj-live");
+    var elList = proj.querySelector(".proj-list"), elListOl = elList.querySelector("ol");
+
+    /* faixas de cada playlist, assadas no HTML. Extraídas uma vez da própria
+       lista do YouTube, então a sala monta o índice sem chave de API e sem
+       script externo rodando no navegador de quem visita. */
+    var LISTAS = {};
+    try {
+      var brutas = document.getElementById("proj-listas");
+      if (brutas) { LISTAS = JSON.parse(brutas.textContent); }
+    } catch (err) { LISTAS = {}; }
+    var faixa = 0;                      /* episódio atual dentro da playlist */
+    var mqMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var LANG = (document.documentElement.lang || "en").slice(0, 2);
+    var opener = null, closing = false, guard = 0, igTimer = 0, igOk = false;
+    var scrollY = 0, downInRoom = false, warmed = {};
+    var rolo = [], pos = 0, atual = null;
+
+    /* data-* manda; sem ele, deduz do href, então pôster colado amanhã
+       funciona sem tocar no JS. list= é testado ANTES de v= porque
+       watch?v=X&list=Y deve abrir a lista. */
+    function receita(a) {
+      var kind = a.getAttribute("data-embed") || "", id = a.getAttribute("data-id") || "";
+      if (kind === "off") { return null; }
+      var href = a.getAttribute("href") || "", m;
+      if (!kind || !id) {
+        if ((m = href.match(/[?&]list=([\w-]+)/))) { kind = "yt-list"; id = m[1]; }
+        else if ((m = href.match(/(?:v=|youtu\.be\/|\/embed\/)([\w-]{11})/))) { kind = "yt"; id = m[1]; }
+        else if ((m = href.match(/instagram\.com\/(?:[^\/?#]+\/)?(p|reel|tv)\/([\w-]+)/))) { kind = "ig"; id = m[1] + "/" + m[2]; }
+      }
+      if (kind === "ig" && !EMBED_IG) { return null; }
+      return (kind && id) ? { kind: kind, id: id } : null;
+    }
+
+    /* playsinline=1 é o parâmetro decisivo: sem ele o iOS arranca o vídeo para
+       o player nativo em tela cheia e a premissa de reter morre. color=white
+       apaga a barra vermelha, a única cor forte que entraria na sala. */
+    function fonte(r) {
+      var q = "autoplay=1&playsinline=1&rel=0&color=white&iv_load_policy=3&hl=" + LANG;
+      if (r.kind === "yt") { return "https://www.youtube-nocookie.com/embed/" + r.id + "?" + q; }
+      if (r.kind === "yt-list") {
+        var itens = LISTAS[r.id];
+        /* com as faixas em mãos tocamos VÍDEO A VÍDEO e a navegação é a nossa
+           lista, não a do YouTube. Sem elas, cai no endpoint de playlist do
+           YouTube, que ainda funciona, só sem índice próprio. */
+        if (itens && itens[faixa]) {
+          return "https://www.youtube-nocookie.com/embed/" + itens[faixa].id + "?" + q;
+        }
+        return "https://www.youtube-nocookie.com/embed/videoseries?list=" + r.id + "&" + q;
+      }
+      return "https://www.instagram.com/" + r.id + "/embed/captioned/";
+    }
+
+    /* desenha o índice de episódios. aria-current marca a faixa em exibição,
+       que é o que leitor de tela usa para dizer "item atual". */
+    function montarLista(r) {
+      var itens = (r.kind === "yt-list") ? LISTAS[r.id] : null;
+      elListOl.textContent = "";
+      if (!itens || itens.length < 2) { elList.hidden = true; return false; }
+      itens.forEach(function (item, i) {
+        var li = document.createElement("li");
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "proj-faixa";
+        b.setAttribute("aria-current", i === faixa ? "true" : "false");
+        var n = document.createElement("span");
+        n.className = "n"; n.textContent = zero(i + 1);
+        /* o número é ordinal visual: a <ol> já anuncia "item 3 de 6", e sem
+           isto o nome acessível do botão sairia colado, "03A Força de Arte" */
+        n.setAttribute("aria-hidden", "true");
+        var t = document.createElement("span");
+        t.className = "t"; t.textContent = item.t;
+        b.appendChild(n); b.appendChild(t);
+        b.addEventListener("click", function () {
+          if (i === faixa) { return; }
+          faixa = i;
+          pintar(true);
+        });
+        li.appendChild(b);
+        elListOl.appendChild(li);
+      });
+      elList.hidden = false;
+      return true;
+    }
+    function host(r) { return r.kind === "ig" ? "https://www.instagram.com" : "https://www.youtube-nocookie.com"; }
+    function aquecer(r) {
+      var h = host(r); if (warmed[h]) { return; } warmed[h] = 1;
+      var l = document.createElement("link");
+      l.rel = "preconnect"; l.href = h; l.crossOrigin = "";
+      document.head.appendChild(l);
+    }
+    function ouvirIG(e) { if (e.origin === "https://www.instagram.com") { igOk = true; } }
+    function zero(n) { return (n < 10 ? "0" : "") + n; }
+
+    function pintar(troca) {
+      var a = rolo[pos], r = receita(a);
+      var fig = a.closest("figure"), cap = fig && fig.querySelector("figcaption");
+      var titulo = cap ? cap.textContent.trim() : ((a.querySelector("img") || {}).alt || "");
+
+      elTit.textContent = titulo;        /* nome vem do HTML: bilíngue de graça */
+      elOut.href = a.href;
+      elBlind.hidden = true;
+
+      var temLista = montarLista(r);
+      room.setAttribute("data-shape", r.kind === "ig" ? "ig" : (temLista ? "list" : "wide"));
+
+      elNav.hidden = rolo.length < 2;
+      elCount.textContent = zero(pos + 1) + " / " + zero(rolo.length);
+      btnPrev.disabled = (pos === 0);
+      btnNext.disabled = (pos === rolo.length - 1);
+
+      /* 302 e 502 apontam para a MESMA playlist, mas abrem em faixas
+         diferentes (data-start), então a faixa entra na comparação: mesmo
+         kind+id+faixa não recria o iframe e o vídeo em andamento não
+         reinicia; faixa diferente troca o vídeo. */
+      var mesma = atual && atual.kind === r.kind && atual.id === r.id && atual.faixa === faixa;
+      if (!mesma) {
+        window.clearTimeout(igTimer);
+        window.removeEventListener("message", ouvirIG);
+        slot.textContent = "";
+        var f = document.createElement("iframe");
+        f.src = fonte(r);
+        f.title = titulo;                /* iframe sem title é falha de WCAG 4.1.2 */
+        f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        f.setAttribute("allowfullscreen", "");
+        f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+        slot.appendChild(f);
+        if (r.kind === "ig") {
+          igOk = false;
+          window.addEventListener("message", ouvirIG);
+          igTimer = window.setTimeout(function () { if (!igOk) { elBlind.hidden = false; } }, 3000);
+        }
+      }
+      atual = { kind: r.kind, id: r.id, faixa: faixa };
+
+      /* dígitos e ponto médio são neutros de idioma: nenhuma string em JS.
+         Com índice de episódios, quem é anunciado é a faixa, que é o que
+         mudou de fato. */
+      var itensAgora = (r.kind === "yt-list") ? LISTAS[r.id] : null;
+      elLive.textContent = (itensAgora && itensAgora[faixa])
+        ? itensAgora[faixa].t + " · " + (faixa + 1) + "/" + itensAgora.length
+        : titulo + " · " + (pos + 1) + "/" + rolo.length;
+
+      if (troca && !mqMotion.matches) {
+        proj.classList.remove("is-cut"); void proj.offsetWidth; proj.classList.add("is-cut");
+      }
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "abrir_video", { producao: titulo, fonte: r.kind });
+      }
+      pixel("ViewContent", { content_name: titulo, content_type: "video" });
+    }
+
+    /* as setas do rodapé andam entre PRODUÇÕES da folha de contato; o índice
+       ao lado da tela anda entre EPISÓDIOS da produção atual. Trocar de
+       produção volta a faixa para o começo, ou para a que o pôster pede. */
+    function andar(d) {
+      var n = pos + d;
+      if (n < 0 || n >= rolo.length) { return; }
+      pos = n;
+      faixa = parseInt(rolo[pos].getAttribute("data-start") || "0", 10) || 0;
+      pintar(true);
+      /* se a seta que tinha o foco acabou de ser desabilitada, o foco cairia
+         no body e a prisão do dialog ficaria sem alvo: passa para a outra */
+      if (document.activeElement === btnPrev && btnPrev.disabled) { btnNext.focus(); }
+      if (document.activeElement === btnNext && btnNext.disabled) { btnPrev.focus(); }
+    }
+
+    function abrir(a) {
+      var r = receita(a); if (!r) { return false; }
+      if (proj.open) { return true; }
+      var sheet = a.closest(".sheet"), row = a.closest(".row");
+      if (!sheet) { return false; }
+
+      /* o rolo é a folha de contato daquele trabalho: quem entrou por um
+         trailer pode ver os outros sem voltar. Figuras .mute não têm <a> e
+         saem sozinhas; com EMBED_IG false os 4 do Instagram também saem, então
+         o contador nunca promete o que não existe. */
+      rolo = Array.prototype.filter.call(sheet.querySelectorAll("a[href]"), function (x) { return !!receita(x); });
+      pos = rolo.indexOf(a); if (pos < 0) { return false; }
+
+      var idx = row && row.querySelector(".row-idx"), nom = row && row.querySelector(".row-name");
+      elIdx.textContent = idx ? idx.textContent.trim() : "";
+      elSrc.textContent = nom ? nom.textContent.trim() : "";
+
+      opener = a; atual = null; limpo = false;
+      faixa = parseInt(a.getAttribute("data-start") || "0", 10) || 0;
+      pintar(false);
+
+      travarRolagem();
+      proj.showModal();
+      btnX.focus({ preventScroll: true });
+      try { history.pushState({ proj: 1 }, ""); } catch (err) {}   /* voltar do Android fecha */
+      return true;
+    }
+
+    function pedirFechar(viaPop) {
+      if (!proj.open || closing) { return; }
+      closing = true;
+      slot.textContent = "";             /* o som corta ANTES da animação */
+      if (!viaPop && history.state && history.state.proj) { try { history.back(); } catch (err) {} }
+      /* consulta o MediaQueryList VIVO, não a var do boot: com animation:none
+         o animationend nunca dispara e o modal ficaria preso com a página
+         travada sem rolagem. */
+      if (mqMotion.matches) { fecharAgora(); return; }
+      proj.classList.add("is-closing");
+      proj.addEventListener("animationend", noFim);
+      guard = window.setTimeout(fecharAgora, 500);   /* segunda rede */
+    }
+    function noFim(e) { if (e.target === proj) { fecharAgora(); } }
+    function fecharAgora() {
+      window.clearTimeout(guard);
+      proj.removeEventListener("animationend", noFim);
+      proj.classList.remove("is-closing", "is-cut");
+      if (proj.open) { proj.close(); }
+      limpar();
+    }
+
+    /* LIMPEZA. Chamada direto por fecharAgora, que é o funil por onde passam
+       Esc, o ×, o clique no preto e o botão voltar. Não dependemos do evento
+       close do <dialog> para isto: ele existe na especificação, mas medindo
+       aqui num showModal/close direto, sem nosso código no meio, ele não
+       disparou, e a página ficava com body position:fixed, ou seja, travada
+       sem rolagem depois de fechar o vídeo. O listener de close continua
+       abaixo como rede para o caso de o navegador fechar o diálogo por conta
+       própria; por isso esta função é idempotente e rodar duas vezes não faz
+       nada na segunda. */
+    var limpo = true;
+    function limpar() {
+      if (limpo) { return; }
+      limpo = true;
+      slot.textContent = "";
+      window.clearTimeout(igTimer);
+      window.removeEventListener("message", ouvirIG);
+      closing = false; atual = null; rolo = [];
+      destravarRolagem();
+      if (opener) { opener.focus({ preventScroll: true }); opener = null; }
+    }
+    proj.addEventListener("close", limpar);
+    proj.addEventListener("cancel", function (e) { e.preventDefault(); pedirFechar(); });
+    window.addEventListener("popstate", function () { if (proj.open) { pedirFechar(true); } });
+
+    btnPrev.addEventListener("click", function () { andar(-1); });
+    btnNext.addEventListener("click", function () { andar(1); });
+    proj.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); andar(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); andar(-1); }
+    });
+
+    /* clique no preto fecha; a guarda de pointerdown evita que arrastar de
+       dentro para fora feche a sala sem querer */
+    function noVazio(t) {
+      return t === proj || t.classList.contains("proj-stage") || t.classList.contains("proj-room");
+    }
+    proj.addEventListener("pointerdown", function (e) { downInRoom = noVazio(e.target); });
+    proj.addEventListener("click", function (e) {
+      if (e.target.closest("[data-proj-close]")) { pedirFechar(); return; }
+      if (downInRoom && noVazio(e.target)) { pedirFechar(); }
+    });
+
+    /* position:fixed com top negativo é a única técnica que segura o Safari do
+       iPhone; overflow:hidden sozinho não segura. A compensação de barra evita
+       a página pular de lado ao abrir. */
+    function travarRolagem() {
+      scrollY = window.pageYOffset || 0;
+      var barra = window.innerWidth - document.documentElement.clientWidth;
+      var b = document.body.style;
+      b.position = "fixed"; b.top = (-scrollY) + "px";
+      b.left = "0"; b.right = "0"; b.width = "100%";
+      if (barra > 0) { b.paddingRight = barra + "px"; }
+    }
+    function destravarRolagem() {
+      var b = document.body.style, h = document.documentElement.style, antes = h.scrollBehavior;
+      b.position = b.top = b.left = b.right = b.width = b.paddingRight = "";
+      h.scrollBehavior = "auto";         /* html{scroll-behavior:smooth} animaria a volta */
+      window.scrollTo(0, scrollY);
+      h.scrollBehavior = antes;
+    }
+
+    /* com o JS de pé o link deixa de "abrir fora": tira o target para o leitor
+       de tela não prometer nova aba, e entra aria-haspopup="dialog". O href
+       FICA, então ctrl+clique e "abrir em nova aba" continuam funcionando. */
+    document.querySelectorAll(".sheet a[href]").forEach(function (a) {
+      if (!receita(a)) { return; }
+      a.removeAttribute("target");
+      a.setAttribute("aria-haspopup", "dialog");
+      a.addEventListener("pointerenter", function () { var r = receita(a); if (r) { aquecer(r); } });
+      a.addEventListener("focus", function () { var r = receita(a); if (r) { aquecer(r); } });
+    });
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest ? e.target.closest(".sheet a[href]") : null;
+      if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
+      if (abrir(a)) { e.preventDefault(); }
+    });
+    /* rede de segurança: se o foco escapar da sala, volta para o × */
+    document.addEventListener("focusin", function (e) {
+      if (proj.open && !proj.contains(e.target)) { btnX.focus({ preventScroll: true }); }
+    });
+  })();
 })();

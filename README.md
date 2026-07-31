@@ -162,6 +162,58 @@ automática e um efeito de dobradiça ligado ao scroll via
 `animation-timeline: view()`) e o raciocínio completo do julgamento ficam
 fora do repositório — foram avaliação de processo, não decisão final.
 
+## Sala de projeção (vídeo dentro do site)
+
+Clicar num pôster abre o vídeo em `<dialog>` nativo em vez de mandar o
+visitante para o YouTube. O `<a href target="_blank">` continua no HTML: sem
+JS, sem suporte a `<dialog>` ou com `data-embed="off"` num pôster, o clique
+volta a levar para fora, que é a degradação honesta.
+
+- **Nenhum iframe existe antes do clique** e nenhum sobrevive ao fechamento,
+  então a página em repouso continua sem player. Verificado: 0 iframes antes,
+  1 com a sala aberta, 0 depois de fechar.
+- **`<dialog>` nativo de propósito**: entrega prisão de foco real, resto do
+  documento inerte, Esc e top layer sem disputa de `z-index` com o rail (30),
+  o topo (30), o grão (40) e o skip link (50).
+- **A limpeza NÃO depende do evento `close`.** Ele existe na especificação,
+  mas medindo aqui num `showModal()`/`close()` direto, sem nosso código no
+  meio, ele não disparou, e a página ficava com `body position: fixed`, ou
+  seja, travada sem rolagem depois de fechar o vídeo. `fecharAgora()` chama
+  `limpar()` direto; o listener de `close` continua como rede, e `limpar()` é
+  idempotente para rodar duas vezes não fazer nada na segunda.
+- **Índice de episódios** quando o pôster é playlist: a sala ganha ao lado da
+  tela o mesmo índice tipográfico que o site usa na seção de Trabalho, número
+  em mono e título ao lado, faixa em exibição no acento. No celular ele desce
+  para baixo do vídeo com rolagem própria e altura limitada.
+- As faixas vêm de `<script type="application/json" id="proj-listas">` assado
+  no HTML, extraído uma vez da própria lista do YouTube. **Nenhuma chave de
+  API e nenhum script externo rodam no navegador de quem visita.** Ao mudar
+  uma playlist, atualizar esse bloco nos dois arquivos.
+- 302 e 502 apontam para a MESMA playlist de 6 vídeos (3 de cada série), então
+  cada pôster carrega `data-start` e abre na sua própria faixa: `0` e `3`.
+- As setas do rodapé andam entre **produções** da folha de contato; o índice
+  ao lado da tela anda entre **episódios** da produção atual.
+- Parâmetros do embed: `youtube-nocookie`, `playsinline=1` (sem ele o iOS
+  arranca o vídeo para o player nativo em tela cheia e a premissa de reter
+  morre), `color=white` para a barra vermelha não entrar na sala, `hl` vindo
+  do `lang` da página.
+
+**Instagram sobe DESLIGADO** (`EMBED_IG = false` em `js/site.js`). O embed
+carrega como documento cross-origin legítimo, mas nunca foi confirmado
+visualmente o que ele desenha, e o modo de falha é o pior possível num
+portfólio: a sala abre e no meio dela um retângulo branco ou um pedido de
+login, e quem olha conclui que o material não existe. São 4 pôsteres contra
+13, e o painel do Grupo Sal é 100% Instagram, então a falha não seria um
+pôster estranho, seria um trabalho inteiro quebrado. Para ligar: conferir os
+quatro `.../embed/captioned/` em janela anônima e no celular; se os quatro
+renderizarem o vídeo, trocar para `true`.
+
+**Playlist da Maracutaia.fm não é embutível**: 7 dos 9 vídeos devolvem erro
+150 da IFrame Player API, que é o dono do canal ter desativado a exibição
+fora do YouTube. É configuração do canal, não do site. Se essa opção for
+ligada no YouTube Studio, a mesma sala passa a servir essa playlist sem
+mudança de código, bastando assar as faixas no bloco JSON.
+
 ## Pixel da Meta (ligado)
 
 Conjunto de dados **`RegisRegiHome`**, ID `4734001130163052`, no portfólio

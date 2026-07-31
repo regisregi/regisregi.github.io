@@ -497,6 +497,203 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .panel-inner .plink:hover, .panel-inner .plink:focus-visible { color: #8ec2ff; }
 
+/* ---------- sala de projeção ----------
+   O pôster não abre um card flutuando por cima da página: apaga a casa. Como
+   o site já é preto absoluto, um ::backdrop também preto não lê como "camada
+   cinza por cima", lê como "a luz baixou". Sobram o retângulo do vídeo e três
+   linhas tipográficas alinhadas à mesma largura dele.
+   <dialog> nativo de propósito: ele entrega de fábrica prisão de foco real,
+   resto do documento inerte, Esc e top layer sem disputa de z-index com
+   .rail (30), .top (30), .grain (40) e .skip (50). */
+.proj {
+  width: 100%; max-width: 100%; height: 100%; max-height: 100dvh;
+  margin: 0; padding: 0; border: 0; overflow: hidden;
+  background: var(--bg); color: var(--ink);
+}
+/* #000 literal e não var(--bg): herança de custom property no ::backdrop
+   chegou tarde em alguns motores, e um backdrop cinza padrão estragaria
+   exatamente o efeito de apagar a luz. */
+.proj::backdrop { background: #000; }
+
+.proj-room {
+  --proj-chrome: 11rem;                 /* cabeça + rodapé + respiros */
+  --proj-w: min(100%, calc((100dvh - var(--proj-chrome)) * 16 / 9), 1240px);
+  height: 100%; display: flex; flex-direction: column;
+  padding: clamp(1rem, 3.5vw, 2.6rem) clamp(1rem, 4vw, 3rem) clamp(1rem, 3vw, 2.2rem);
+}
+.proj-room[data-shape="ig"] { --proj-w: min(100%, 400px); }
+
+/* cabeça, palco e rodapé na MESMA largura do retângulo: sangria vertical
+   única, do jeito que o resto do site alinha. Nada encosta na tela, porque em
+   sala de projeção não há nada ao lado da tela. */
+.proj-head, .proj-stage, .proj-foot { width: var(--proj-w); margin-inline: auto; }
+
+.proj-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+}
+.proj-meta {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+}
+.proj-idx { color: var(--accent); }     /* número de seção: uso sancionado do acento */
+.proj-bar { margin: 0 .55em; color: var(--line); }
+
+.proj-x {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  min-width: 44px; min-height: 44px; margin-right: -.7rem;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 1.45rem; line-height: 1; color: var(--dim);
+  transition: color .25s var(--ease);
+}
+.proj-x:hover, .proj-x:focus-visible { color: var(--accent); }
+
+.proj-stage { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; }
+
+/* ---- índice de episódios ----
+   Quando o pôster é uma playlist, a sala ganha o rolo daquela produção ao
+   lado da tela. Não é widget de player: é o MESMO índice tipográfico que o
+   site inteiro usa na seção de Trabalho, número em mono e nome em caixa
+   alta, só que em escala de sala. Por isso ele lê como parte da casa e não
+   como carrossel de template.
+   Os títulos vêm do bloco <script type="application/json" id="proj-listas">
+   assado no HTML, então nenhuma chamada de API roda em tempo de execução. */
+.proj-room[data-shape="list"] {
+  --proj-w: min(100%, calc((100dvh - var(--proj-chrome)) * 16 / 9 + 17rem), 1400px);
+}
+/* justify-items e align-items separados de propósito: place-items depois de
+   align-items reescreveria os dois e esticaria o quadro na vertical, o que
+   quebra o aspect-ratio 16/9 do vídeo (medido: virava 1.74). */
+.proj-room[data-shape="list"] .proj-stage {
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: 1.6rem; justify-items: stretch; align-items: start;
+}
+/* a lista acompanha a altura do vídeo e rola por dentro se passar disso */
+.proj-list { min-width: 0; overflow-y: auto; max-height: 100%; }
+.proj-list[hidden] { display: none; }
+.proj-list-cab {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim);
+  padding-bottom: .6rem; border-bottom: 1px solid var(--line);
+}
+.proj-list ol { list-style: none; margin: 0; padding: 0; }
+.proj-faixa {
+  appearance: none; background: none; border: 0; width: 100%; cursor: pointer;
+  display: grid; grid-template-columns: 2.1rem 1fr; gap: .7rem;
+  align-items: baseline; text-align: left;
+  padding: .7rem 0; border-bottom: 1px solid var(--line);
+  color: var(--dim); transition: color .25s var(--ease);
+}
+.proj-faixa .n { font-family: var(--mono); font-size: .62rem; letter-spacing: .1em; }
+.proj-faixa .t {
+  font-family: var(--body); font-size: .78rem; line-height: 1.35;
+  color: inherit; overflow-wrap: anywhere;
+}
+.proj-faixa:hover, .proj-faixa:focus-visible { color: var(--ink); }
+/* a faixa em exibição é estado ativo, um dos usos sancionados do acento */
+.proj-faixa[aria-current="true"] { color: var(--accent); }
+.proj-faixa[aria-current="true"] .n::after {
+  content: ""; display: block; height: 1px; margin-top: .35rem; background: var(--accent);
+}
+.proj-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.proj-room[data-shape="ig"] .proj-frame { aspect-ratio: auto; height: min(70dvh, 720px); }
+/* fio interno via ::after e não box-shadow inset no próprio quadro: o iframe
+   pinta por cima do inset e o fio sumiria */
+.proj-frame::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+}
+.proj-slot, .proj-slot iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block;
+}
+
+.proj-foot {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .6rem 1.5rem; flex-wrap: wrap; padding-top: .75rem; border-top: 1px solid var(--line);
+}
+.proj-title {
+  font-family: var(--display); font-size: clamp(1.1rem, 3.2vw, 2.1rem);
+  line-height: 1; text-transform: uppercase; color: var(--ink);
+}
+.proj-exit { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+.proj-out, .proj-esc, .proj-blind {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim); text-decoration: none;
+}
+.proj-out { transition: color .25s var(--ease); }
+.proj-out:hover, .proj-out:focus-visible { color: var(--accent); }
+.proj-esc { opacity: .55; }
+.proj-blind[hidden], .proj-nav[hidden] { display: none; }
+
+/* ROLO: avança entre as produções da MESMA folha de contato, pelo rodapé. */
+.proj-nav { display: inline-flex; align-items: center; gap: .3rem; }
+.proj-step {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  min-width: 44px; min-height: 44px; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .95rem; line-height: 1; color: var(--dim);
+  transition: color .25s var(--ease);
+}
+.proj-prev::before { content: "\2190"; }
+.proj-next::before { content: "\2192"; }
+.proj-step[disabled] { opacity: .22; cursor: default; }
+.proj-step:not([disabled]):hover, .proj-step:focus-visible { color: var(--accent); }
+.proj-count {
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; color: var(--dim);
+  font-variant-numeric: tabular-nums; min-width: 4.4em; text-align: center;
+}
+
+/* abertura em três tempos: a luz baixa, a tela abre de uma fresta, os rótulos
+   entram. clip-path e não scale: escalar iframe borra o vídeo durante a
+   animação, clip-path só recorta. */
+@keyframes proj-luz   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes proj-abre  { from { clip-path: inset(50% 0 50% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes proj-letra { from { opacity: 0; transform: translateY(.4rem); } to { opacity: 1; transform: none; } }
+
+.proj[open]             { animation: proj-luz .2s linear both; }
+.proj[open]::backdrop   { animation: proj-luz .2s linear both; }
+.proj[open] .proj-frame { animation: proj-abre .42s var(--ease) .12s both; }
+.proj[open] .proj-head,
+.proj[open] .proj-foot  { animation: proj-letra .34s var(--ease) .3s both; }
+
+/* troca de produção é CORTE SECO: o iframe some e nasce, sem transição. Só os
+   rótulos re-entram, para a mudança registrar. Corte seco é a gramática da
+   casa: o próprio CSS chama os blocos de "corte". */
+.proj.is-cut .proj-head, .proj.is-cut .proj-foot { animation: proj-letra .2s var(--ease) both; }
+
+/* FECHAMENTO. .proj.is-closing (0,2,0) empata em especificidade com
+   .proj[open] (0,2,0) e só vence por vir depois no arquivo. Não reordenar
+   estes dois blocos, senão a sala fecha sem animar e o animationend não
+   dispara no elemento esperado. */
+.proj.is-closing             { animation: proj-luz .16s linear .16s reverse both; }
+.proj.is-closing::backdrop   { animation: proj-luz .16s linear .16s reverse both; }
+.proj.is-closing .proj-frame { animation: proj-abre .22s var(--ease) reverse both; }
+.proj.is-closing .proj-head,
+.proj.is-closing .proj-foot  { animation: proj-letra .12s var(--ease) reverse both; }
+
+@media (max-width: 640px) {
+  .proj-room { --proj-chrome: 9.5rem; padding: .9rem .9rem 1rem; }
+  /* no celular não há coluna ao lado: o índice desce para baixo da tela e
+     ganha rolagem própria, com altura limitada para o vídeo continuar sendo
+     o assunto principal */
+  .proj-room[data-shape="list"] { --proj-w: min(100%, 100%); }
+  .proj-room[data-shape="list"] .proj-stage {
+    grid-template-columns: minmax(0, 1fr); gap: .9rem; align-content: start;
+  }
+  .proj-room[data-shape="list"] .proj-list { max-height: 32dvh; }
+  .proj-esc { display: none; }          /* sem teclado, sem dica de teclado */
+  .proj-title { font-size: clamp(1rem, 5.2vw, 1.5rem); }
+  .proj-exit { gap: .8rem; width: 100%; justify-content: space-between; }
+  .proj-room[data-shape="ig"] .proj-frame { height: min(64dvh, 640px); }
+}
+/* celular deitado: sobra pouca altura, o retângulo manda */
+@media (orientation: landscape) and (max-height: 520px) {
+  .proj-room { --proj-chrome: 6rem; padding: .5rem .9rem .6rem; }
+  .proj-head { padding-bottom: .35rem; }
+  .proj-foot { padding-top: .4rem; }
+  .proj-title { font-size: 1rem; }
+  .proj-step { min-height: 34px; }
+}
+
 /* ---------- competências ---------- */
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: clamp(1.5rem, 4vw, 3.5rem); }
 .col h3 {
@@ -543,4 +740,16 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   /* a faixa que atravessa no hover também para; o fio de estado do ::after
      continua acendendo, então o hover segue sinalizado, só sem movimento */
   .row:not(.row-out):hover::before { animation: none; opacity: 0; }
+  /* a sala aparece e some sem transição alguma. O efeito sobrevive porque
+     nunca dependeu do movimento, dependeu do preto: a luz não baixa, ela já
+     está apagada. Atenção: com animation:none o animationend NUNCA dispara,
+     por isso o JS consulta o MediaQueryList vivo antes de esperar por ele. */
+  .proj, .proj::backdrop,
+  .proj[open], .proj[open]::backdrop,
+  .proj[open] .proj-frame, .proj[open] .proj-head, .proj[open] .proj-foot,
+  .proj.is-cut .proj-head, .proj.is-cut .proj-foot,
+  .proj.is-closing, .proj.is-closing::backdrop,
+  .proj.is-closing .proj-frame, .proj.is-closing .proj-head,
+  .proj.is-closing .proj-foot { animation: none; }
+  .proj-x, .proj-out, .proj-step { transition: none; }
 }
