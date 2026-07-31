@@ -167,6 +167,14 @@
     if (!btn) { return; }
 
     row.addEventListener("click", function (e) {
+      /* qualquer clique DENTRO do painel aberto não deve alternar a linha,
+         só o cabeçalho (número, nome, meta, +) deve. Antes só link era
+         ignorado, e clicar num pôster sem material (sem <a>, caso de
+         Temporada de Bônus e A Estranha na Cama) ou até no parágrafo de
+         descrição borbulhava até aqui e fechava a subseção sozinho. .panel é
+         irmão do cabeçalho, nunca o envolve, então este guard não impede
+         abrir a linha pelo nome. */
+      if (e.target.closest(".panel")) { return; }
       if (e.target.closest("a")) { return; }
       var open = row.classList.toggle("open");
       btn.setAttribute("aria-expanded", open ? "true" : "false");
