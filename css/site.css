@@ -307,6 +307,32 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .row:hover .row-name { color: var(--accent); transform: translateX(.4rem); }
   .row:hover .row-plus { color: var(--accent); }
   .row:hover::after { width: 100%; }
+  /* faixa de acento atravessando a linha a cada passagem do mouse, para dizer
+     "isto abre" antes do clique. Vive no ::before para não brigar com o
+     ::after, que é o fio de estado (cresce e FICA enquanto o mouse está em
+     cima). Só nas linhas que expandem: .row-out são as de Escrita, que levam
+     para fora e já se anunciam com sublinhado e seta, então varrer nelas
+     prometeria uma expansão que não existe.
+     Faixa feita com background-position, não com transform: um segmento de
+     45% da largura corre de -45% a 145%, o que atravessa a linha inteira sem
+     depender de conta de translate em cima de largura variável. */
+  .row:not(.row-out)::before {
+    content: ""; position: absolute; left: 0; bottom: -1px; height: 1px;
+    width: 100%; pointer-events: none; opacity: 0;
+    background-image: linear-gradient(90deg, transparent, var(--accent), transparent);
+    background-size: 45% 100%; background-repeat: no-repeat;
+  }
+  /* curva própria, não var(--ease): a curva da casa é fortemente frontal
+     (serve para coisas que ASSENTAM) e medida aqui levava a faixa a 85% do
+     trajeto em 150ms, virando um flash em vez de uma passagem. Esta é
+     simétrica, então a faixa atravessa em velocidade legível. */
+  .row:not(.row-out):hover::before {
+    animation: passa-faixa .85s cubic-bezier(.45, .05, .55, .95);
+  }
+}
+@keyframes passa-faixa {
+  from { background-position-x: -45%; opacity: 1; }
+  to   { background-position-x: 145%; opacity: 1; }
 }
 .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
 .row:focus-within::after { width: 100%; }
@@ -514,4 +540,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   :is(#trabalho, #work) .work.cut.in .row-name,
   :is(#trabalho, #work) .work.cut.in .row-plus,
   :is(#trabalho, #work) .work.cut.in .row::after { animation: none; }
+  /* a faixa que atravessa no hover também para; o fio de estado do ::after
+     continua acendendo, então o hover segue sinalizado, só sem movimento */
+  .row:not(.row-out):hover::before { animation: none; opacity: 0; }
 }
