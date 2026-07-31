@@ -208,11 +208,23 @@ pôster estranho, seria um trabalho inteiro quebrado. Para ligar: conferir os
 quatro `.../embed/captioned/` em janela anônima e no celular; se os quatro
 renderizarem o vídeo, trocar para `true`.
 
-**Playlist da Maracutaia.fm não é embutível**: 7 dos 9 vídeos devolvem erro
-150 da IFrame Player API, que é o dono do canal ter desativado a exibição
-fora do YouTube. É configuração do canal, não do site. Se essa opção for
-ligada no YouTube Studio, a mesma sala passa a servir essa playlist sem
-mudança de código, bastando assar as faixas no bloco JSON.
+**Painel da Maracutaia.fm tem pôster e sala, com uma ressalva conhecida.**
+O painel ganhou `assets/posters/maracutaia.jpg` (a marca, não uma foto de
+produção; ver `assets/posters/README.md`) ligado à playlist "Sets
+Maracutaia.fm". A sala monta o índice com as 9 faixas reais da playlist,
+mas **7 das 9 devolvem erro 150 da IFrame Player API**: o dono do canal
+desativou a exibição fora do YouTube para esses vídeos especificamente.
+É configuração do canal (`@casa33rio`), não bug do site.
+
+Decidido subir os 9 mesmo assim, ao contrário do Instagram, porque aqui o
+modo de falha é CONHECIDO e contido, não uma incógnita: o YouTube desenha o
+próprio card "assistir no YouTube" dentro do nosso retângulo preto (feio,
+não quebrado), e "Ver original ↗" continua visível o tempo todo apontando
+para a playlist completa. As duas faixas que hoje tocam embutidas são
+`fNN-2GiPE0M` (Drama EFX Openhouse) e `u0Lxj6oraJk` (Mateus tuK). Se o dono
+do canal liberar embed nas outras 7 no YouTube Studio, elas passam a tocar
+sem eu precisar mudar nada: a permissão é checada pelo YouTube a cada
+carregamento, não fica guardada no site.
 
 ## Pixel da Meta (ligado)
 

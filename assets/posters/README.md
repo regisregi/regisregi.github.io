@@ -1,8 +1,12 @@
 # Pôsteres das produções
 
-19 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
-qualidade 82. Total 1,69 MB. Entram no contact sheet dentro de cada painel de
+20 pôsteres, todos normalizados em **600×900 (2:3)**, JPG progressivo
+qualidade 82. Total 1,70 MB. Entram no contact sheet dentro de cada painel de
 trabalho do `index.html` e do `en/index.html`.
+
+Um deles, `maracutaia.jpg`, não é pôster de produção: é a marca da
+Maracutaia.fm, recortada de um mockup de página (16:9) que não segue o
+formato dos outros. Ver a seção própria abaixo.
 
 Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 
@@ -27,15 +31,28 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `serie-302.jpg` | Série 302 | Dafina · Finalização |
 | `serie-502.jpg` | Série 502 | Dafina · Finalização |
 | `era-de-ouro.jpg` | Era de Ouro: O Nascimento dos Super-Heróis | Dafina · Finalização |
+| `maracutaia.jpg` | Maracutaia.fm (marca, não pôster) | Maracutaia.fm |
 
 ## Como foram normalizados
 
 Os originais vinham em proporções de 0,605 a 0,802, e em PNG de até 8,9 MB.
 O tratamento foi feito para deixar tudo igual sem perder rosto nem título:
 
-1. **Moldura aparada.** Alguns arquivos traziam moldura branca sólida (Galera
-   FC e A Estranha na Cama). Detectada pelos quatro cantos e removida, senão
-   viravam bloco claro no fundo preto e quebravam a uniformidade da fileira.
+1. **Moldura aparada.** Alguns arquivos traziam moldura branca sólida. Em
+   Galera FC os quatro cantos batiam e o script antigo (que só apara quando
+   os quatro cantos são idênticos) resolveu sozinho. Em A Estranha na Cama o
+   original vinha com cantos arredondados: a cor de cada canto varia por
+   causa do arredondamento, então a checagem de "4 cantos iguais" falhava e
+   a função devolvia a imagem intocada. Por coincidência, o recorte 2:3
+   seguinte (centralizado, âncora `center`) cortou fora a moldura de
+   topo/base/esquerda no processo normal de enquadrar a proporção, mas
+   sobrou uma faixa clara de ~24px no lado direito, que ficou no ar sem
+   ninguém notar até o pedido de correção. Reprocessada com detecção de
+   borda por lado, independente por topo/base/esquerda/direita, sem exigir
+   cantos iguais: achou a moldura real de 27px nos quatro lados do
+   original (687×1024) e cortou os quatro antes do recorte 2:3. Se outro
+   pôster aparecer com moldura em cantos arredondados, usar esse método,
+   não o antigo baseado em 4 cantos idênticos.
 2. **Recorte para 2:3, sempre centralizado na horizontal.** Onze pôsteres já
    estavam entre 0,667 e 0,680, então o corte é desprezível. Os três mais
    largos (Coração Suburbano 0,727, Desejos S.A. 0,796, O Lado Bom 0,802)
@@ -51,9 +68,34 @@ O tratamento foi feito para deixar tudo igual sem perder rosto nem título:
    arquivo mais pesado da pasta, 199 KB, porque é ilustração cheia de detalhe
    fino, que o JPG não compacta bem; carrega em `lazy` dentro do painel.
 
-Cada uma das 19 foi conferida visualmente numa montagem depois do processo,
-para garantir que rosto e nome da produção continuam legíveis na miniatura.
+Cada uma das 19 fotos de produção foi conferida visualmente numa montagem
+depois do processo, para garantir que rosto e nome da produção continuam
+legíveis na miniatura.
 
-Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura,
-recortar para 600×900 escolhendo a âncora que preserva o título, salvar JPG
-qualidade 82 progressivo, e olhar a miniatura antes de publicar.
+Ao trocar ou acrescentar pôster, refazer o mesmo caminho: aparar moldura
+(por lado, não por 4 cantos iguais, se houver canto arredondado), recortar
+para 600×900 escolhendo a âncora que preserva o título, salvar JPG qualidade
+82 progressivo, e olhar a miniatura antes de publicar.
+
+## Maracutaia.fm: marca, não pôster
+
+`maracutaia.jpg` não é uma foto de produção: é o símbolo da Maracutaia.fm
+(o traço preto em forma de meia-lua) recortado de um mockup de página inteira
+(16:9, com título "SETS AUDIOVISUAIS", grade de seis fotos de DJs e botão
+"Ver a playlist completa") que estava na mesma pasta dos pôsteres. Esse
+mockup inteiro não cabe no formato 2:3 do contact sheet sem espremer a
+tipografia a ilegibilidade, e as seis fotos nele são de outros artistas
+(Azo, Caiao, Marta Supernova, Rafael Não Existe e mais dois), não do Régis,
+então não fazia sentido usá-las como "pôster" da entrada dele no portfólio.
+
+O recorte usado é só o quadrado da marca, fundo violeta sólido, sem rosto de
+ninguém. Coincidência feliz: a cor de fundo desse quadrado no mockup
+(`rgb(164, 139, 255)`) é exatamente o `--accent` do site (`#a48bff`). O
+quadrado foi redimensionado para 600px de largura e colado centralizado
+numa tela 600×900 preenchida com a mesma cor, então não há upscale
+forçado nem corte do símbolo.
+
+O pôster está ligado ao mesmo player embutido dos outros: clicar nele abre
+a playlist "Sets Maracutaia.fm" dentro do site, com índice dos 9 episódios
+(ver `## Sala de projeção` no README principal para o porquê de 7 dos 9
+vídeos não tocarem embutidos, e o que fazer se isso mudar).

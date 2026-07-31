@@ -140,7 +140,7 @@ dl, dt, dd { margin: 0; }
    (curadoria), como emenda mal alinhada na ilha de edição. As cópias
    nascem de ::before/::after com o texto em data-txt, então não duplicam
    markup nem atrapalham o efeito assinatura (letra a letra) que já mora
-   em .ln/.ch. Ciclo de 3,5s, valores calibrados no navegador: em .08em
+   em .ln/.ch. Ciclo de 1,5s, valores calibrados no navegador: em .08em
    a fatia saía do bloco do nome e virava letra fantasma; .045em mantém
    a leitura. */
 .hero-name .ln { position: relative; }
@@ -150,12 +150,12 @@ dl, dt, dd { margin: 0; }
 }
 .hero-name .ln::before {
   color: var(--roteiro);
-  animation: corte-fita-a 3.5s var(--ease) infinite;
+  animation: corte-fita-a 1.5s var(--ease) infinite;
   clip-path: inset(42% 0 38% 0);
 }
 .hero-name .ln::after {
   color: var(--curadoria);
-  animation: corte-fita-b 3.5s var(--ease) infinite;
+  animation: corte-fita-b 1.5s var(--ease) infinite;
   clip-path: inset(68% 0 12% 0);
 }
 @keyframes corte-fita-a {
