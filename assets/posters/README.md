@@ -135,7 +135,7 @@ linka e na cobertura do O Povo, out/2019). O cronômetro na base é literal —
 dez casas numeradas de 10 a 01, só a última no acento.
 
 As logos dos clientes vinham em fundos e cores próprias (verde do
-Descomplica, navy do Mellin, oliva do BSC, lavanda do MQE). Todas foram
+Descomplica, navy do Mellin, oliva do Brasil Surfe Clube, lavanda do MQE). Todas foram
 normalizadas para branco sobre transparente antes de entrar: cor de marca de
 terceiro sobre o preto do site quebra a unidade e faz o painel parecer
 anúncio. Fontes originais e scripts de tratamento ficaram em
