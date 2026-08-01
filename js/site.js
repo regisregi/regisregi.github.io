@@ -499,7 +499,7 @@
     /* com o JS de pé o link deixa de "abrir fora": tira o target para o leitor
        de tela não prometer nova aba, e entra aria-haspopup="dialog". O href
        FICA, então ctrl+clique e "abrir em nova aba" continuam funcionando. */
-    document.querySelectorAll(".sheet a[href]").forEach(function (a) {
+    document.querySelectorAll(".sheet a[href], .peca a[href]").forEach(function (a) {
       if (!receita(a)) { return; }
       a.removeAttribute("target");
       a.setAttribute("aria-haspopup", "dialog");
@@ -507,7 +507,7 @@
       a.addEventListener("focus", function () { var r = receita(a); if (r) { aquecer(r); } });
     });
     document.addEventListener("click", function (e) {
-      var a = e.target.closest ? e.target.closest(".sheet a[href]") : null;
+      var a = e.target.closest ? e.target.closest(".sheet a[href], .peca a[href]") : null;
       if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
       if (abrir(a)) { e.preventDefault(); }
     });

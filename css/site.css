@@ -497,80 +497,181 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .sheet figure.mute img { opacity: .82; }
 
 /* ---------- peça de painel: o pôster como bloco vivo ----------
-   PROTÓTIPO, só no painel do Porta dos Fundos, para comparar com o banner
-   16:9 logo abaixo antes de decidir se os cinco viram bloco.
-
-   O JPG exportado nasce em 1920px e entra no painel a ~330px no celular:
-   tudo escala por 0,17, então o mono de 13px vira 2px e a ficha some. Aqui
-   o mesmo desenho é texto de verdade — reflui, indexa na busca e não pesa
+   Os pôsteres 16:9 desenhados para as subseções viraram texto de verdade.
+   O JPG nascia em 1920px e entrava no painel a ~330px num celular: tudo
+   escalava por 0,17, o mono de 13px virava 2px e a ficha sumia. Em bloco a
+   peça reflui, indexa na busca, fica nítida em qualquer densidade e não pesa
    além das fontes que a página já carrega.
 
-   A textura (a frase repetida) é decorativa: sai do leitor de tela por
-   aria-hidden e vive em z-index negativo, com a chapa preta do ::before
-   fazendo o corte seco que no pôster é um painel sólido. */
+   A peça SUBSTITUI o parágrafo do painel — não convive com ele. Antes o
+   pôster repetia em imagem o que o texto ao lado já dizia; agora o painel
+   tem uma voz só. Os hyperlinks que moravam no parágrafo viraram o botão da
+   peça, e o JS da sala de projeção alcança .peca a[href] igual alcançava o
+   contact sheet.
+
+   Cada painel tem sua textura de fundo, sempre decorativa e sempre fora do
+   leitor de tela (aria-hidden): frase repetida, algarismos, cronômetro,
+   onda de áudio, tira de fotos. É o que faz seis painéis não virarem seis
+   caixas iguais. */
 .peca {
   position: relative; overflow: hidden; isolation: isolate;
   border: 1px solid var(--line);
-  margin-top: clamp(1.1rem, 2.4vw, 1.8rem);
-  padding: clamp(1.3rem, 3.2vw, 2.8rem);
-  display: grid; gap: clamp(.8rem, 1.5vw, 1.2rem);
+  padding: clamp(1.35rem, 3.2vw, 2.9rem);
+  display: grid; gap: clamp(.75rem, 1.4vw, 1.15rem);
   width: 100%; max-width: 1240px; margin-inline: auto;
+  /* minmax(0,1fr) e não 1fr: com min-width:auto, as fileiras internas de
+     auto-fit (marcas, frentes, tiras) somam a largura mínima das colunas e
+     esticam o bloco para fora da tela em vez de quebrar. */
+  grid-template-columns: minmax(0, 1fr);
 }
-/* o corte: no desktop a chapa cobre a coluna do texto e a frase sobra à
-   direita; abaixo de 720px ela cobre o topo e a frase vira faixa no pé */
-.peca::before {
-  content: ""; position: absolute; inset: 0 42% 0 0;
-  background: var(--bg); z-index: -1;
-}
-.peca-fundo { position: absolute; inset: -.4rem -1rem; z-index: -2; overflow: hidden; }
-.peca-fundo b {
-  display: block; white-space: nowrap; font-weight: 400;
-  font-family: var(--display); text-transform: uppercase;
-  font-size: clamp(2.2rem, 6.4vw, 5.4rem); line-height: 1.08;
-  letter-spacing: -.02em; color: #1b1726;
-}
-.peca-fundo b.acesa { color: var(--accent); }
+.peca > * { min-width: 0; }
 
+/* topo da peça: índice e frente de atuação, no mesmo mono do resto do site */
 .peca-topo {
-  font-family: var(--mono); font-size: .62rem; letter-spacing: .28em;
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .26em;
   text-transform: uppercase; color: var(--dim);
 }
 .peca-topo b { color: var(--ink); font-weight: 400; }
-.peca-marca { margin: clamp(.4rem, 1vw, .8rem) 0 0; }
-.peca-marca img {
-  display: block; width: clamp(190px, 26vw, 320px); height: auto;
-}
+
+/* a marca do cliente ocupa o lugar do título: é ela que dá a legitimidade */
+.peca-marca { margin: clamp(.15rem, .6vw, .5rem) 0 0; line-height: 0; }
+.peca-marca img { display: block; width: auto; height: clamp(38px, 4.6vw, 64px); }
+.peca-marca.alta img { height: clamp(74px, 9vw, 128px); }
+
 .peca-lede {
-  max-width: 46ch; font-size: clamp(.9rem, 1.15vw, 1.02rem);
+  max-width: 52ch; font-size: clamp(.92rem, 1.15vw, 1.05rem);
   line-height: 1.6; color: #b3adbd;
 }
 .peca-lede strong { color: var(--ink); font-weight: 600; }
+
 .peca-ficha {
-  display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; list-style: none;
-  font-family: var(--mono); font-size: .6rem; letter-spacing: .18em;
+  display: flex; flex-wrap: wrap; gap: .35rem 1.05rem; list-style: none;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .16em;
   text-transform: uppercase; color: var(--dim);
 }
 .peca-ficha b { color: var(--ink); font-weight: 400; }
+
 .peca-cta {
   justify-self: start; display: inline-flex; align-items: center; gap: .7rem;
-  margin-top: clamp(.3rem, .8vw, .6rem);
-  padding: .78rem 1.4rem; border-radius: 999px;
+  margin-top: clamp(.2rem, .6vw, .5rem);
+  padding: .78rem 1.45rem; border-radius: 999px;
   background: var(--ink); color: #07060c; text-decoration: none;
-  font-size: .82rem; font-weight: 600;
+  font-size: .82rem; font-weight: 600; white-space: nowrap;
   transition: transform .2s var(--ease), background-color .2s var(--ease);
 }
 .peca-cta:hover, .peca-cta:focus-visible { transform: translateY(-2px); background: #fff; }
+.peca-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* No estreito o corte deita: a chapa cobre tudo menos uma faixa fixa no pé,
-   e o padding reserva essa faixa. Em porcentagem a chapa acompanhava a
-   altura do bloco e o botão caía por cima da frase — medido a 390px, com o
-   CTA em 297px e a chapa terminando em 241px. */
-@media (max-width: 720px) {
-  .peca { padding-bottom: calc(clamp(1.3rem, 3.2vw, 2.8rem) + 96px); }
-  .peca::before { inset: 0 0 96px 0; }
-  .peca-fundo { inset: auto -1rem 0 -1rem; height: 96px; }
-  .peca-lede { max-width: none; }
+/* ---- textura 1: frase repetida, cortada por uma chapa sólida ----
+   No largo a chapa cobre a coluna do texto e a frase sobra à direita. No
+   estreito ela deita e sobra uma faixa de altura fixa no pé: em porcentagem
+   a chapa acompanhava a altura do bloco e o botão caía por cima da frase
+   (medido a 390px, CTA em 297px, chapa terminando em 241px). */
+.peca--frase::before {
+  content: ""; position: absolute; inset: 0 42% 0 0;
+  background: var(--bg); z-index: -1;
 }
+.peca-frase { position: absolute; inset: -.4rem -1rem; z-index: -2; overflow: hidden; }
+.peca-frase b {
+  display: block; white-space: nowrap; font-weight: 400;
+  font-family: var(--display); text-transform: uppercase;
+  font-size: clamp(2.2rem, 6.2vw, 5.2rem); line-height: 1.08;
+  letter-spacing: -.02em; color: #1b1726;
+}
+.peca-frase b.acesa { color: var(--accent); }
+
+/* ---- textura 2: fileira de marcas atendidas ----
+   Os arquivos vêm em proporções muito diferentes (C6 é 5:1, Praya é 1:1,25),
+   então a normalização é pela altura da caixa, não pela largura do arquivo. */
+.peca-marcas {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
+  gap: clamp(1rem, 2.4vw, 2rem); align-items: end;
+  margin-top: clamp(.3rem, .8vw, .6rem);
+  border-top: 1px solid var(--line); padding-top: clamp(1rem, 2vw, 1.4rem);
+  list-style: none;
+}
+.peca-marcas li { display: grid; gap: .7rem; justify-items: start; min-width: 0; }
+.peca-marcas img { display: block; width: auto; max-width: 100%; height: clamp(30px, 3.4vw, 46px); }
+/* marca alta (Praya é 1:1,25, BSC é 1:0,65) precisa de mais altura para ter
+   a mesma mancha que uma marca deitada como a do C6, que é 5:1 */
+.peca-marcas li.alta img { height: clamp(52px, 6.2vw, 84px); }
+.peca-marcas span {
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--dim);
+}
+
+/* ---- textura 3: três frentes com algarismo fantasma ---- */
+.peca-frentes {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: clamp(1.2rem, 2.6vw, 2.2rem); list-style: none;
+  margin-top: clamp(.3rem, .8vw, .6rem);
+}
+.peca-frentes li { position: relative; display: grid; gap: .7rem; align-content: start; min-width: 0; }
+/* o algarismo fica à direita: à esquerda ele batia atrás da marca do
+   cliente e as duas viravam mancha só */
+.peca-frentes .num {
+  position: absolute; top: -.34em; right: 0; z-index: -1;
+  font-family: var(--display); font-size: clamp(4.4rem, 8vw, 7rem);
+  line-height: 1; letter-spacing: -.04em; color: #1b1726;
+}
+.peca-frentes img { display: block; width: auto; max-width: 100%; height: clamp(30px, 3.6vw, 48px); }
+.peca-frentes .fio { height: 1px; background: var(--line); }
+.peca-frentes p { font-size: clamp(.82rem, 1vw, .92rem); line-height: 1.55; color: #9d97a8; }
+.peca-frentes b {
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--ink); font-weight: 400;
+}
+
+/* ---- textura 4: cronômetro de dez casas ---- */
+.peca-crono {
+  display: flex; gap: clamp(3px, .5vw, 8px); align-items: flex-end;
+  margin-top: clamp(.3rem, .8vw, .6rem); list-style: none;
+}
+.peca-crono li { flex: 1; display: grid; gap: .5rem; }
+.peca-crono i {
+  display: block; height: clamp(38px, 5.4vw, 74px); background: #231e31;
+}
+.peca-crono span {
+  font-family: var(--mono); font-size: .5rem; letter-spacing: .1em; color: #4a4455;
+}
+.peca-crono li:last-child i { background: var(--accent); }
+.peca-crono li:last-child span { color: var(--accent); }
+
+/* ---- textura 5: onda de áudio ---- */
+.peca-onda {
+  display: flex; gap: 3px; align-items: center;
+  height: clamp(58px, 7vw, 104px); margin-top: clamp(.3rem, .8vw, .6rem);
+}
+.peca-onda i { flex: 1; display: block; background: #2f2942; }
+.peca-onda i.acesa { background: var(--accent); }
+
+/* ---- textura 6: tira de fotos (Maracutaia) ----
+   Aqui a peça não pode ser só tipografia: o trabalho É a imagem dos sets.
+   Quatro miniaturas de 480px substituem o mockup de 1600px, e cada uma
+   ganha o nome do artista embaixo, que a imagem grande escondia no rodapé. */
+.peca-tiras {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: clamp(.5rem, 1.1vw, .9rem); list-style: none;
+  margin-top: clamp(.3rem, .8vw, .6rem);
+}
+.peca-tiras li { display: grid; gap: .55rem; min-width: 0; }
+.peca-tiras img {
+  display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1);
+}
+.peca-tiras span {
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim);
+}
+
+@media (max-width: 720px) {
+  .peca--frase { padding-bottom: calc(clamp(1.35rem, 3.2vw, 2.9rem) + 92px); }
+  .peca--frase::before { inset: 0 0 92px 0; }
+  .peca-frase { inset: auto -1rem 0 -1rem; height: 92px; }
+  .peca-lede { max-width: none; }
+  .peca-crono i { height: 34px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .peca-cta { transition: none; }
   .peca-cta:hover, .peca-cta:focus-visible { transform: none; }
