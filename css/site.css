@@ -496,6 +496,86 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 /* pôster sem material público não é link: fica um pouco recuado */
 .sheet figure.mute img { opacity: .82; }
 
+/* ---------- peça de painel: o pôster como bloco vivo ----------
+   PROTÓTIPO, só no painel do Porta dos Fundos, para comparar com o banner
+   16:9 logo abaixo antes de decidir se os cinco viram bloco.
+
+   O JPG exportado nasce em 1920px e entra no painel a ~330px no celular:
+   tudo escala por 0,17, então o mono de 13px vira 2px e a ficha some. Aqui
+   o mesmo desenho é texto de verdade — reflui, indexa na busca e não pesa
+   além das fontes que a página já carrega.
+
+   A textura (a frase repetida) é decorativa: sai do leitor de tela por
+   aria-hidden e vive em z-index negativo, com a chapa preta do ::before
+   fazendo o corte seco que no pôster é um painel sólido. */
+.peca {
+  position: relative; overflow: hidden; isolation: isolate;
+  border: 1px solid var(--line);
+  margin-top: clamp(1.1rem, 2.4vw, 1.8rem);
+  padding: clamp(1.3rem, 3.2vw, 2.8rem);
+  display: grid; gap: clamp(.8rem, 1.5vw, 1.2rem);
+  width: 100%; max-width: 1240px; margin-inline: auto;
+}
+/* o corte: no desktop a chapa cobre a coluna do texto e a frase sobra à
+   direita; abaixo de 720px ela cobre o topo e a frase vira faixa no pé */
+.peca::before {
+  content: ""; position: absolute; inset: 0 42% 0 0;
+  background: var(--bg); z-index: -1;
+}
+.peca-fundo { position: absolute; inset: -.4rem -1rem; z-index: -2; overflow: hidden; }
+.peca-fundo b {
+  display: block; white-space: nowrap; font-weight: 400;
+  font-family: var(--display); text-transform: uppercase;
+  font-size: clamp(2.2rem, 6.4vw, 5.4rem); line-height: 1.08;
+  letter-spacing: -.02em; color: #1b1726;
+}
+.peca-fundo b.acesa { color: var(--accent); }
+
+.peca-topo {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--dim);
+}
+.peca-topo b { color: var(--ink); font-weight: 400; }
+.peca-marca { margin: clamp(.4rem, 1vw, .8rem) 0 0; }
+.peca-marca img {
+  display: block; width: clamp(190px, 26vw, 320px); height: auto;
+}
+.peca-lede {
+  max-width: 46ch; font-size: clamp(.9rem, 1.15vw, 1.02rem);
+  line-height: 1.6; color: #b3adbd;
+}
+.peca-lede strong { color: var(--ink); font-weight: 600; }
+.peca-ficha {
+  display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; list-style: none;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim);
+}
+.peca-ficha b { color: var(--ink); font-weight: 400; }
+.peca-cta {
+  justify-self: start; display: inline-flex; align-items: center; gap: .7rem;
+  margin-top: clamp(.3rem, .8vw, .6rem);
+  padding: .78rem 1.4rem; border-radius: 999px;
+  background: var(--ink); color: #07060c; text-decoration: none;
+  font-size: .82rem; font-weight: 600;
+  transition: transform .2s var(--ease), background-color .2s var(--ease);
+}
+.peca-cta:hover, .peca-cta:focus-visible { transform: translateY(-2px); background: #fff; }
+
+/* No estreito o corte deita: a chapa cobre tudo menos uma faixa fixa no pé,
+   e o padding reserva essa faixa. Em porcentagem a chapa acompanhava a
+   altura do bloco e o botão caía por cima da frase — medido a 390px, com o
+   CTA em 297px e a chapa terminando em 241px. */
+@media (max-width: 720px) {
+  .peca { padding-bottom: calc(clamp(1.3rem, 3.2vw, 2.8rem) + 96px); }
+  .peca::before { inset: 0 0 96px 0; }
+  .peca-fundo { inset: auto -1rem 0 -1rem; height: 96px; }
+  .peca-lede { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .peca-cta { transition: none; }
+  .peca-cta:hover, .peca-cta:focus-visible { transform: none; }
+}
+
 /* material: hyperlinks do trabalho, inline no corpo do texto (estilo do
    CV em PDF). Azul deliberado: não é cor de trilha, é convenção de link. */
 .panel-inner .plink {
