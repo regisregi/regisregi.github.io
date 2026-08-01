@@ -247,6 +247,9 @@
         if ((m = href.match(/[?&]list=([\w-]+)/))) { kind = "yt-list"; id = m[1]; }
         else if ((m = href.match(/(?:v=|youtu\.be\/|\/embed\/)([\w-]{11})/))) { kind = "yt"; id = m[1]; }
         else if ((m = href.match(/instagram\.com\/(?:[^\/?#]+\/)?(p|reel|tv)\/([\w-]+)/))) { kind = "ig"; id = m[1] + "/" + m[2]; }
+        /* Spotify tem endpoint de embed próprio (/embed/show/ID), então o
+           podcast toca aqui dentro como o vídeo toca */
+        else if ((m = href.match(/open\.spotify\.com\/(show|episode|playlist|album)\/([\w]+)/))) { kind = "sp-" + m[1]; id = m[2]; }
       }
       if (kind === "ig" && !EMBED_IG) { return null; }
       return (kind && id) ? { kind: kind, id: id } : null;
@@ -267,6 +270,9 @@
           return "https://www.youtube-nocookie.com/embed/" + itens[faixa].id + "?" + q;
         }
         return "https://www.youtube-nocookie.com/embed/videoseries?list=" + r.id + "&" + q;
+      }
+      if (r.kind.indexOf("sp-") === 0) {
+        return "https://open.spotify.com/embed/" + r.kind.slice(3) + "/" + r.id + "?theme=0";
       }
       return "https://www.instagram.com/" + r.id + "/embed/captioned/";
     }
@@ -322,7 +328,11 @@
       elBlind.hidden = true;
 
       var temLista = montarLista(r);
-      room.setAttribute("data-shape", r.kind === "ig" ? "ig" : (temLista ? "list" : "wide"));
+      /* som não é vídeo: o embed do Spotify tem altura própria e ficaria
+         perdido dentro de um retângulo 16:9 */
+      var forma = r.kind === "ig" ? "ig"
+        : (r.kind.indexOf("sp-") === 0 ? "som" : (temLista ? "list" : "wide"));
+      room.setAttribute("data-shape", forma);
 
       elNav.hidden = rolo.length < 2;
       elCount.textContent = zero(pos + 1) + " / " + zero(rolo.length);
@@ -388,7 +398,11 @@
     function abrir(a) {
       var r = receita(a); if (!r) { return false; }
       if (proj.open) { return true; }
-      var sheet = a.closest(".sheet"), row = a.closest(".row");
+      /* o contêiner do rolo é o contact sheet OU a peça inteira: o botão da
+         peça (playlist da Maracutaia, esquete do Porta, podcast do MQE) mora
+         fora do .sheet, e sem isso ele caía para fora do site em vez de abrir
+         a sala */
+      var sheet = a.closest(".sheet") || a.closest(".peca"), row = a.closest(".row");
       if (!sheet) { return false; }
 
       /* o rolo é a folha de contato daquele trabalho: quem entrou por um

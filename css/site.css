@@ -600,9 +600,38 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
    Reaproveita o .sheet do contact sheet para o JS da sala de projeção não
    precisar de seletor novo; só a caixa muda, porque dentro da peça a fileira
    alinha à esquerda em vez de centralizar. */
-.peca .sheet { justify-content: flex-start; max-width: none; padding-top: 0; margin: 0; }
+.peca .sheet { justify-content: center; max-width: none; padding-top: 0; margin: 0; }
 .peca .sheet figure { flex: 1 1 104px; max-width: 158px; }
-.peca .sheet figcaption { text-align: left; min-height: 0; font-size: .55rem; }
+.peca .sheet figcaption { text-align: center; min-height: 0; font-size: .55rem; }
+
+/* ---- material 2b: módulos da Maracutaia ----
+   As fotos dos sets recortadas nas formas da própria marca — quadrado,
+   círculo, arco e meia-cana — alternadas com um módulo do padrão gráfico e um
+   módulo violeta com o símbolo. É a peça que existia como imagem 16:9, agora
+   viva: a grade era o que dava identidade a ela, não o texto. */
+.peca-modulos {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.45rem, 1vw, .85rem); list-style: none;
+}
+.peca-modulos li { display: grid; gap: .5rem; min-width: 0; }
+.peca-modulos .mod { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: #07060c; }
+.peca-modulos .mod > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.peca-modulos .circ { border-radius: 50%; }
+.peca-modulos .arco { border-radius: 50% 50% 0 0; }
+.peca-modulos .dee { border-radius: 0 50% 50% 0; }
+/* o padrão é preto sobre branco no arquivo: inverte para virar branco sobre
+   preto sem precisar de uma segunda versão do asset */
+.peca-modulos .padrao > img { filter: invert(1); }
+.peca-modulos .violeta { background: var(--accent); display: grid; place-items: center; }
+.peca-modulos .violeta > img { position: static; width: 42%; height: auto; object-fit: contain; }
+.peca-modulos span {
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim);
+}
+.peca-modulos b { color: var(--accent); font-weight: 400; }
+@media (max-width: 640px) {
+  .peca-modulos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 /* ---- material 2: fotos dos sets ---- */
 .peca-tiras {
@@ -731,6 +760,8 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   padding: clamp(1rem, 3.5vw, 2.6rem) clamp(1rem, 4vw, 3rem) clamp(1rem, 3vw, 2.2rem);
 }
 .proj-room[data-shape="ig"] { --proj-w: min(100%, 400px); }
+/* podcast: o embed do Spotify tem altura fixa e largura de card */
+.proj-room[data-shape="som"] { --proj-w: min(100%, 720px); }
 
 /* cabeça, palco e rodapé na MESMA largura do retângulo: sangria vertical
    única, do jeito que o resto do site alinha. Nada encosta na tela, porque em
@@ -806,6 +837,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .proj-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; }
 .proj-room[data-shape="ig"] .proj-frame { aspect-ratio: auto; height: min(70dvh, 720px); }
+.proj-room[data-shape="som"] .proj-frame { aspect-ratio: auto; height: 352px; }
 /* fio interno via ::after e não box-shadow inset no próprio quadro: o iframe
    pinta por cima do inset e o fio sumiria */
 .proj-frame::after {
