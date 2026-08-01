@@ -35,6 +35,7 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `mellin-studio-banner.jpg` | Mellin Studio (pôster de painel 16:9) | Mellin Studio |
 | `dafina-formatos-banner.jpg` | Dafina · Formatos (pôster de painel 16:9) | Dafina · Formatos |
 | `mulheres-que-escrevem-banner.jpg` | Mulheres que Escrevem (pôster de painel 16:9) | Mulheres que Escrevem |
+| `dez-segundos-banner.jpg` | Dez Segundos (pôster de painel 16:9) | Descomplica |
 
 ## Como foram normalizados
 
@@ -125,6 +126,13 @@ e a textura de fundo, para as quatro não virarem a mesma peça repetida:
 | Mellin Studio | espelho do Porta, editorial à direita | "branded content · Canal OFF" repetido, marcas atendidas na base |
 | Dafina · Formatos | três colunas, uma por frente | algarismos 01/02/03 gigantes atrás das colunas |
 | Mulheres que Escrevem | marca à esquerda, lide à direita | onda de áudio de 132 barras, trecho aceso no acento |
+| Dez Segundos | headline à esquerda, lide e marca à direita | cronômetro de dez casas, a última acesa |
+
+O do Dez Segundos usa os dados do formato como matéria de design, não como
+enfeite: dez perguntas, dez segundos por resposta, três alternativas, níveis
+1 a 5, ao vivo todo dia às 21h (fontes na matéria do TechTudo que o painel
+linka e na cobertura do O Povo, out/2019). O cronômetro na base é literal —
+dez casas numeradas de 10 a 01, só a última no acento.
 
 As logos dos clientes vinham em fundos e cores próprias (verde do
 Descomplica, navy do Mellin, oliva do BSC, lavanda do MQE). Todas foram
