@@ -390,6 +390,18 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
    .row têm a mesma especificidade, então quem estiver por último vence, e
    o grid de 3 colunas do mobile seria anulado se o bloco viesse depois. */
 .row-out { display: block; padding: 0; }
+/* sinopse sob cada publicação. Fica FORA do <a> de propósito: dentro, o nome
+   acessível do link viraria o parágrafo inteiro. Medium e Academia.edu
+   proíbem enquadramento por cabeçalho (frame-ancestors 'self' num, 403 no
+   outro), então leitor embutido não existe — o que dá para fazer é chegar no
+   clique já sabendo do que se trata. */
+.row-sinopse {
+  margin: -.2rem 0 clamp(.9rem, 2vh, 1.25rem);
+  padding-left: calc(2.6rem + 1.2rem);
+  max-width: 70ch; font-size: .92rem; line-height: 1.6; color: var(--dim);
+}
+.row-sinopse em { font-style: normal; color: #b3adbd; }
+@media (max-width: 860px) { .row-sinopse { padding-left: 0; font-size: .88rem; } }
 .row-hit {
   display: grid; grid-template-columns: 2.6rem 1fr auto 1.6rem; align-items: baseline;
   gap: .8rem 1.2rem; padding: clamp(.85rem, 1.6vh, 1.15rem) 0;
