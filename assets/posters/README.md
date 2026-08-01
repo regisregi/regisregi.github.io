@@ -31,6 +31,10 @@ Originais em `D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER\OK`.
 | `serie-502.jpg` | Série 502 | Dafina · Finalização |
 | `era-de-ouro.jpg` | Era de Ouro: O Nascimento dos Super-Heróis | Dafina · Finalização |
 | `maracutaia-banner.jpg` | Maracutaia.fm (mockup 16:9, não pôster) | Maracutaia.fm |
+| `porta-dos-fundos-banner.jpg` | Porta dos Fundos (pôster de painel 16:9) | Porta dos Fundos |
+| `mellin-studio-banner.jpg` | Mellin Studio (pôster de painel 16:9) | Mellin Studio |
+| `dafina-formatos-banner.jpg` | Dafina · Formatos (pôster de painel 16:9) | Dafina · Formatos |
+| `mulheres-que-escrevem-banner.jpg` | Mulheres que Escrevem (pôster de painel 16:9) | Mulheres que Escrevem |
 
 ## Como foram normalizados
 
@@ -101,3 +105,34 @@ O banner está ligado ao mesmo player embutido dos outros: clicar nele abre
 a playlist "Sets Maracutaia.fm" dentro do site, com índice dos 9 episódios
 (ver `## Sala de projeção` no README principal para o porquê de 7 dos 9
 vídeos não tocarem embutidos, e o que fazer se isso mudar).
+
+## Pôsteres de painel: quatro peças autorais 16:9
+
+`porta-dos-fundos-banner.jpg`, `mellin-studio-banner.jpg`,
+`dafina-formatos-banner.jpg` e `mulheres-que-escrevem-banner.jpg` seguem o
+mesmo modificador `.wide` do banner da Maracutaia, mas não são material de
+terceiros: foram desenhados para o site, em 1920×1080, e entregues aqui em
+1600×900 (JPG progressivo qualidade 88, de 75 a 115 KB).
+
+Usam os tokens de `css/tokens.css` — preto absoluto, Anton na display,
+Archivo no corpo, Space Mono nos metadados, `--accent` violeta uma única vez
+por peça, fios em `--line`. O que muda de painel para painel é a diagramação
+e a textura de fundo, para as quatro não virarem a mesma peça repetida:
+
+| Peça | Diagramação | Textura |
+|---|---|---|
+| Porta dos Fundos | painel preto cortando a seco em 1088px | frase "três esquetes por semana" repetida oito vezes |
+| Mellin Studio | espelho do Porta, editorial à direita | "branded content · Canal OFF" repetido, marcas atendidas na base |
+| Dafina · Formatos | três colunas, uma por frente | algarismos 01/02/03 gigantes atrás das colunas |
+| Mulheres que Escrevem | marca à esquerda, lide à direita | onda de áudio de 132 barras, trecho aceso no acento |
+
+As logos dos clientes vinham em fundos e cores próprias (verde do
+Descomplica, navy do Mellin, oliva do BSC, lavanda do MQE). Todas foram
+normalizadas para branco sobre transparente antes de entrar: cor de marca de
+terceiro sobre o preto do site quebra a unidade e faz o painel parecer
+anúncio. Fontes originais e scripts de tratamento ficaram em
+`D:\Users\regis\Desktop\Régis\CLAUDE\SITE\POSTER`.
+
+Só o do Porta dos Fundos é clicável (abre a esquete na sala de projeção,
+`data-embed="yt"`). Os outros três não têm material público ligado e usam
+`class="wide mute"`, como os pôsteres sem link do resto do contact sheet.
