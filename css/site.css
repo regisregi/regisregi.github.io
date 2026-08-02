@@ -734,9 +734,128 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .peca h3 { max-width: none; }
 }
 
+/* ---------- animação das peças ----------
+   A peça só existe depois que a linha abre, então a entrada é one-shot,
+   presa em .row.open: nada anima em repouso, nada fica em laço, e o texto
+   nunca se move enquanto está sendo lido.
+
+   Só opacity e transform, que rodam no compositor. Duração de 400 a 600ms
+   com o ease da casa; o escalonamento é curto de propósito (40 a 60ms por
+   item), o suficiente para o olho perceber ordem sem esperar pela peça.
+
+   Como o .panel usa transition de grid-template-rows, a entrada corre junto
+   com a abertura: quando a caixa termina de crescer, o conteúdo já pousou. */
+@keyframes peca-entra {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes peca-indice {
+  from { opacity: 0; transform: translateY(-6px) scale(1.06); }
+  to { opacity: 1; transform: none; }
+}
+/* o cronômetro cresce do pé, uma casa de cada vez: a animação É o conceito
+   da peça, dez segundos correndo */
+@keyframes peca-crono {
+  from { opacity: .35; transform: scaleY(.1); }
+  to { opacity: 1; transform: none; }
+}
+/* a onda sobe do eixo, do começo para o fim, como leitura de forma de onda */
+@keyframes peca-onda {
+  from { opacity: .3; transform: scaleY(.08); }
+  to { opacity: 1; transform: none; }
+}
+
+.row.open .peca-topo { animation: peca-entra .5s var(--ease) both; }
+.row.open .peca h3 { animation: peca-entra .6s var(--ease) .05s both; }
+.row.open .peca-indice { animation: peca-indice .9s var(--ease) .1s both; }
+.row.open .peca-frase b { animation: peca-entra .7s var(--ease) both; }
+.row.open .peca-frase b:nth-child(2) { animation-delay: .05s; }
+.row.open .peca-frase b:nth-child(3) { animation-delay: .1s; }
+.row.open .peca-frase b:nth-child(4) { animation-delay: .15s; }
+.row.open .peca-frase b:nth-child(5) { animation-delay: .2s; }
+.row.open .peca-frase b:nth-child(6) { animation-delay: .25s; }
+
+.row.open .peca-texto > * { animation: peca-entra .55s var(--ease) both; }
+.row.open .peca-texto > *:nth-child(1) { animation-delay: .1s; }
+.row.open .peca-texto > *:nth-child(2) { animation-delay: .15s; }
+.row.open .peca-texto > *:nth-child(3) { animation-delay: .2s; }
+.row.open .peca-texto > *:nth-child(4) { animation-delay: .25s; }
+.row.open .peca-texto > *:nth-child(5) { animation-delay: .3s; }
+.row.open .peca-rodape { animation: peca-entra .5s var(--ease) .34s both; }
+
+/* material: cada item entra depois do texto, em fila */
+.row.open .peca .sheet figure,
+.row.open .peca-tiras li,
+.row.open .peca-modulos li,
+.row.open .peca-marcas li,
+.row.open .peca-frentes li { animation: peca-entra .5s var(--ease) both; }
+.row.open .peca .sheet figure:nth-child(1),
+.row.open .peca-tiras li:nth-child(1),
+.row.open .peca-modulos li:nth-child(1),
+.row.open .peca-marcas li:nth-child(1),
+.row.open .peca-frentes li:nth-child(1) { animation-delay: .22s; }
+.row.open .peca .sheet figure:nth-child(2),
+.row.open .peca-tiras li:nth-child(2),
+.row.open .peca-modulos li:nth-child(2),
+.row.open .peca-marcas li:nth-child(2),
+.row.open .peca-frentes li:nth-child(2) { animation-delay: .27s; }
+.row.open .peca .sheet figure:nth-child(3),
+.row.open .peca-tiras li:nth-child(3),
+.row.open .peca-modulos li:nth-child(3),
+.row.open .peca-marcas li:nth-child(3),
+.row.open .peca-frentes li:nth-child(3) { animation-delay: .32s; }
+.row.open .peca .sheet figure:nth-child(4),
+.row.open .peca-tiras li:nth-child(4),
+.row.open .peca-modulos li:nth-child(4) { animation-delay: .37s; }
+.row.open .peca .sheet figure:nth-child(5),
+.row.open .peca-modulos li:nth-child(5) { animation-delay: .42s; }
+.row.open .peca .sheet figure:nth-child(6),
+.row.open .peca-modulos li:nth-child(6) { animation-delay: .47s; }
+
+.row.open .peca-crono i { transform-origin: bottom; animation: peca-crono .45s var(--ease) both; }
+.row.open .peca-crono li:nth-child(1) i { animation-delay: .24s; }
+.row.open .peca-crono li:nth-child(2) i { animation-delay: .29s; }
+.row.open .peca-crono li:nth-child(3) i { animation-delay: .34s; }
+.row.open .peca-crono li:nth-child(4) i { animation-delay: .39s; }
+.row.open .peca-crono li:nth-child(5) i { animation-delay: .44s; }
+.row.open .peca-crono li:nth-child(6) i { animation-delay: .49s; }
+.row.open .peca-crono li:nth-child(7) i { animation-delay: .54s; }
+.row.open .peca-crono li:nth-child(8) i { animation-delay: .59s; }
+.row.open .peca-crono li:nth-child(9) i { animation-delay: .64s; }
+.row.open .peca-crono li:nth-child(10) i { animation-delay: .69s; }
+
+/* --i vem do HTML, uma por barra: 46 regras de nth-child seriam pior que o
+   custo de um custom property inline */
+.row.open .peca-onda i {
+  transform-origin: center;
+  animation: peca-onda .5s var(--ease) both;
+  animation-delay: calc(.24s + var(--i, 0) * 9ms);
+}
+
+/* hover: a imagem respira dentro da moldura, que continua parada */
+.peca .sheet a, .peca-tiras img, .peca-modulos .mod { overflow: hidden; }
+.peca .sheet a img, .peca-tiras img, .peca-modulos .mod > img {
+  transition: transform .5s var(--ease), box-shadow .35s var(--ease), filter .35s var(--ease);
+}
+.peca .sheet a:hover img, .peca .sheet a:focus-visible img { transform: scale(1.035); }
+.peca-tiras li:hover img, .peca-modulos li:hover .mod > img { transform: scale(1.04); }
+/* a seta do botão sai na direção que promete */
+.peca-cta span[aria-hidden] { transition: transform .2s var(--ease); }
+.peca-cta:hover span[aria-hidden], .peca-cta:focus-visible span[aria-hidden] { transform: translate(3px, -3px); }
+
 @media (prefers-reduced-motion: reduce) {
   .peca-cta { transition: none; }
   .peca-cta:hover, .peca-cta:focus-visible { transform: none; }
+  /* quem pediu menos movimento recebe a peça inteira parada, já montada */
+  .row.open .peca-topo, .row.open .peca h3, .row.open .peca-indice,
+  .row.open .peca-frase b, .row.open .peca-texto > *, .row.open .peca-rodape,
+  .row.open .peca .sheet figure, .row.open .peca-tiras li, .row.open .peca-modulos li,
+  .row.open .peca-marcas li, .row.open .peca-frentes li,
+  .row.open .peca-crono i, .row.open .peca-onda i { animation: none; }
+  .peca .sheet a img, .peca-tiras img, .peca-modulos .mod > img,
+  .peca-cta span[aria-hidden] { transition: none; }
+  .peca .sheet a:hover img, .peca-tiras li:hover img,
+  .peca-modulos li:hover .mod > img { transform: none; }
 }
 
 /* material: hyperlinks do trabalho, inline no corpo do texto (estilo do
