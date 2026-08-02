@@ -233,7 +233,14 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   line-height: 1; text-transform: uppercase; letter-spacing: -.01em;
 }
 
-.cut > * { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+/* o esconde-e-revela é condicionado a .js, classe que um script inline no
+   <head> põe no <html> antes da primeira pintura. Sem isso, quem chega com o
+   JS bloqueado ou quebrado recebia seção invisível — e a conta piorou quando
+   o cabeçalho das seções e o contato, que guarda o e-mail, entraram no mesmo
+   mecanismo. Assim o pior caso vira "site inteiro de pé, sem entrada", que é
+   a falha certa. Inline e no head: script diferido esconderia depois de já
+   ter pintado, e o lampejo seria pior que o problema. */
+.js .cut > * { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
 .cut.in > * { opacity: 1; transform: none; }
 
 /* ---------- sobre ---------- */
@@ -1108,7 +1115,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .cut > * { opacity: 1; transform: none; transition: none; }
+  .js .cut > * { opacity: 1; transform: none; transition: none; }
   /* .row-out .row-name precisa da mesma especificidade da regra que liga a
      transição lá em cima, senão ela vence aqui e o movimento sobrevive */
   .row-name, .row-out .row-name { transition: none; }
@@ -1141,4 +1148,101 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .proj.is-closing .proj-frame, .proj.is-closing .proj-head,
   .proj.is-closing .proj-foot { animation: none; }
   .proj-x, .proj-out, .proj-step { transition: none; }
+}
+
+/* ---------- entrada das outras seções ----------
+   Trabalho já tinha vocabulário próprio (varredura na lista, peça viva ao
+   abrir). O resto do site entrava com um fade-up só, todos os filhos ao
+   mesmo tempo: honesto, mas sem hierarquia — quatro colunas de competência
+   chegando juntas não dizem por onde começar a ler.
+
+   Aqui cada bloco ganha ordem, nada mais. Nenhuma animação nova em laço,
+   nenhum movimento em repouso: tudo continua pendurado no .cut.in que o
+   IntersectionObserver de js/site.js já aplica uma vez só. O que muda é o
+   atraso de cada filho, guardado em --d, e a duração, que cai de 800ms
+   para 500–600ms porque agora existe escalonamento em cima.
+
+   Este bloco fica DEPOIS do @media de prefers-reduced-motion acima, então
+   ele venceria o `transition: none` de lá por ordem. O bloco de repetição
+   no fim do arquivo é o que reata o desligamento — não remover. */
+
+/* cabeçalho de seção: o número chega, o título logo atrás */
+.head.cut > * {
+  transition: opacity .5s var(--ease) var(--d, 0s), transform .5s var(--ease) var(--d, 0s);
+}
+.head.cut > h2 { --d: .07s; }
+
+/* sobre: o segundo parágrafo é aparte, chega depois do principal */
+.about.cut > * {
+  transition: opacity .6s var(--ease) var(--d, 0s), transform .6s var(--ease) var(--d, 0s);
+}
+.about.cut > *:nth-child(2) { --d: .1s; }
+
+/* competências: as colunas assentam da esquerda para a direita. As listas
+   dentro NÃO escalonam: item entrando dentro de coluna entrando multiplica
+   opacidade por opacidade e o que era ordem vira borrão. */
+.cols.cut > * {
+  transition: opacity .55s var(--ease) var(--d, 0s), transform .55s var(--ease) var(--d, 0s);
+}
+.cols.cut > *:nth-child(2) { --d: .08s; }
+.cols.cut > *:nth-child(3) { --d: .16s; }
+.cols.cut > *:nth-child(4) { --d: .24s; }
+
+/* o fio de acento acende por cima da régua que JÁ existe sob o rótulo da
+   coluna: nenhum traço novo no desenho, só o que estava lá ganhando cor por
+   um instante. Mesmo gesto do fio da peça e do fio de estado da linha. */
+.col h3 { position: relative; }
+.col h3::after {
+  content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  transform: scaleX(0); transform-origin: left; opacity: 0; pointer-events: none;
+}
+.cols.cut.in .col h3::after {
+  animation: sec-fio .8s var(--ease) forwards;
+  animation-delay: calc(var(--d, 0s) + .18s);
+}
+@keyframes sec-fio {
+  from { transform: scaleX(0); opacity: 1; }
+  to { transform: scaleX(1); opacity: .55; }
+}
+
+/* escrita: as três linhas em fila. Continua sem a varredura de Trabalho de
+   propósito — aqui sublinhado e seta já ficam visíveis o tempo todo, o
+   reforço seria redundante. */
+:is(#escrita, #writing) .work.cut > * {
+  transition: opacity .55s var(--ease) var(--d, 0s), transform .55s var(--ease) var(--d, 0s);
+}
+:is(#escrita, #writing) .work.cut > *:nth-child(2) { --d: .09s; }
+:is(#escrita, #writing) .work.cut > *:nth-child(3) { --d: .18s; }
+
+/* contato: o único lugar do site com entrada por máscara. É o fecho e é o
+   endereço de e-mail — se existe um gesto grande para gastar, é aqui.
+
+   O padding com margem negativa alarga a caixa de recorte sem mexer no
+   layout: com line-height .85 o topo do Anton passa da linha e seria
+   decepado pelo overflow. O título não recebe o fade do .cut, senão a
+   máscara e a opacidade se somariam e o gesto viraria névoa. */
+.end.cut > .end-big { opacity: 1; transform: none; transition: none; }
+.end-ln { display: block; overflow: hidden; padding: .12em 0; margin: -.12em 0; }
+.js .end-ln > span { transform: translateY(105%); }
+.end-ln > span {
+  display: block; transition: transform .75s var(--ease) var(--d, 0s);
+}
+.end-ln:nth-child(2) > span { --d: .09s; }
+.end.cut.in .end-ln > span { transform: none; }
+.end.cut > .end-links {
+  transition: opacity .6s var(--ease) .3s, transform .6s var(--ease) .3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .head.cut > *, .about.cut > *, .cols.cut > *,
+  :is(#escrita, #writing) .work.cut > *,
+  .end.cut > .end-links { transition: none; }
+  /* o fio da coluna não anima, mas continua desenhado: sem isto ele fica em
+     scaleX(0) e a régua perde o acento */
+  .cols.cut.in .col h3::after { animation: none; transform: none; opacity: .55; }
+  .end-ln { overflow: visible; }
+  /* .js na frente para bater a especificidade da regra que empurra a linha
+     para fora da caixa; sem isso o fecho ficaria escondido para sempre */
+  .js .end-ln > span { transform: none; transition: none; }
 }
