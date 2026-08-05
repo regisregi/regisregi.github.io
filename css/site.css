@@ -63,13 +63,16 @@ dl, dt, dd { margin: 0; }
    pintado por js/site.js. O rail diz QUAL cena; o timecode dá a posição
    contínua na linha do tempo da página. Textura numérica no limiar da
    percepção periférica — opacity .45 de propósito, um ponto abaixo do resto
-   do rail. Escondido sem JS (ficaria congelado em 00:00:00:00, peso morto);
-   o reduce-motion o desliga no bloco do fim do arquivo. */
+   do rail. Só aparece com .tc-vivo, classe que o MÓDULO põe no html ao
+   armar de verdade — presença de JS não basta: boot em tela estreita ou
+   com menos-movimento deixaria o span congelado em 00:00:00:00, peso
+   morto. Falha sancionada é "timecode ausente", nunca "timecode parado".
+   O reduce-motion o desliga no bloco do fim do arquivo. */
 .rail-tc {
   display: none; font-size: .6rem; letter-spacing: .08em; color: var(--dim);
   font-variant-numeric: tabular-nums; margin-top: .5rem; opacity: .45;
 }
-.js .rail-tc { display: block; }
+.tc-vivo .rail-tc { display: block; }
 @media (max-width: 860px) { .rail { display: none; } }
 
 /* ---------- topo ---------- */
@@ -204,9 +207,15 @@ dl, dt, dd { margin: 0; }
 }
 .marcas-trilho { display: flex; width: max-content; animation: marcas-correr 46s linear infinite; }
 /* .presa = dedo pousado na fita (classe posta por js/site.js): o mesmo pausar
-   do hover, para quem navega por toque conseguir ler as credenciais */
-.marcas-faixa:hover .marcas-trilho, .marcas-faixa:focus-within .marcas-trilho,
+   do hover, para quem navega por toque conseguir ler as credenciais. O :hover
+   fica atrás de (hover:hover) como o das linhas de Trabalho, e pelo mesmo
+   motivo: no toque o hover emulado GRUDA depois que o dedo solta, e a fita
+   ficaria presa anulando exatamente o pointerup/pointercancel do JS. */
+.marcas-faixa:focus-within .marcas-trilho,
 .marcas-faixa.presa .marcas-trilho { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .marcas-faixa:hover .marcas-trilho { animation-play-state: paused; }
+}
 .marcas-trilho ul {
   display: flex; align-items: center; gap: clamp(1.6rem, 3.5vw, 3rem);
   padding-right: clamp(1.6rem, 3.5vw, 3rem); margin: 0; list-style: none;
@@ -1075,10 +1084,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .proj-step:not([disabled]):hover, .proj-step:focus-visible { color: var(--accent); }
 /* botão de mesa: o press acende seco e apaga na transition que cada controle
    já tem. Cor apenas, nada se move sob o dedo — cobre o vazio enquanto o
-   iframe novo nasce. A faixa em exibição (aria-current) segue mandando por
-   especificidade: o press não antecipa o estado ativo. */
+   iframe novo nasce. O :not([aria-current]) é obrigatório: sem ele esta
+   regra empataria em especificidade com a da faixa em exibição e venceria
+   por vir depois — o press apagaria o violeta do episódio atual, que é
+   estado, não feedback. */
 .proj-x:active, .proj-out:active, .proj-step:not([disabled]):active { color: var(--accent); transition-duration: 0s; }
-.proj-faixa:active { color: var(--ink); transition-duration: 0s; }
+.proj-faixa:not([aria-current="true"]):active { color: var(--ink); transition-duration: 0s; }
 .proj-count {
   font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; color: var(--dim);
   font-variant-numeric: tabular-nums; min-width: 4.4em; text-align: center;
@@ -1190,9 +1201,10 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .hero-name .ln::before, .hero-name .ln::after { animation: none; opacity: 0; }
   .marcas-trilho { animation: none; }
   .marcas-faixa { -webkit-mask-image: none; mask-image: none; }
-  /* timecode congelado é peso morto: some. O JS nem liga o módulo, esta
-     regra cobre o caso de a preferência mudar depois do boot. */
-  .js .rail-tc { display: none; }
+  /* timecode congelado é peso morto: some. O JS nem arma o módulo, esta
+     regra cobre o caso de a preferência mudar depois do boot (a media query
+     do CSS é viva; o snapshot do JS, não). */
+  .tc-vivo .rail-tc { display: none; }
   .marcas-trilho ul:last-child { display: none; }
   .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
   /* a varredura de entrada some inteira; o peso permanente do "+" (Camada 1,

@@ -95,18 +95,26 @@
 
   /* playhead: o timecode do rail corre com a rolagem, 3px = 1 quadro a
      24fps. O rail diz QUAL cena; o timecode dá a posição contínua, como o
-     playhead numa timeline. Só desktop (o rail some abaixo de 861px) e
-     avaliado uma vez no boot: religar em resize custaria mais que o caso de
-     borda vale. textContent só quando o quadro muda, para scroll subpixel
-     não repintar à toa. */
+     playhead numa timeline. O gate é o complemento EXATO da consulta que
+     esconde o rail no CSS (max-width: 860px) — min-width: 861px deixava
+     larguras fracionárias entre 860 e 861 com rail visível e módulo morto,
+     a mesma colisão que o recuo do índice já documenta no site.css. Só o
+     módulo armado põe .tc-vivo no html, e só .tc-vivo mostra o span: boot
+     em tela estreita ou com menos-movimento degrada para "timecode
+     ausente", nunca "congelado em 00:00:00:00". Avaliado uma vez no boot:
+     religar em resize custaria mais que o caso de borda vale. textContent
+     só quando o quadro muda, para scroll subpixel não repintar à toa. */
   var railTc = document.querySelector(".rail-tc");
-  if (railTc && !reduceMotion && window.matchMedia("(min-width: 861px)").matches) {
+  if (railTc && !reduceMotion && !window.matchMedia("(max-width: 860px)").matches) {
     var tcDois = function (n) { return (n < 10 ? "0" : "") + n; };
     var tcQuadro = -1;
     var tcAgendado = false;
     var tcPintar = function () {
       tcAgendado = false;
-      var q = Math.round((window.pageYOffset || 0) / 3);
+      /* Math.max: o overscroll elástico do Safari (macOS e iPad) deixa o
+         pageYOffset NEGATIVO durante o rubber band, e -3 sairia impresso
+         como "0-1:0-1:0-1:0-3" no rail */
+      var q = Math.round(Math.max(0, window.pageYOffset || 0) / 3);
       if (q === tcQuadro) { return; }
       tcQuadro = q;
       var s = Math.floor(q / 24);
@@ -117,6 +125,7 @@
     window.addEventListener("scroll", function () {
       if (!tcAgendado) { tcAgendado = true; window.requestAnimationFrame(tcPintar); }
     }, { passive: true });
+    document.documentElement.classList.add("tc-vivo");
     tcPintar();                    /* estado inicial: quem chega por âncora não começa em zero */
   }
 
