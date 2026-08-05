@@ -69,6 +69,57 @@
     }
   });
 
+  /* toque: destrava o :active no Safari do iPhone. Sem ao menos UM listener
+     de touchstart no documento, o iOS não aplica :active a elemento nenhum —
+     e o "corte seco no toque" do CSS ficaria mudo exatamente onde foi feito
+     para falar. Passivo e vazio de propósito: o efeito colateral É o
+     recurso. */
+  document.addEventListener("touchstart", function () {}, { passive: true });
+
+  /* segurar a fita: pousar o dedo pausa o marquee de marcas, o mesmo gesto
+     que o hover já faz no desktop — a lista é credencial e precisa ser
+     legível também no toque. Pointer Events passivos, nenhum preventDefault:
+     o scroll vertical segue intacto. pointercancel é inegociável — quando o
+     navegador toma o gesto para si (scroll), sem ele a fita ficaria presa.
+     Com reduce-motion o trilho nem anda, então nem ligamos. */
+  var faixaMarcas = document.querySelector(".marcas-faixa");
+  if (faixaMarcas && !reduceMotion) {
+    var soltarFita = function () { faixaMarcas.classList.remove("presa"); };
+    faixaMarcas.addEventListener("pointerdown", function () {
+      faixaMarcas.classList.add("presa");
+    }, { passive: true });
+    faixaMarcas.addEventListener("pointerup", soltarFita, { passive: true });
+    faixaMarcas.addEventListener("pointercancel", soltarFita, { passive: true });
+    faixaMarcas.addEventListener("pointerleave", soltarFita, { passive: true });
+  }
+
+  /* playhead: o timecode do rail corre com a rolagem, 3px = 1 quadro a
+     24fps. O rail diz QUAL cena; o timecode dá a posição contínua, como o
+     playhead numa timeline. Só desktop (o rail some abaixo de 861px) e
+     avaliado uma vez no boot: religar em resize custaria mais que o caso de
+     borda vale. textContent só quando o quadro muda, para scroll subpixel
+     não repintar à toa. */
+  var railTc = document.querySelector(".rail-tc");
+  if (railTc && !reduceMotion && window.matchMedia("(min-width: 861px)").matches) {
+    var tcDois = function (n) { return (n < 10 ? "0" : "") + n; };
+    var tcQuadro = -1;
+    var tcAgendado = false;
+    var tcPintar = function () {
+      tcAgendado = false;
+      var q = Math.round((window.pageYOffset || 0) / 3);
+      if (q === tcQuadro) { return; }
+      tcQuadro = q;
+      var s = Math.floor(q / 24);
+      railTc.textContent = tcDois(Math.floor(s / 3600)) + ":" +
+        tcDois(Math.floor(s / 60) % 60) + ":" + tcDois(s % 60) + ":" +
+        tcDois(q % 24);
+    };
+    window.addEventListener("scroll", function () {
+      if (!tcAgendado) { tcAgendado = true; window.requestAnimationFrame(tcPintar); }
+    }, { passive: true });
+    tcPintar();                    /* estado inicial: quem chega por âncora não começa em zero */
+  }
+
   /* assinatura: quebra cada linha do nome em letras com atraso escalonado.
      O h1 leva aria-label com o nome íntegro; as letras ficam aria-hidden. */
   var name = document.querySelector(".hero-name");

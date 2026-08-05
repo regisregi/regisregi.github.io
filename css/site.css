@@ -59,6 +59,17 @@ dl, dt, dd { margin: 0; }
 }
 .rail a.on { opacity: 1; color: var(--accent); }
 .rail a.on::before { width: 26px; }
+/* playhead do rail: timecode que corre com a rolagem, 3px = 1 quadro a 24fps,
+   pintado por js/site.js. O rail diz QUAL cena; o timecode dá a posição
+   contínua na linha do tempo da página. Textura numérica no limiar da
+   percepção periférica — opacity .45 de propósito, um ponto abaixo do resto
+   do rail. Escondido sem JS (ficaria congelado em 00:00:00:00, peso morto);
+   o reduce-motion o desliga no bloco do fim do arquivo. */
+.rail-tc {
+  display: none; font-size: .6rem; letter-spacing: .08em; color: var(--dim);
+  font-variant-numeric: tabular-nums; margin-top: .5rem; opacity: .45;
+}
+.js .rail-tc { display: block; }
 @media (max-width: 860px) { .rail { display: none; } }
 
 /* ---------- topo ---------- */
@@ -192,7 +203,10 @@ dl, dt, dd { margin: 0; }
           mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
 .marcas-trilho { display: flex; width: max-content; animation: marcas-correr 46s linear infinite; }
-.marcas-faixa:hover .marcas-trilho, .marcas-faixa:focus-within .marcas-trilho { animation-play-state: paused; }
+/* .presa = dedo pousado na fita (classe posta por js/site.js): o mesmo pausar
+   do hover, para quem navega por toque conseguir ler as credenciais */
+.marcas-faixa:hover .marcas-trilho, .marcas-faixa:focus-within .marcas-trilho,
+.marcas-faixa.presa .marcas-trilho { animation-play-state: paused; }
 .marcas-trilho ul {
   display: flex; align-items: center; gap: clamp(1.6rem, 3.5vw, 3rem);
   padding-right: clamp(1.6rem, 3.5vw, 3rem); margin: 0; list-style: none;
@@ -345,6 +359,28 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 @keyframes passa-faixa {
   from { background-position-x: -45%; opacity: 1; }
   to   { background-position-x: 145%; opacity: 1; }
+}
+
+/* ---------- corte seco no toque ----------
+   Toda a linguagem de hover vive atrás de (hover:hover)/(pointer:fine) — o
+   que estava certo, e deixava o toque mudo. Aqui o dedo recebe os MESMOS
+   valores do hover, em gramática de corte: acende em 0s no press e apaga na
+   transition de repouso ao soltar. É mudança de estado, não animação, então
+   fica de pé com prefers-reduced-motion de propósito — feedback de toque é
+   função, não ornamento. O tap-highlight nativo sai só de quem ganhou
+   resposta própria, nunca do site inteiro. O :active destravado no Safari
+   do iPhone por um listener de touchstart em js/site.js. */
+@media (hover: none) {
+  .row, .row-hit, .sheet a, .peca-cta, .end a.mail, .end-links a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .row:active .row-name, .row:active .row-plus { color: var(--accent); transition-duration: 0s; }
+  .row:active::after { transform: scaleX(1); transition-duration: 0s; }
+  .row-out .row-hit:active .row-name { text-decoration-color: var(--accent); transition-duration: 0s; }
+  .sheet a:active img { box-shadow: inset 0 0 0 2px var(--accent); transition-duration: 0s; }
+  .peca-cta:active { background: #fff; transition-duration: 0s; }
+  .end a.mail:active { border-color: var(--accent); transition-duration: 0s; }
+  .end-links a:active { color: var(--ink); transition-duration: 0s; }
 }
 .row:focus-within .row-name { color: var(--accent); transform: translateX(.4rem); }
 .row:focus-within::after { transform: scaleX(1); }
@@ -901,6 +937,10 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .proj {
   width: 100%; max-width: 100%; height: 100%; max-height: 100dvh;
   margin: 0; padding: 0; border: 0; overflow: hidden;
+  /* clip por cima de hidden: o grain da película transborda -25% e hidden
+     ainda deixaria a sala rolar por foco ou script; clip proíbe rolagem de
+     vez. Navegador sem clip ignora a linha e fica no hidden de sempre. */
+  overflow: clip;
   background: var(--bg); color: var(--ink);
 }
 /* #000 literal e não var(--bg): herança de custom property no ::backdrop
@@ -1033,6 +1073,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .proj-next::before { content: "\2192"; }
 .proj-step[disabled] { opacity: .22; cursor: default; }
 .proj-step:not([disabled]):hover, .proj-step:focus-visible { color: var(--accent); }
+/* botão de mesa: o press acende seco e apaga na transition que cada controle
+   já tem. Cor apenas, nada se move sob o dedo — cobre o vazio enquanto o
+   iframe novo nasce. A faixa em exibição (aria-current) segue mandando por
+   especificidade: o press não antecipa o estado ativo. */
+.proj-x:active, .proj-out:active, .proj-step:not([disabled]):active { color: var(--accent); transition-duration: 0s; }
+.proj-faixa:active { color: var(--ink); transition-duration: 0s; }
 .proj-count {
   font-family: var(--mono); font-size: .6rem; letter-spacing: .14em; color: var(--dim);
   font-variant-numeric: tabular-nums; min-width: 4.4em; text-align: center;
@@ -1050,6 +1096,24 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .proj[open] .proj-frame { animation: proj-abre .42s var(--ease) .12s both; }
 .proj[open] .proj-head,
 .proj[open] .proj-foot  { animation: proj-letra .34s var(--ease) .3s both; }
+
+/* película viva: com a sala aberta, o grain salta como emulsão sob luz de
+   projetor — 5 posições por ciclo de .45s (um salto a cada 90ms, cadência de
+   grão de filme; mais lento que isso lê como tique). Preso a [open]: nada
+   anima em repouso, e o grain global da casa continua parado. O absolute
+   resolve contra o dialog e o overflow:hidden dele clipa o transbordo de
+   -25%; z-index 40 explícito mantém a película por cima do vídeo e o
+   pointer-events:none herdado de .grain deixa os cliques passarem. steps(1)
+   segura cada posição inteira e corta para a próxima: salto, não deslize. */
+.proj .grain { position: absolute; inset: -25%; opacity: .04; z-index: 40; }
+.proj[open] .grain { animation: pelicula .45s steps(1, end) infinite; }
+@keyframes pelicula {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-2.1%, 1.4%); }
+  40%  { transform: translate(1.6%, -2.4%); }
+  60%  { transform: translate(-1.2%, -1.7%); }
+  80%  { transform: translate(2.3%, .9%); }
+}
 
 /* troca de produção é CORTE SECO: o iframe some e nasce, sem transição. Só os
    rótulos re-entram, para a mudança registrar. Corte seco é a gramática da
@@ -1126,6 +1190,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .hero-name .ln::before, .hero-name .ln::after { animation: none; opacity: 0; }
   .marcas-trilho { animation: none; }
   .marcas-faixa { -webkit-mask-image: none; mask-image: none; }
+  /* timecode congelado é peso morto: some. O JS nem liga o módulo, esta
+     regra cobre o caso de a preferência mudar depois do boot. */
+  .js .rail-tc { display: none; }
   .marcas-trilho ul:last-child { display: none; }
   .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
   /* a varredura de entrada some inteira; o peso permanente do "+" (Camada 1,
@@ -1147,6 +1214,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .proj.is-closing, .proj.is-closing::backdrop,
   .proj.is-closing .proj-frame, .proj.is-closing .proj-head,
   .proj.is-closing .proj-foot { animation: none; }
+  /* a película volta a ser grain estático: o efeito da sala depende do
+     preto, não do movimento */
+  .proj[open] .grain { animation: none; }
   .proj-x, .proj-out, .proj-step { transition: none; }
 }
 
