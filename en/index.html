@@ -12,10 +12,15 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="pt_BR">
   <meta property="og:site_name" content="Régis Regi">
-  <!-- No og:image yet: the card shows title and description only. Once the
-       1200x630 image exists, wire it here and in index.html, and switch both
-       to twitter:card=summary_large_image. -->
-  <meta name="twitter:card" content="summary">
+  <!-- 1200x630 social card in the house design (black, name in display type,
+       accent rule, the four disciplines). Absolute, not relative: og:image
+       consumers do not resolve relative paths. The same image serves both
+       languages — it is the name, which does not translate. -->
+  <meta property="og:image" content="https://regisregi.com/assets/og-regis-regi.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Régis Regi — post-production coordination, writing, editing and curation, Rio de Janeiro">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://regisregi.com/en/">
   <link rel="alternate" hreflang="pt-BR" href="https://regisregi.com/">
   <link rel="alternate" hreflang="en" href="https://regisregi.com/en/">
@@ -105,7 +110,13 @@
         <span class="mono">Rio de Janeiro</span>
         <span class="mono">2018 → present</span>
       </div>
-      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span><span class="ln" data-txt="Regi">Regi</span></h1>
+      <!-- the space between the two .ln nodes is required and does NOT show on
+           screen: both spans are display:block, so the text node between them
+           is not rendered. Without it the h1 extracts as "RégisRegi", glued,
+           and search engines never find the proper name in the page's main
+           heading — the strongest signal there is for someone searching for
+           "Régis Regi". Same reason for the contact h2. -->
+      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span> <span class="ln" data-txt="Regi">Regi</span></h1>
 
       <p class="hero-roles">
         <span><span class="dot dot-coord" aria-hidden="true"></span>Post-Production Coordinator</span>
@@ -702,7 +713,7 @@
 
     <!-- 05 CONTACT -->
     <section class="end cut" id="contact">
-      <h2 class="end-big"><span class="end-ln"><span>Let's</span></span><span class="end-ln"><span><a class="mail" href="mailto:regispereiraregi@gmail.com">talk.</a></span></span></h2>
+      <h2 class="end-big"><span class="end-ln"><span>Let's</span></span> <span class="end-ln"><span><a class="mail" href="mailto:regispereiraregi@gmail.com">talk.</a></span></span></h2>
       <div class="end-links">
         <a href="mailto:regispereiraregi@gmail.com">regispereiraregi@gmail.com</a>
         <a href="https://www.linkedin.com/in/regisregi" target="_blank" rel="noopener">LinkedIn ↗</a>

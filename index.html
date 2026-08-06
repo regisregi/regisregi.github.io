@@ -12,10 +12,15 @@
   <meta property="og:locale" content="pt_BR">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Régis Regi">
-  <!-- Sem og:image por ora: o cartão sai só com título e descrição. Ao criar
-       a imagem 1200x630, ligar aqui, no en/index.html e trocar para
-       twitter:card=summary_large_image nos dois. -->
-  <meta name="twitter:card" content="summary">
+  <!-- Cartão social 1200x630 no desenho da casa (preto, nome em display, fio
+       de acento, as quatro frentes). Absoluto e não relativo: quem consome
+       og:image não resolve caminho relativo. A mesma imagem serve as duas
+       línguas — é o nome, que não traduz. -->
+  <meta property="og:image" content="https://regisregi.com/assets/og-regis-regi.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Régis Regi — coordenação de pós-produção, roteiro, edição e curadoria, Rio de Janeiro">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://regisregi.com/">
   <link rel="alternate" hreflang="pt-BR" href="https://regisregi.com/">
   <link rel="alternate" hreflang="en" href="https://regisregi.com/en/">
@@ -105,7 +110,13 @@
         <span class="mono">Rio de Janeiro</span>
         <span class="mono">2018 → hoje</span>
       </div>
-      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span><span class="ln" data-txt="Regi">Regi</span></h1>
+      <!-- o espaço entre os dois .ln é obrigatório e NÃO aparece na tela: os
+           dois spans são display:block, então o nó de texto entre eles não é
+           renderizado. Sem ele o texto extraído do h1 sai "RégisRegi", colado,
+           e o buscador não encontra o nome próprio no título principal da
+           página — que é o sinal mais forte que existe para quem procura por
+           "Régis Regi". Vale para o h2 do contato pelo mesmo motivo. -->
+      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span> <span class="ln" data-txt="Regi">Regi</span></h1>
 
       <p class="hero-roles">
         <span><span class="dot dot-coord" aria-hidden="true"></span>Coordenador de Pós-Produção</span>
@@ -702,7 +713,7 @@
 
     <!-- 05 CONTATO -->
     <section class="end cut" id="contato">
-      <h2 class="end-big"><span class="end-ln"><span>Vamos</span></span><span class="end-ln"><span><a class="mail" href="mailto:regispereiraregi@gmail.com">conversar.</a></span></span></h2>
+      <h2 class="end-big"><span class="end-ln"><span>Vamos</span></span> <span class="end-ln"><span><a class="mail" href="mailto:regispereiraregi@gmail.com">conversar.</a></span></span></h2>
       <div class="end-links">
         <a href="mailto:regispereiraregi@gmail.com">regispereiraregi@gmail.com</a>
         <a href="https://www.linkedin.com/in/regisregi" target="_blank" rel="noopener">LinkedIn ↗</a>
