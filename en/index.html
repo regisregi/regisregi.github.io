@@ -41,40 +41,72 @@
     gtag('config', 'G-R19SB2FGP1');
   </script>
   <!-- Structured data for search engines (schema.org). Not rendered.
-       The @id is deliberately the same as in index.html: it tells Google both
-       pages describe the same person, not two people with the same name.
+       @graph with three nodes: the site, THIS page, and the person.
+       The Person @id is deliberately the same as in index.html: it tells
+       Google both pages describe the same person, not two people with the
+       same name. That is why Person.url is the home page on BOTH — a person
+       has one home page. Previously each page declared a different url under
+       the same @id, so merging the graphs produced one person with two
+       conflicting home pages. What varies per page is mainEntityOfPage,
+       pointing at the local WebPage node, and WebPage.about, which declares
+       who the document is about. inLanguage lives on WebPage only: on
+       WebSite it would conflict between the two languages.
        Only assert here what the page already states in text. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": "https://regisregi.com/#regis",
-    "name": "Régis Regi",
-    "url": "https://regisregi.com/en/",
-    "email": "regispereiraregi@gmail.com",
-    "jobTitle": ["Post-Production Coordinator", "Screenwriter", "Editor", "Curator"],
-    "description": "Post-production coordinator, screenwriter, editor and curator based in Rio de Janeiro, with eight years in film and television between global streamers and the independent scene.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Rio de Janeiro",
-      "addressRegion": "RJ",
-      "addressCountry": "BR"
-    },
-    "knowsLanguage": ["pt-BR", "en"],
-    "knowsAbout": [
-      "Post-production",
-      "Screenwriting",
-      "Editing",
-      "Content curation",
-      "Television criticism"
-    ],
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Mellin Studio"
-    },
-    "sameAs": [
-      "https://www.linkedin.com/in/regisregi",
-      "https://extvnerd.medium.com/"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://regisregi.com/#site",
+        "url": "https://regisregi.com/",
+        "name": "Régis Regi",
+        "publisher": { "@id": "https://regisregi.com/#regis" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://regisregi.com/en/#pagina-en",
+        "url": "https://regisregi.com/en/",
+        "name": "Régis Regi · Post-Production, Writing and Curation",
+        "inLanguage": "en",
+        "isPartOf": { "@id": "https://regisregi.com/#site" },
+        "about": { "@id": "https://regisregi.com/#regis" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://regisregi.com/#regis",
+        "name": "Régis Regi",
+        "alternateName": "Regis Regi",
+        "givenName": "Régis",
+        "familyName": "Regi",
+        "url": "https://regisregi.com/",
+        "mainEntityOfPage": { "@id": "https://regisregi.com/en/#pagina-en" },
+        "email": "regispereiraregi@gmail.com",
+        "jobTitle": ["Post-Production Coordinator", "Screenwriter", "Editor", "Curator"],
+        "description": "Post-production coordinator, screenwriter, editor and curator based in Rio de Janeiro, with eight years in film and television between global streamers and the independent scene.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Rio de Janeiro",
+          "addressRegion": "RJ",
+          "addressCountry": "BR"
+        },
+        "knowsLanguage": ["pt-BR", "en"],
+        "knowsAbout": [
+          "Post-production",
+          "Screenwriting",
+          "Editing",
+          "Content curation",
+          "Television criticism"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Mellin Studio"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/regisregi",
+          "https://extvnerd.medium.com/"
+        ]
+      }
     ]
   }
   </script>
