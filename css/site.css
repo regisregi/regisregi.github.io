@@ -613,7 +613,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 .peca h3 {
   font-family: var(--display); font-weight: 400;
-  font-size: clamp(1.95rem, 4.6vw, 3.5rem); line-height: .95;
+  /* 1.06 e não .95: o título é caixa alta com acento (AGÊNCIA, PADRÃO) e o
+     Anton desenha o acento ACIMA da altura de caixa — em .95 o circunflexo
+     da segunda linha batia na vírgula da primeira, medido no painel do
+     Mellin em desktop e celular. 1.06 é o mínimo que dá folga ao acento
+     sem abrir o bloco a ponto de perder o peso de cartaz. */
+  font-size: clamp(1.95rem, 4.6vw, 3.5rem); line-height: 1.06;
   letter-spacing: -.03em; text-transform: uppercase; color: var(--ink);
   max-width: 18ch; margin-top: .35rem;
 }
@@ -700,18 +705,47 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 
 /* ---- material 3: fileira de marcas atendidas ----
-   Os arquivos vêm em proporções muito diferentes (C6 é 5:1, Praya é 1:1,25),
-   então a normalização é pela altura da caixa, não pela largura do arquivo. */
+   Os arquivos vêm em proporções muito diferentes (C6 é um wordmark 5:1,
+   Praya e BSC são emblemas mais altos que largos), então cada logo pousa
+   num PALCO de altura fixa: a caixa é a mesma nas três células, a logo
+   centra dentro dela e o rótulo cai sempre na mesma linha — sem o topo
+   serrilhado que a fileira tinha quando cada célula media pela própria
+   logo. max-width e max-height JUNTOS escalam preservando a proporção;
+   o esquema antigo (height fixa + max-width) achatava o wordmark do C6
+   quando a célula apertava. .alta dá mais teto aos emblemas, que precisam
+   de mais altura para pesar o mesmo que um wordmark; o palco não muda.
+   3 colunas fixas também no celular: vira uma régua de marcas numa linha
+   só, em vez de 2+1 com órfã desalinhada. */
 .peca-marcas {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(126px, 1fr));
-  gap: clamp(1rem, 2.2vw, 1.8rem); align-items: end; list-style: none;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.8rem, 2vw, 1.8rem); list-style: none; width: 100%;
 }
-.peca-marcas li { display: grid; gap: .6rem; justify-items: start; min-width: 0; }
-.peca-marcas img { display: block; width: auto; max-width: 100%; height: clamp(28px, 3.2vw, 42px); }
-.peca-marcas li.alta img { height: clamp(48px, 5.8vw, 76px); }
+.peca-marcas li {
+  display: grid; grid-template-rows: clamp(58px, 7vw, 92px) auto;
+  gap: .7rem; justify-items: center; align-items: center; min-width: 0;
+}
+.peca-marcas img {
+  display: block; width: auto; height: auto;
+  max-width: 100%; max-height: clamp(30px, 3.6vw, 46px);
+}
+.peca-marcas li.alta img { max-height: clamp(52px, 6.4vw, 84px); }
 .peca-marcas span {
   font-family: var(--mono); font-size: .55rem; letter-spacing: .16em;
   text-transform: uppercase; color: var(--dim);
+  text-align: center; line-height: 1.5;
+  /* start e não o center herdado do li: com a fileira de rótulos esticada,
+     o center faria rótulo de 2 linhas (Brasil Surfe Clube no celular)
+     começar mais alto que os de 1 linha — todos partem da mesma linha */
+  align-self: start;
+}
+/* quando a coluna visual é SÓ a fileira de marcas (caso do Mellin), ela
+   centra na vertical ao lado do texto: bloco curto grudado no topo deixava
+   o resto da coluna como vazio morto. Navegador sem :has() fica com o
+   alinhamento de topo de sempre — degradação limpa. */
+@media (min-width: 860px) {
+  .peca--lado .peca-visual:has(> .peca-marcas:only-child) {
+    align-self: stretch; align-content: center;
+  }
 }
 
 /* ---- material 4: três frentes com algarismo fantasma ---- */
