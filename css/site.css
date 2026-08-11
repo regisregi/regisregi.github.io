@@ -154,9 +154,22 @@ dl, dt, dd { margin: 0; }
    (curadoria), como emenda mal alinhada na ilha de edição. As cópias
    nascem de ::before/::after com o texto em data-txt, então não duplicam
    markup nem atrapalham o efeito assinatura (letra a letra) que já mora
-   em .ln/.ch. Ciclo de 1,5s, valores calibrados no navegador: em .08em
-   a fatia saía do bloco do nome e virava letra fantasma; .045em mantém
-   a leitura. */
+   em .ln/.ch.
+
+   Calibragem atual, a pedido do dono: mais perceptível, constante e
+   levemente exagerada. Três decisões fazem isso sem virar ruído:
+   1. DUAS rajadas por ciclo em cada fatia (mais um tique curto no fim da
+      violeta), intercaladas no tempo — o maior silêncio cai a ~350ms e o
+      olho lê o defeito como permanente, não como piscada rara.
+   2. A faixa de recorte MUDA a cada quadro (inset diferente por keyframe):
+      fatia que salta sempre no mesmo lugar lê como carimbo; mudando de
+      altura, lê como a emenda varrendo a fita.
+   3. Pico de deslocamento em .065em — acima dos .045em antigos, abaixo do
+      limiar de .08em medido no navegador em que a fatia sai do bloco do
+      nome e vira letra fantasma. O leve escorregão vertical (.012em) é a
+      emenda desencaixando também na altura, não só no eixo do tempo.
+   linear e não var(--ease): entre quadros a 3% de distância (~45ms) a
+   curva da casa viraria rampa; o corte tem que ser mecânico. */
 .hero-name .ln { position: relative; }
 .hero-name .ln::before, .hero-name .ln::after {
   content: attr(data-txt); position: absolute; left: 0; top: 0; width: 100%;
@@ -164,25 +177,33 @@ dl, dt, dd { margin: 0; }
 }
 .hero-name .ln::before {
   color: var(--roteiro);
-  animation: corte-fita-a 1.5s var(--ease) infinite;
+  animation: corte-fita-a 1.5s linear infinite;
   clip-path: inset(42% 0 38% 0);
 }
 .hero-name .ln::after {
   color: var(--curadoria);
-  animation: corte-fita-b 1.5s var(--ease) infinite;
+  animation: corte-fita-b 1.5s linear infinite;
   clip-path: inset(68% 0 12% 0);
 }
 @keyframes corte-fita-a {
-  0%, 90%, 100% { transform: none; opacity: 0; }
-  91% { transform: translateX(-.045em); opacity: 1; }
-  93% { transform: translateX(.022em); opacity: 1; }
-  95% { transform: none; opacity: 0; }
+  0%, 8% { transform: none; opacity: 0; clip-path: inset(42% 0 38% 0); }
+  9%     { transform: translate(-.065em, .012em); opacity: 1; clip-path: inset(34% 0 48% 0); }
+  12%    { transform: translateX(.032em); opacity: 1; clip-path: inset(45% 0 35% 0); }
+  15%, 52% { transform: none; opacity: 0; clip-path: inset(42% 0 38% 0); }
+  53%    { transform: translateX(.05em); opacity: 1; clip-path: inset(40% 0 42% 0); }
+  56%    { transform: translate(-.028em, -.01em); opacity: 1; clip-path: inset(48% 0 30% 0); }
+  59%, 100% { transform: none; opacity: 0; clip-path: inset(42% 0 38% 0); }
 }
 @keyframes corte-fita-b {
-  0%, 92%, 100% { transform: none; opacity: 0; }
-  93% { transform: translateX(.035em); opacity: 1; }
-  95% { transform: translateX(-.018em); opacity: 1; }
-  97% { transform: none; opacity: 0; }
+  0%, 10% { transform: none; opacity: 0; clip-path: inset(68% 0 12% 0); }
+  11%    { transform: translateX(.055em); opacity: 1; clip-path: inset(64% 0 16% 0); }
+  14%    { transform: translate(-.03em, .012em); opacity: 1; clip-path: inset(72% 0 8% 0); }
+  17%, 55% { transform: none; opacity: 0; clip-path: inset(68% 0 12% 0); }
+  56%    { transform: translate(-.06em, -.01em); opacity: 1; clip-path: inset(60% 0 20% 0); }
+  59%    { transform: translateX(.028em); opacity: 1; clip-path: inset(70% 0 10% 0); }
+  62%, 84% { transform: none; opacity: 0; clip-path: inset(68% 0 12% 0); }
+  85%    { transform: translateX(.035em); opacity: 1; clip-path: inset(76% 0 6% 0); }
+  88%, 100% { transform: none; opacity: 0; clip-path: inset(68% 0 12% 0); }
 }
 
 /* ---------- faixa de marcas: rótulo fixo ----------
