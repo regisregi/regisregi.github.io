@@ -645,11 +645,16 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .peca h3 em { font-style: normal; color: var(--accent); }
 
-/* cabeça com a marca à esquerda do título (caso do MQE): cartela de
-   abertura, a logo apresenta o projeto antes do nome da peça. Centro
-   vertical entre logo e título de duas linhas; em tela estreita demais
-   o wrap devolve a logo para cima do título, que era o desenho antigo —
-   degradação para o conhecido, não para o quebrado. */
+/* cabeça da peça, padrão dos ONZE painéis: título primeiro, marca depois —
+   cartela de crédito na ordem de leitura (primeiro o que fiz, depois para
+   quem). Par ancorado à esquerda de propósito: o algarismo fantasma
+   continua dono do canto direito, sem marca por cima dele. Centro
+   vertical alinhado entre o título de duas linhas e a marca; em tela
+   estreita o wrap derruba a marca para BAIXO do título, e a ordem de
+   leitura fica intacta. Wordmarks (Porta, Dafina, Maracutaia, DOT,
+   A Fábrica) usam a altura base; emblemas mais altos que largos
+   (Mellin, MQE, Grupo Sal, Paramount+, Descomplica) usam .alta, para
+   pesarem o mesmo na fileira de painéis. */
 .peca-cabeca {
   display: flex; align-items: center; flex-wrap: wrap;
   gap: .6rem clamp(1.1rem, 2.6vw, 2rem); margin-top: .35rem;
