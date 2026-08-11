@@ -645,6 +645,17 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .peca h3 em { font-style: normal; color: var(--accent); }
 
+/* cabeça com a marca à esquerda do título (caso do MQE): cartela de
+   abertura, a logo apresenta o projeto antes do nome da peça. Centro
+   vertical entre logo e título de duas linhas; em tela estreita demais
+   o wrap devolve a logo para cima do título, que era o desenho antigo —
+   degradação para o conhecido, não para o quebrado. */
+.peca-cabeca {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: .6rem clamp(1.1rem, 2.6vw, 2rem); margin-top: .35rem;
+}
+.peca-cabeca h3 { margin-top: 0; }
+
 /* corpo: no largo, texto de um lado e material do outro */
 .peca-corpo { display: grid; gap: clamp(1.1rem, 2.4vw, 2.2rem); }
 .peca-texto { display: grid; gap: clamp(.75rem, 1.4vw, 1.15rem); align-content: start; }
@@ -895,6 +906,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 .row.open .peca-topo { animation: peca-entra .45s var(--ease) both; }
 .row.open .peca h3 { animation: peca-entra .5s var(--ease) .04s both; }
+/* a marca da cabeça entra logo depois do título — fora de .peca-texto ela
+   perderia o escalonamento e cairia parada no quadro */
+.row.open .peca-cabeca .peca-marca { animation: peca-entra .5s var(--ease) .07s both; }
 .row.open .peca-indice { animation: peca-indice .8s var(--ease) .08s both; }
 .row.open .peca-frase b { animation: peca-entra .7s var(--ease) var(--d, 0s) both; }
 .row.open .peca-frase b:nth-child(2) { --d: .05s; }
@@ -947,10 +961,28 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .row.open .peca-crono li:nth-child(10) i { --i: 9; }
 
 /* aqui o --i vem do HTML, uma por barra: com 46 barras, uma tabela de
-   nth-child custaria mais que o atributo inline */
+   nth-child custaria mais que o atributo inline.
+
+   Depois de pousar, a onda CONTINUA respirando (pedido do dono: onda
+   sonora não fica estática): cada barra oscila em scaleY como medidor de
+   áudio caindo do pico e voltando. Só para baixo (escala ≤ 1) — acima
+   de 1 a barra de 96% estouraria a régua. A fase de partida é igual para
+   todas, mas a DURAÇÃO varia por barra (--i), então elas dessincronizam
+   sozinhas ciclo a ciclo, como escuta de verdade — sem random, loop
+   determinístico e compositor-only. O delay do laço é o fim exato da
+   varredura de entrada daquela barra, e sem fill-mode ele não pisa na
+   animação de pouso enquanto espera: pouso termina em escala 1, laço
+   começa em escala 1, emenda invisível. Vem por último na lista de
+   propósito — animação posterior vence o transform enquanto ativa. */
 .row.open .peca-onda i {
   transform-origin: center;
-  animation: peca-onda .45s var(--ease) calc(.2s + var(--i, 0) * 7ms) both;
+  animation:
+    peca-onda .45s var(--ease) calc(.2s + var(--i, 0) * 7ms) both,
+    onda-viva calc(1.1s + var(--i, 0) * 29ms) ease-in-out calc(.65s + var(--i, 0) * 7ms) infinite alternate;
+}
+@keyframes onda-viva {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(.58); }
 }
 
 /* hover: a imagem respira dentro da moldura, que continua parada */
@@ -969,6 +1001,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .peca-cta:hover, .peca-cta:focus-visible { transform: none; }
   /* quem pediu menos movimento recebe a peça inteira parada, já montada */
   .row.open .peca-topo, .row.open .peca h3, .row.open .peca-indice,
+  .row.open .peca-cabeca .peca-marca,
   .row.open .peca-frase b, .row.open .peca-texto > *, .row.open .peca-rodape,
   .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li),
   .row.open .peca .sheet a img, .row.open .peca-modulos .mod > img,
