@@ -813,10 +813,91 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .peca-crono li:last-child i { background: var(--accent); }
 .peca-crono li:last-child span { color: var(--accent); }
 
-/* ---- material 6: onda de áudio ---- */
+/* ---- material 6: onda de áudio ----
+   Barras em pílula (raio total), vocabulário de player de áudio moderno.
+   O trecho .acesa é o estado ESTÁTICO — sem JS, com menos-movimento ou
+   antes de abrir, a onda mostra um trecho aceso fixo. Com o painel aberto,
+   o playhead varre (onda-toca, abaixo) e pinta por cima dele. */
 .peca-onda { display: flex; gap: 3px; align-items: center; height: clamp(54px, 6.4vw, 96px); }
-.peca-onda i { flex: 1; display: block; background: #2f2942; }
+.peca-onda i { flex: 1; display: block; background: #2f2942; border-radius: 99px; }
 .peca-onda i.acesa { background: var(--accent); }
+
+/* ---- material 7: fluxo semanal (Porta dos Fundos) ----
+   O pipeline da entrega semanal como trilho de cinco etapas: roteiro,
+   gravação, edição, pós, no ar. Um pulso de acento atravessa o trilho
+   acendendo nó, fio e rótulo em sequência — e atravessa TRÊS vezes por
+   ciclo, com uma respirada depois da terceira: são as três esquetes da
+   semana, o ritmo que o painel inteiro descreve. Ciclo de 18s com
+   travessias em 0%, 30.6% e 61.1% (5,5s cada) e 5s de silêncio no fim;
+   o mesmo keyframe serve todos os nós porque quem estagia é o delay
+   (.9s por etapa, índice --e posto no LI por nth-child e herdado por
+   nó, fio e rótulo). Estado parado: trilho desenhado, "no ar" aceso —
+   é o que fica para menos-movimento e para quem chega sem JS. */
+.peca-fluxo {
+  list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .5rem; margin-top: .6rem;
+  /* width explícita: colunas minmax(0,1fr) têm base zero, e sem isto a
+     grade colapsa para a largura do conteúdo em vez de abrir o trilho */
+  width: 100%;
+}
+.peca-fluxo li { position: relative; display: grid; gap: .6rem; justify-items: start; min-width: 0; }
+.peca-fluxo li:nth-child(2) { --e: 1; }
+.peca-fluxo li:nth-child(3) { --e: 2; }
+.peca-fluxo li:nth-child(4) { --e: 3; }
+.peca-fluxo li:nth-child(5) { --e: 4; }
+/* nó: mesmo quadradinho das frentes de atuação da hero */
+.peca-fluxo .no {
+  display: block; width: 9px; height: 9px; border-radius: 2px;
+  background: #2f2942;
+}
+/* trilho entre um nó e o próximo */
+.peca-fluxo li:not(:last-child)::before {
+  content: ""; position: absolute; left: 17px; right: 7px; top: 4px; height: 1px;
+  background: var(--line);
+}
+/* fio de acento que varre o trilho quando o pulso passa */
+.peca-fluxo li:not(:last-child)::after {
+  content: ""; position: absolute; left: 17px; right: 7px; top: 4px; height: 1px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+}
+.peca-fluxo span:not(.no) {
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .14em;
+  text-transform: uppercase; color: #4a4455;
+}
+/* estado parado: a chegada fica marcada — composição estática completa */
+.peca-fluxo li:last-child span:not(.no) { color: var(--accent); }
+
+@keyframes fluxo-no {
+  0%, 30.55%, 61.11% { background: var(--accent); transform: scale(1.55); }
+  2.8%, 33.35%, 63.91% { background: var(--accent); transform: none; }
+  4.4%, 34.95%, 65.51%, 100% { background: #2f2942; transform: none; }
+}
+@keyframes fluxo-fio {
+  0%, 30.55%, 61.11% { transform: scaleX(0); opacity: 1; }
+  4.9%, 35.45%, 66.01% { transform: scaleX(1); opacity: 1; }
+  6%, 36.55%, 67.11%, 100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes fluxo-rotulo {
+  0%, 30.55%, 61.11% { color: var(--ink); }
+  4.4%, 34.95%, 65.51%, 100% { color: #4a4455; }
+}
+/* a chegada ("no ar") segura o acento mais tempo: é o ponto do fluxo */
+@keyframes fluxo-final {
+  0%, 30.55%, 61.11% { color: var(--accent); }
+  9%, 39.55%, 70.11%, 100% { color: #4a4455; }
+}
+.row.open .peca-fluxo .no {
+  animation: fluxo-no 18s linear calc(.8s + var(--e, 0) * .9s) infinite;
+}
+.row.open .peca-fluxo li:not(:last-child)::after {
+  animation: fluxo-fio 18s linear calc(.8s + var(--e, 0) * .9s) infinite;
+}
+.row.open .peca-fluxo span:not(.no) {
+  animation: fluxo-rotulo 18s linear calc(.8s + var(--e, 0) * .9s) infinite;
+}
+.row.open .peca-fluxo li:last-child span:not(.no) {
+  animation-name: fluxo-final;
+}
 
 /* ---- textura: frase repetida cortada por chapa sólida ----
    No largo a chapa cobre a coluna do texto e a frase sobra à direita. No
@@ -932,15 +1013,15 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 /* material: cada item entra depois do texto, em fila. O :nth-child(n+7)
    trava a fila: sem ele o sétimo pôster em diante cai no atraso zero e
    entra junto com o primeiro, quebrando a leitura de fileira. */
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li) {
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li) {
   --d: calc(.18s + var(--i, 0) * 50ms);
   animation: peca-entra .5s var(--ease) var(--d) both;
 }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li):nth-child(2) { --i: 1; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li):nth-child(3) { --i: 2; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li):nth-child(4) { --i: 3; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li):nth-child(5) { --i: 4; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li):nth-child(n+6) { --i: 5; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(2) { --i: 1; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(3) { --i: 2; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(4) { --i: 3; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(5) { --i: 4; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(n+6) { --i: 5; }
 
 /* fill BACKWARDS e não both: com both a animação segura transform: none no
    fim e passa na frente do :hover, que morreria em silêncio. Backwards só
@@ -951,19 +1032,46 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   animation: peca-foto .6s var(--ease) var(--d, 0s) backwards;
 }
 
+/* o --i mora no LI e desce por herança para a casa E para o algarismo:
+   os dois precisam do mesmo índice, a casa para a entrada e o par
+   casa+algarismo para a contagem regressiva abaixo */
 .row.open .peca-crono i {
   transform-origin: bottom;
-  animation: peca-crono .45s var(--ease) calc(.2s + var(--i, 0) * 40ms) both;
+  animation:
+    peca-crono .45s var(--ease) calc(.2s + var(--i, 0) * 40ms) both,
+    crono-conta 10s linear calc(.8s + var(--i, 0) * 1s) infinite;
 }
-.row.open .peca-crono li:nth-child(2) i { --i: 1; }
-.row.open .peca-crono li:nth-child(3) i { --i: 2; }
-.row.open .peca-crono li:nth-child(4) i { --i: 3; }
-.row.open .peca-crono li:nth-child(5) i { --i: 4; }
-.row.open .peca-crono li:nth-child(6) i { --i: 5; }
-.row.open .peca-crono li:nth-child(7) i { --i: 6; }
-.row.open .peca-crono li:nth-child(8) i { --i: 7; }
-.row.open .peca-crono li:nth-child(9) i { --i: 8; }
-.row.open .peca-crono li:nth-child(10) i { --i: 9; }
+.row.open .peca-crono li:nth-child(2)  { --i: 1; }
+.row.open .peca-crono li:nth-child(3)  { --i: 2; }
+.row.open .peca-crono li:nth-child(4)  { --i: 3; }
+.row.open .peca-crono li:nth-child(5)  { --i: 4; }
+.row.open .peca-crono li:nth-child(6)  { --i: 5; }
+.row.open .peca-crono li:nth-child(7)  { --i: 6; }
+.row.open .peca-crono li:nth-child(8)  { --i: 7; }
+.row.open .peca-crono li:nth-child(9)  { --i: 8; }
+.row.open .peca-crono li:nth-child(10) { --i: 9; }
+/* contagem regressiva de verdade: com o painel aberto, cada casa acende
+   por exatamente 1 segundo, da 10 até a 01, em ciclo de 10s — o formato
+   do programa rodando na peça. Mesmo keyframe para todas as casas; quem
+   conta é o delay (1s por casa). O algarismo acompanha a própria casa.
+   linear com corte em 10%/12%: relógio não desliza, salta. Enquanto a
+   animação roda ela pinta por cima do accent estático da última casa;
+   com menos-movimento tudo volta ao quadro parado de antes. */
+@keyframes crono-conta {
+  0%   { background: var(--accent); }
+  10%  { background: var(--accent); }
+  12%  { background: #231e31; }
+  100% { background: #231e31; }
+}
+@keyframes crono-num {
+  0%   { color: var(--accent); }
+  10%  { color: var(--accent); }
+  12%  { color: #4a4455; }
+  100% { color: #4a4455; }
+}
+.row.open .peca-crono li span {
+  animation: crono-num 10s linear calc(.8s + var(--i, 0) * 1s) infinite;
+}
 
 /* aqui o --i vem do HTML, uma por barra: com 46 barras, uma tabela de
    nth-child custaria mais que o atributo inline.
@@ -983,11 +1091,24 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   transform-origin: center;
   animation:
     peca-onda .45s var(--ease) calc(.2s + var(--i, 0) * 7ms) both,
-    onda-viva calc(1.1s + var(--i, 0) * 29ms) ease-in-out calc(.65s + var(--i, 0) * 7ms) infinite alternate;
+    onda-viva calc(1.1s + var(--i, 0) * 29ms) ease-in-out calc(.65s + var(--i, 0) * 7ms) infinite alternate,
+    onda-toca 7s linear calc(.65s + var(--i, 0) * .152s) infinite;
 }
 @keyframes onda-viva {
   from { transform: scaleY(1); }
   to   { transform: scaleY(.58); }
+}
+/* playhead: um trecho aceso ATRAVESSA a onda da esquerda para a direita,
+   como reprodução em andamento — o mesmo conceito do timecode do rail.
+   Cada barra acende quando a "agulha" passa: mesmo keyframe para todas,
+   o que estagia é o delay (.152s por barra ≈ 7s ÷ 46). Anima background,
+   que é paint e não compositor — em 46 barras minúsculas o repaint é
+   barato, medido sem queda. A cauda de 12% dá o rastro de decaimento. */
+@keyframes onda-toca {
+  0%   { background: var(--accent); }
+  4%   { background: var(--accent); }
+  16%  { background: #2f2942; }
+  100% { background: #2f2942; }
 }
 
 /* hover: a imagem respira dentro da moldura, que continua parada */
@@ -1008,9 +1129,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .row.open .peca-topo, .row.open .peca h3, .row.open .peca-indice,
   .row.open .peca-cabeca .peca-marca,
   .row.open .peca-frase b, .row.open .peca-texto > *, .row.open .peca-rodape,
-  .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li),
+  .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li),
   .row.open .peca .sheet a img, .row.open .peca-modulos .mod > img,
-  .row.open .peca-crono i, .row.open .peca-onda i { animation: none; }
+  .row.open .peca-crono i, .row.open .peca-crono li span,
+  .row.open .peca-fluxo .no, .row.open .peca-fluxo li:not(:last-child)::after,
+  .row.open .peca-fluxo span:not(.no),
+  .row.open .peca-onda i { animation: none; }
   /* o fio do topo não anima, mas continua desenhado: sem isto ele fica em
      scaleX(0) e a peça perde a moldura de acento */
   .row.open .peca::after { animation: none; transform: none; opacity: .5; }
