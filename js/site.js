@@ -251,12 +251,23 @@
     });
   });
 
-  /* faixa "Exibido em": cada canal leva à subseção mais relevante. O alvo
-     vem de data-alvo (id do painel); daqui a gente abre a linha, rola até
-     ela e passa o foco pro botão, para teclado e leitor de tela seguirem
-     do lugar certo. Modificador de teclado ou id inexistente: o href age
-     sozinho (nova aba, ou âncora da seção de Trabalho). A rolagem
-     respeita menos-movimento consultando o MediaQueryList na hora. */
+  /* faixa "Exibido em": cada canal leva à subseção mais relevante — em
+     DOIS TEMPOS, não um. Rolagem e expansão juntas eram dois movimentos
+     brigando: a página crescia embaixo enquanto o scroll corria e a
+     chegada parecia fora do lugar. Sequenciado lê como cena: chega, abre.
+
+     A chegada é vigiada por POSIÇÃO (pageYOffset dentro de 4px do alvo,
+     com rede de 1,2s), não por scrollend, que o Safari demorou a ter.
+     O alvo é o topo da linha menos o scroll-margin-top dela — o mesmo
+     respiro do topo fixo, lido do CSS para não duplicar a medida.
+
+     Depois de abrir, um assentamento: linha perto do PÉ da página não
+     alcança o alvo antes de abrir (não existe rolagem sobrando), então o
+     painel crescendo libera altura e um segundo scrollTo curto encosta a
+     linha no lugar. Só roda se ficou longe (>8px), senão nada se move.
+
+     Modificador de teclado ou id inexistente: o href age sozinho. Com
+     menos-movimento: salto seco, abertura imediata, sem coreografia. */
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest(".marcas-trilho a[data-alvo]") : null;
     if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
@@ -265,17 +276,46 @@
     var btn = row && row.querySelector("button.row-name");
     if (!btn) { return; }
     e.preventDefault();
-    if (!row.classList.contains("open")) {
-      row.classList.add("open");
-      btn.setAttribute("aria-expanded", "true");
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
+
+    var margem = parseFloat(getComputedStyle(row).scrollMarginTop) || 0;
+    var alvo = Math.max(0, row.getBoundingClientRect().top + window.pageYOffset - margem);
+    var semMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var abrir = function () {
+      if (!row.classList.contains("open")) {
+        row.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
+        }
+        pixel("ViewContent", { content_name: btn.textContent.trim() });
       }
-      pixel("ViewContent", { content_name: btn.textContent.trim() });
+      btn.focus({ preventScroll: true });
+      /* assentamento: o painel aberto liberou altura; se a linha parou
+         longe do alvo, encosta. O atraso deixa a expansão ganhar corpo
+         antes de medir de novo. */
+      if (!semMovimento) {
+        window.setTimeout(function () {
+          if (Math.abs(window.pageYOffset - alvo) > 8) {
+            window.scrollTo({ top: alvo, behavior: "smooth" });
+          }
+        }, 120);
+      }
+    };
+
+    if (semMovimento) {
+      window.scrollTo(0, alvo);
+      abrir();
+      return;
     }
-    var quer = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-    row.scrollIntoView({ behavior: quer, block: "start" });
-    btn.focus({ preventScroll: true });
+    if (Math.abs(window.pageYOffset - alvo) < 4) { abrir(); return; }
+    window.scrollTo({ top: alvo, behavior: "smooth" });
+    var desde = Date.now();
+    var vigiar = function () {
+      if (Math.abs(window.pageYOffset - alvo) < 4 || Date.now() - desde > 1200) { abrir(); return; }
+      window.requestAnimationFrame(vigiar);
+    };
+    window.requestAnimationFrame(vigiar);
   });
 
   /* ---------- sala de projeção ----------
