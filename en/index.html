@@ -164,14 +164,22 @@
       <div class="marcas">
         <span class="marcas-rot" aria-hidden="true">Featured in</span>
         <div class="marcas-faixa">
+          <!-- each channel links to the most relevant Work subsection:
+               data-alvo is the panel id, and js/site.js opens the row and
+               scrolls to it. Without JS the href goes to the whole Work
+               section — honest degradation. The four global streamers land
+               on the DOT panel, which is the originals work for those
+               platforms. The loop copy is decorative (aria-hidden) and
+               leaves the tab order via tabindex="-1", otherwise Tab would
+               visit every channel twice. -->
           <div class="marcas-trilho" role="list" aria-label="Platforms and channels this work has aired on">
             <ul>
-              <li>Netflix</li><li>Disney+</li><li>Star+</li><li>HBO Max</li><li>Paramount+</li>
-              <li>Discovery+</li><li>A&amp;E</li><li>Canal Brasil</li><li>Canal OFF</li><li>TNT</li><li>Porta dos Fundos</li>
+              <li><a href="#work" data-alvo="p-dot">Netflix</a></li><li><a href="#work" data-alvo="p-dot">Disney+</a></li><li><a href="#work" data-alvo="p-dot">Star+</a></li><li><a href="#work" data-alvo="p-dot">HBO Max</a></li><li><a href="#work" data-alvo="p-para">Paramount+</a></li>
+              <li><a href="#work" data-alvo="p-dafinaf">Discovery+</a></li><li><a href="#work" data-alvo="p-dafinae">A&amp;E</a></li><li><a href="#work" data-alvo="p-dafinae">Canal Brasil</a></li><li><a href="#work" data-alvo="p-mellin">Canal OFF</a></li><li><a href="#work" data-alvo="p-fabrica">TNT</a></li><li><a href="#work" data-alvo="p-porta">Porta dos Fundos</a></li>
             </ul>
             <ul aria-hidden="true">
-              <li>Netflix</li><li>Disney+</li><li>Star+</li><li>HBO Max</li><li>Paramount+</li>
-              <li>Discovery+</li><li>A&amp;E</li><li>Canal Brasil</li><li>Canal OFF</li><li>TNT</li><li>Porta dos Fundos</li>
+              <li><a href="#work" data-alvo="p-dot" tabindex="-1">Netflix</a></li><li><a href="#work" data-alvo="p-dot" tabindex="-1">Disney+</a></li><li><a href="#work" data-alvo="p-dot" tabindex="-1">Star+</a></li><li><a href="#work" data-alvo="p-dot" tabindex="-1">HBO Max</a></li><li><a href="#work" data-alvo="p-para" tabindex="-1">Paramount+</a></li>
+              <li><a href="#work" data-alvo="p-dafinaf" tabindex="-1">Discovery+</a></li><li><a href="#work" data-alvo="p-dafinae" tabindex="-1">A&amp;E</a></li><li><a href="#work" data-alvo="p-dafinae" tabindex="-1">Canal Brasil</a></li><li><a href="#work" data-alvo="p-mellin" tabindex="-1">Canal OFF</a></li><li><a href="#work" data-alvo="p-fabrica" tabindex="-1">TNT</a></li><li><a href="#work" data-alvo="p-porta" tabindex="-1">Porta dos Fundos</a></li>
             </ul>
           </div>
         </div>

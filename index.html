@@ -163,14 +163,21 @@
       <div class="marcas">
         <span class="marcas-rot" aria-hidden="true">Exibido em</span>
         <div class="marcas-faixa">
+          <!-- cada canal leva à subseção de Trabalho mais relevante para ele:
+               data-alvo é o id do painel, e js/site.js abre a linha e rola até
+               lá. Sem JS o href leva à seção de Trabalho inteira, degradação
+               honesta. Os quatro streamings globais caem no painel da DOT,
+               que é o trabalho de originais para essas plataformas. A cópia
+               do laço é decorativa (aria-hidden) e sai do teclado com
+               tabindex="-1", senão o Tab visitaria cada canal duas vezes. -->
           <div class="marcas-trilho" role="list" aria-label="Plataformas e canais onde o trabalho foi exibido">
             <ul>
-              <li>Netflix</li><li>Disney+</li><li>Star+</li><li>HBO Max</li><li>Paramount+</li>
-              <li>Discovery+</li><li>A&amp;E</li><li>Canal Brasil</li><li>Canal OFF</li><li>TNT</li><li>Porta dos Fundos</li>
+              <li><a href="#trabalho" data-alvo="p-dot">Netflix</a></li><li><a href="#trabalho" data-alvo="p-dot">Disney+</a></li><li><a href="#trabalho" data-alvo="p-dot">Star+</a></li><li><a href="#trabalho" data-alvo="p-dot">HBO Max</a></li><li><a href="#trabalho" data-alvo="p-para">Paramount+</a></li>
+              <li><a href="#trabalho" data-alvo="p-dafinaf">Discovery+</a></li><li><a href="#trabalho" data-alvo="p-dafinae">A&amp;E</a></li><li><a href="#trabalho" data-alvo="p-dafinae">Canal Brasil</a></li><li><a href="#trabalho" data-alvo="p-mellin">Canal OFF</a></li><li><a href="#trabalho" data-alvo="p-fabrica">TNT</a></li><li><a href="#trabalho" data-alvo="p-porta">Porta dos Fundos</a></li>
             </ul>
             <ul aria-hidden="true">
-              <li>Netflix</li><li>Disney+</li><li>Star+</li><li>HBO Max</li><li>Paramount+</li>
-              <li>Discovery+</li><li>A&amp;E</li><li>Canal Brasil</li><li>Canal OFF</li><li>TNT</li><li>Porta dos Fundos</li>
+              <li><a href="#trabalho" data-alvo="p-dot" tabindex="-1">Netflix</a></li><li><a href="#trabalho" data-alvo="p-dot" tabindex="-1">Disney+</a></li><li><a href="#trabalho" data-alvo="p-dot" tabindex="-1">Star+</a></li><li><a href="#trabalho" data-alvo="p-dot" tabindex="-1">HBO Max</a></li><li><a href="#trabalho" data-alvo="p-para" tabindex="-1">Paramount+</a></li>
+              <li><a href="#trabalho" data-alvo="p-dafinaf" tabindex="-1">Discovery+</a></li><li><a href="#trabalho" data-alvo="p-dafinae" tabindex="-1">A&amp;E</a></li><li><a href="#trabalho" data-alvo="p-dafinae" tabindex="-1">Canal Brasil</a></li><li><a href="#trabalho" data-alvo="p-mellin" tabindex="-1">Canal OFF</a></li><li><a href="#trabalho" data-alvo="p-fabrica" tabindex="-1">TNT</a></li><li><a href="#trabalho" data-alvo="p-porta" tabindex="-1">Porta dos Fundos</a></li>
             </ul>
           </div>
         </div>
