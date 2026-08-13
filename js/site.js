@@ -251,6 +251,33 @@
     });
   });
 
+  /* faixa "Exibido em": cada canal leva à subseção mais relevante. O alvo
+     vem de data-alvo (id do painel); daqui a gente abre a linha, rola até
+     ela e passa o foco pro botão, para teclado e leitor de tela seguirem
+     do lugar certo. Modificador de teclado ou id inexistente: o href age
+     sozinho (nova aba, ou âncora da seção de Trabalho). A rolagem
+     respeita menos-movimento consultando o MediaQueryList na hora. */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest(".marcas-trilho a[data-alvo]") : null;
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
+    var painel = document.getElementById(a.getAttribute("data-alvo"));
+    var row = painel && painel.closest(".row");
+    var btn = row && row.querySelector("button.row-name");
+    if (!btn) { return; }
+    e.preventDefault();
+    if (!row.classList.contains("open")) {
+      row.classList.add("open");
+      btn.setAttribute("aria-expanded", "true");
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
+      }
+      pixel("ViewContent", { content_name: btn.textContent.trim() });
+    }
+    var quer = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    row.scrollIntoView({ behavior: quer, block: "start" });
+    btn.focus({ preventScroll: true });
+  });
+
   /* ---------- sala de projeção ----------
      Clicar num pôster abre o vídeo aqui dentro em vez de mandar o visitante
      para o YouTube. O <a href> continua no HTML: sem JS, sem <dialog> ou com
