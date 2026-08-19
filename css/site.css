@@ -104,6 +104,11 @@ dl, dt, dd { margin: 0; }
    na mesma moldura, define a borda da verde e tira o ar de figurinha
    colada da inglesa, que é quase toda branca. Altura em clamp para ficar
    proporcional ao mono do cabeçalho, não maior que ele. */
+/* dois grupos no topo: à esquerda o nome com o LinkedIn colado nele (o
+   ícone pertence à assinatura, não à barra de ações), à direita idioma e
+   CV. O gap da esquerda é menor de propósito — o ícone é aposto do nome,
+   não item de lista. */
+.top-start { display: flex; align-items: center; gap: clamp(.65rem, 1.8vw, 1rem); }
 .top-end { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); }
 .top .lang { display: flex; align-items: center; gap: .5rem; margin: 0; }
 .top .lang-bt {
