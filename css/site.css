@@ -943,12 +943,28 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   display: grid; place-items: center; width: 100%;
   height: clamp(64px, 8vw, 104px);
 }
-.entrega-palco img {
-  display: block; width: auto; height: auto;
-  max-width: 88%; max-height: clamp(30px, 3.8vw, 48px);
-  opacity: 1;
+/* a logo é MÁSCARA, não imagem: o arquivo branco-sobre-transparente vira
+   recorte, a base pinta branco cheio e o ::after é a coluna de acento que
+   SOBE POR DENTRO do desenho — um sexto a cada estágio completado, tudo
+   roxo no Online. A subida é na curva da casa e o topo da coluna tem um
+   respiro de gradiente (menisco), para ler como líquido enchendo, não
+   como barra dura. mask-size: contain segura a proporção mesmo se a caixa
+   não bater com o aspect-ratio inline. transform-only: nada de animar
+   altura. O estado parado (fechado, sem JS, menos-movimento) é a
+   composição final: tudo no ar, tudo acento. */
+.entrega-logo {
+  position: relative; overflow: hidden;
+  height: clamp(30px, 3.8vw, 48px); max-width: 88%;
+  background: #fff;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+          mask: var(--logo) center / contain no-repeat;
 }
-.entrega.alta .entrega-palco img { max-height: clamp(56px, 7vw, 92px); }
+.entrega.alta .entrega-logo { height: clamp(56px, 7vw, 92px); }
+.entrega-logo::after {
+  content: ""; position: absolute; inset: -10% 0 0 0;
+  background: linear-gradient(to top, var(--accent) 90%, rgba(164, 139, 255, 0) 100%);
+  transform: translateY(0);
+}
 /* fio do payoff: cresce sob o palco quando a entrega fica no ar */
 .entrega::after {
   content: ""; position: absolute; left: 12%; right: 12%;
@@ -981,13 +997,25 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   30% { opacity: 0; }
   100% { opacity: 0; }
 }
-/* a logo respira baixo durante os passes e acende no ONLINE */
-@keyframes entrega-logo {
-  0% { opacity: .5; }
-  69.93% { opacity: .5; }
-  70% { opacity: 1; }
-  99.96% { opacity: 1; }
-  100% { opacity: .5; }
+/* a coluna de acento sobe um degrau a cada estágio completado (subida de
+   0,55s na curva da casa, segurada até o próximo), chega ao topo no
+   Online e corta de volta ao vazio quando o ciclo recomeça */
+@keyframes entrega-enche {
+  0%      { transform: translateY(100%); }
+  11.67%  { transform: translateY(100%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  16.25%  { transform: translateY(83.4%); }
+  23.33%  { transform: translateY(83.4%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  27.92%  { transform: translateY(66.7%); }
+  35%     { transform: translateY(66.7%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  39.58%  { transform: translateY(50%); }
+  46.67%  { transform: translateY(50%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  51.25%  { transform: translateY(33.4%); }
+  58.33%  { transform: translateY(33.4%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  62.92%  { transform: translateY(16.7%); }
+  70%     { transform: translateY(16.7%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  74.58%  { transform: translateY(0%); }
+  99.96%  { transform: translateY(0%); }
+  100%    { transform: translateY(100%); }
 }
 @keyframes entrega-fio {
   0% { transform: scaleX(0); opacity: 1; }
@@ -1002,8 +1030,8 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .row.open .entrega-fila b.final {
   animation: entrega-final 12s linear calc(var(--f, 0s) + 8.4s - 12s) infinite;
 }
-.row.open .entrega-palco img {
-  animation: entrega-logo 12s linear calc(var(--f, 0s) - 12s) infinite;
+.row.open .entrega-logo::after {
+  animation: entrega-enche 12s linear calc(var(--f, 0s) - 12s) infinite;
 }
 .row.open .entrega::after {
   animation: entrega-fio 12s linear calc(var(--f, 0s) - 12s) infinite;
@@ -1261,7 +1289,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .row.open .peca-crono i, .row.open .peca-crono li span,
   .row.open .peca-fluxo .no, .row.open .peca-fluxo li:not(:last-child)::after,
   .row.open .peca-fluxo span:not(.no),
-  .row.open .entrega-fila b, .row.open .entrega-palco img, .row.open .entrega::after,
+  .row.open .entrega-fila b, .row.open .entrega-logo::after, .row.open .entrega::after,
   .row.open .peca-onda i { animation: none; }
   /* o fio do topo não anima, mas continua desenhado: sem isto ele fica em
      scaleX(0) e a peça perde a moldura de acento */
