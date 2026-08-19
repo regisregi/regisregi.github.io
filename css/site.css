@@ -646,12 +646,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 .peca h3 {
   font-family: var(--display); font-weight: 400;
-  /* 1.06 e não .95: o título é caixa alta com acento (AGÊNCIA, PADRÃO) e o
+  /* 1.14 e não .95: o título é caixa alta com acento (AGÊNCIA, PADRÃO) e o
      Anton desenha o acento ACIMA da altura de caixa — em .95 o circunflexo
-     da segunda linha batia na vírgula da primeira, medido no painel do
-     Mellin em desktop e celular. 1.06 é o mínimo que dá folga ao acento
-     sem abrir o bloco a ponto de perder o peso de cartaz. */
-  font-size: clamp(1.95rem, 4.6vw, 3.5rem); line-height: 1.06;
+     da segunda linha batia na vírgula da primeira. 1.06 resolvia a colisão
+     mas ainda ficava apertado a olho (pedido do dono); 1.14 dá ao acento o
+     respiro de peça premium sem dissolver o peso de cartaz do bloco. */
+  font-size: clamp(1.95rem, 4.6vw, 3.5rem); line-height: 1.14;
   letter-spacing: -.03em; text-transform: uppercase; color: var(--ink);
   max-width: 18ch; margin-top: .35rem;
 }
@@ -956,8 +956,15 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   position: relative; overflow: hidden;
   height: clamp(30px, 3.8vw, 48px); max-width: 88%;
   background: #fff;
-  -webkit-mask: var(--logo) center / contain no-repeat;
-          mask: var(--logo) center / contain no-repeat;
+  /* longhands e não o shorthand, e o --logo inline usa caminho ABSOLUTO
+     de raiz (/assets/...): url() relativa dentro de custom property é
+     resolvida pelo Chrome contra a base da folha que consome o var — ou
+     seja, /css/ — e a máscara apontava para /css/assets/..., 404, logo
+     invisível. Absoluto não tem base para errar. */
+  -webkit-mask-image: var(--logo); mask-image: var(--logo);
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
 }
 .entrega.alta .entrega-logo { height: clamp(56px, 7vw, 92px); }
 .entrega-logo::after {
