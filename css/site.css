@@ -612,7 +612,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
    projeção, quem não tem sai marcado com data-embed="off". */
 .peca {
   position: relative; overflow: hidden; isolation: isolate;
-  border: 1px solid var(--line);
+  /* sem borda de caixa por decisão do dono: a peça se sustenta pelos
+     próprios chãos (chapa, textura, faixa) e pelo fio de acento do topo,
+     que segue sendo o sinal de "abriu" */
   padding: clamp(1.35rem, 3.2vw, 2.9rem);
   display: grid; gap: clamp(1rem, 2vw, 1.6rem);
   width: 100%; max-width: 1240px; margin-inline: auto;
