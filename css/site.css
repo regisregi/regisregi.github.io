@@ -127,10 +127,26 @@ dl, dt, dd { margin: 0; }
   .top a.lang-bt:hover { opacity: 1; transform: translateY(-1px); }
 }
 .top a.lang-bt:focus-visible { opacity: 1; outline-offset: 4px; }
+/* LinkedIn: marca de terceiro entra em BRANCO monocromático, a mesma regra
+   que normaliza as logos dos clientes — o azul da marca sobre o preto
+   quebraria a unidade e daria ar de botão de rede social colado. Altura um
+   fio acima da bandeira para compensar o peso ótico do glifo vazado. */
+.top .social {
+  display: block; padding: .4rem .15rem; line-height: 0; color: #fff;
+  opacity: .7; transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.top .social svg {
+  display: block; width: auto; height: clamp(14px, 1.6vw, 17px); fill: currentColor;
+}
+@media (hover: hover) and (pointer: fine) {
+  .top .social:hover { opacity: 1; transform: translateY(-1px); }
+}
+.top .social:focus-visible { opacity: 1; outline-offset: 4px; }
+
 /* alvo de toque maior no celular, e press seco como o resto da casa */
 @media (hover: none) {
-  .top .lang-bt { padding: .6rem .35rem; -webkit-tap-highlight-color: transparent; }
-  .top a.lang-bt:active { opacity: 1; transition-duration: 0s; }
+  .top .lang-bt, .top .social { padding: .6rem .35rem; -webkit-tap-highlight-color: transparent; }
+  .top a.lang-bt:active, .top .social:active { opacity: 1; transition-duration: 0s; }
 }
 
 /* ---------- hero ---------- */
