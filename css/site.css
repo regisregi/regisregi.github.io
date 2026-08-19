@@ -911,6 +911,132 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   animation-name: fluxo-final;
 }
 
+/* ---- material 8: entregas em andamento (Mellin) ----
+   As três marcas como três ENTREGAS correndo em paralelo, cada uma com a
+   régua de status da pós rodando embaixo, no ciclo natural da ilha:
+   INGEST, CONVERSÃO, ORGANIZAÇÃO, CONFORM, V1, APROVAÇÃO, ONLINE — em corte seco, palavra substituindo palavra, nada
+   desliza. As réguas ficam DEFASADAS de um terço de ciclo entre si: três
+   campanhas, cada uma num estágio, que é a história do painel. Quando a
+   régua bate em ONLINE a logo acende e o fio de acento cresce embaixo —
+   a logo é o payoff do ciclo, não decoração.
+   Ciclo de 12s: seis passes de 1,4s + 3,6s de ONLINE no ar. Delays
+   NEGATIVOS de propósito: o ciclo já está rodando quando o painel abre —
+   ninguém liga uma ilha, a operação já estava em andamento. Fase por
+   aritmética (--f da entrega, --k da palavra), sem JS. Estado parado
+   (fechado, sem JS ou com menos-movimento): ONLINE aceso e logo cheia,
+   a composição final. */
+.peca-entregas { width: 100%; display: grid; gap: clamp(.9rem, 2vw, 1.4rem); }
+.peca-entregas-cab {
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim);
+  padding-bottom: .55rem; border-bottom: 1px solid var(--line);
+}
+.peca-entregas-cab b { color: var(--accent); font-weight: 400; }
+.peca-entregas ul {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.8rem, 2.4vw, 2rem); list-style: none;
+}
+.entrega { position: relative; display: grid; gap: .8rem; justify-items: center; min-width: 0; }
+/* palco da logo: altura fixa, logo centrada, proporção intocada */
+.entrega-palco {
+  display: grid; place-items: center; width: 100%;
+  height: clamp(64px, 8vw, 104px);
+}
+/* a logo é MÁSCARA, não imagem: o arquivo branco-sobre-transparente vira
+   recorte, a base pinta branco cheio e o ::after é a coluna de acento que
+   SOBE POR DENTRO do desenho — um sexto a cada estágio completado, tudo
+   roxo no Online. A subida é na curva da casa e o topo da coluna tem um
+   respiro de gradiente (menisco), para ler como líquido enchendo, não
+   como barra dura. mask-size: contain segura a proporção mesmo se a caixa
+   não bater com o aspect-ratio inline. transform-only: nada de animar
+   altura. O estado parado (fechado, sem JS, menos-movimento) é a
+   composição final: tudo no ar, tudo acento. */
+.entrega-logo {
+  position: relative; overflow: hidden;
+  height: clamp(30px, 3.8vw, 48px); max-width: 88%;
+  background: #fff;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+          mask: var(--logo) center / contain no-repeat;
+}
+.entrega.alta .entrega-logo { height: clamp(56px, 7vw, 92px); }
+.entrega-logo::after {
+  content: ""; position: absolute; inset: -10% 0 0 0;
+  background: linear-gradient(to top, var(--accent) 90%, rgba(164, 139, 255, 0) 100%);
+  transform: translateY(0);
+}
+/* fio do payoff: cresce sob o palco quando a entrega fica no ar */
+.entrega::after {
+  content: ""; position: absolute; left: 12%; right: 12%;
+  top: calc(clamp(64px, 8vw, 104px) + .1rem); height: 1px;
+  background: var(--accent); transform: scaleX(1); transform-origin: left;
+  opacity: .35;
+}
+/* régua de status: as seis palavras empilhadas na mesma célula; quem fala
+   é uma por vez, por opacidade em corte */
+.entrega-fila { display: grid; justify-items: center; }
+.entrega-fila b {
+  grid-area: 1 / 1; font-weight: 400;
+  font-family: var(--mono); font-size: .55rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--dim); white-space: nowrap;
+  opacity: 0;
+}
+.entrega-fila b.final { color: var(--accent); opacity: 1; }
+
+/* palavra comum: viva por 1,4s do ciclo de 10,5s (13,33%), corte nas bordas */
+@keyframes entrega-passa {
+  0% { opacity: 1; }
+  11.63% { opacity: 1; }
+  11.67% { opacity: 0; }
+  100% { opacity: 0; }
+}
+/* ONLINE: viva por 3,5s (33,33%) */
+@keyframes entrega-final {
+  0% { opacity: 1; }
+  29.96% { opacity: 1; }
+  30% { opacity: 0; }
+  100% { opacity: 0; }
+}
+/* a coluna de acento sobe um degrau a cada estágio completado (subida de
+   0,55s na curva da casa, segurada até o próximo), chega ao topo no
+   Online e corta de volta ao vazio quando o ciclo recomeça */
+@keyframes entrega-enche {
+  0%      { transform: translateY(100%); }
+  11.67%  { transform: translateY(100%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  16.25%  { transform: translateY(83.4%); }
+  23.33%  { transform: translateY(83.4%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  27.92%  { transform: translateY(66.7%); }
+  35%     { transform: translateY(66.7%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  39.58%  { transform: translateY(50%); }
+  46.67%  { transform: translateY(50%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  51.25%  { transform: translateY(33.4%); }
+  58.33%  { transform: translateY(33.4%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  62.92%  { transform: translateY(16.7%); }
+  70%     { transform: translateY(16.7%); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+  74.58%  { transform: translateY(0%); }
+  99.96%  { transform: translateY(0%); }
+  100%    { transform: translateY(100%); }
+}
+@keyframes entrega-fio {
+  0% { transform: scaleX(0); opacity: 1; }
+  69.93% { transform: scaleX(0); opacity: 1; }
+  70.9% { transform: scaleX(1); opacity: 1; }
+  99.96% { transform: scaleX(1); opacity: .55; }
+  100% { transform: scaleX(0); opacity: 1; }
+}
+.row.open .entrega-fila b {
+  animation: entrega-passa 12s linear calc(var(--f, 0s) + var(--k, 0) * 1.4s - 12s) infinite;
+}
+.row.open .entrega-fila b.final {
+  animation: entrega-final 12s linear calc(var(--f, 0s) + 8.4s - 12s) infinite;
+}
+.row.open .entrega-logo::after {
+  animation: entrega-enche 12s linear calc(var(--f, 0s) - 12s) infinite;
+}
+.row.open .entrega::after {
+  animation: entrega-fio 12s linear calc(var(--f, 0s) - 12s) infinite;
+}
+
 /* na peça da frase, o trilho do fluxo vira FAIXA DE MÁQUINA no pé do
    cartão: chão preto próprio, fio de separação e sangria total. Antes ele
    corria metade sobre a chapa, metade sobre a frase-textura — os últimos
@@ -1042,15 +1168,15 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 /* material: cada item entra depois do texto, em fila. O :nth-child(n+7)
    trava a fila: sem ele o sétimo pôster em diante cai no atraso zero e
    entra junto com o primeiro, quebrando a leitura de fileira. */
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li) {
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega) {
   --d: calc(.18s + var(--i, 0) * 50ms);
   animation: peca-entra .5s var(--ease) var(--d) both;
 }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(2) { --i: 1; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(3) { --i: 2; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(4) { --i: 3; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(5) { --i: 4; }
-.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li):nth-child(n+6) { --i: 5; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega):nth-child(2) { --i: 1; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega):nth-child(3) { --i: 2; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega):nth-child(4) { --i: 3; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega):nth-child(5) { --i: 4; }
+.row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega):nth-child(n+6) { --i: 5; }
 
 /* fill BACKWARDS e não both: com both a animação segura transform: none no
    fim e passa na frente do :hover, que morreria em silêncio. Backwards só
@@ -1158,11 +1284,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .row.open .peca-topo, .row.open .peca h3, .row.open .peca-indice,
   .row.open .peca-cabeca .peca-marca,
   .row.open .peca-frase b, .row.open .peca-texto > *, .row.open .peca-rodape,
-  .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li),
+  .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega),
   .row.open .peca .sheet a img, .row.open .peca-modulos .mod > img,
   .row.open .peca-crono i, .row.open .peca-crono li span,
   .row.open .peca-fluxo .no, .row.open .peca-fluxo li:not(:last-child)::after,
   .row.open .peca-fluxo span:not(.no),
+  .row.open .entrega-fila b, .row.open .entrega-logo::after, .row.open .entrega::after,
   .row.open .peca-onda i { animation: none; }
   /* o fio do topo não anima, mas continua desenhado: sem isto ele fica em
      scaleX(0) e a peça perde a moldura de acento */
