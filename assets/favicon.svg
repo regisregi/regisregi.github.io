@@ -1,15 +1,47 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Televisão de tubo com antenas e chuvisco de fora do ar.
+       Desenhada para 16px: chassi chapado, tela escura e estática em blocos
+       grandes alinhados em faixas — grão fino viraria borrão nesse tamanho.
+       Paleta da casa: fundo preto, branco quente do chassi, violeta do
+       acento no chuvisco. -->
   <defs>
-    <clipPath id="clap"><rect x="6" y="8" width="52" height="14" rx="3"/></clipPath>
+    <clipPath id="tela"><rect x="10" y="29" width="37" height="23" rx="3"/></clipPath>
   </defs>
-  <rect x="4" y="4" width="56" height="56" rx="10" fill="#121216"/>
-  <rect x="6" y="8" width="52" height="14" rx="3" fill="#FF4438"/>
-  <g clip-path="url(#clap)" stroke="#121216" stroke-width="5">
-    <line x1="10" y1="26" x2="22" y2="4"/>
-    <line x1="24" y1="26" x2="36" y2="4"/>
-    <line x1="38" y1="26" x2="50" y2="4"/>
-    <line x1="52" y1="26" x2="64" y2="4"/>
+
+  <rect width="64" height="64" rx="12" fill="#0B0A10"/>
+
+  <!-- antenas em V, com as pontas arrematadas -->
+  <g stroke="#F2F0EB" stroke-width="3.4" stroke-linecap="round" fill="none">
+    <path d="M31 27 14 9"/>
+    <path d="M33 27 50 9"/>
   </g>
-  <text x="32" y="50" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="21" letter-spacing="1" fill="#F2F0EB">RR</text>
-  <circle cx="52" cy="47" r="3" fill="#FF4438"/>
+  <circle cx="14" cy="9" r="2.6" fill="#F2F0EB"/>
+  <circle cx="50" cy="9" r="2.6" fill="#F2F0EB"/>
+
+  <!-- chassi -->
+  <rect x="6" y="25" width="52" height="31" rx="5" fill="#F2F0EB"/>
+  <!-- tela -->
+  <rect x="10" y="29" width="37" height="23" rx="3" fill="#0B0A10"/>
+
+  <!-- chuvisco: faixas de blocos, sem nada menor que 3px de lado -->
+  <g clip-path="url(#tela)">
+    <g fill="#F2F0EB">
+      <rect x="13" y="32" width="6" height="3.6"/><rect x="30" y="32" width="5" height="3.6"/>
+      <rect x="20" y="38" width="8" height="3.6"/><rect x="39" y="38" width="5" height="3.6"/>
+      <rect x="14" y="44" width="5" height="3.6"/><rect x="33" y="44" width="7" height="3.6"/>
+    </g>
+    <g fill="#A48BFF">
+      <rect x="38" y="32" width="6" height="3.6"/><rect x="13" y="38" width="4" height="3.6"/>
+      <rect x="24" y="44" width="6" height="3.6"/>
+    </g>
+    <g fill="#4A4455">
+      <rect x="22" y="32" width="5" height="3.6"/><rect x="31" y="38" width="5" height="3.6"/>
+      <rect x="42" y="44" width="4" height="3.6"/>
+    </g>
+  </g>
+
+  <!-- botões do painel lateral -->
+  <circle cx="52.5" cy="34" r="2.6" fill="#0B0A10"/>
+  <circle cx="52.5" cy="42.5" r="2.6" fill="#0B0A10"/>
+  <rect x="49.5" y="48" width="6" height="2.4" rx="1.2" fill="#0B0A10"/>
 </svg>
