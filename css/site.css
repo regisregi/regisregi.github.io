@@ -79,7 +79,15 @@ dl, dt, dd { margin: 0; }
 .top {
   position: fixed; top: 0; left: 0; right: 0; z-index: 30;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.4rem var(--edge); mix-blend-mode: difference;
+  padding: 1.4rem var(--edge);
+  /* barra sólida atrás do cabeçalho (pedido do dono): antes o texto ficava
+     legível por mix-blend-mode: difference, mas SOBRE o conteúdo, e ao
+     rolar tudo se sobrepunha. Preto quase cheio + blur: em cima do fundo
+     preto a barra desaparece (como deve), e quando pôster ou texto passa
+     por baixo ela segura a leitura com vidro escuro, sem inversão. Quem
+     não tem backdrop-filter fica com o rgba .88, que já cobre. */
+  background: rgba(0, 0, 0, .88);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
 }
 .top .wm {
   font-family: var(--mono); font-weight: 700; font-size: .8rem;
