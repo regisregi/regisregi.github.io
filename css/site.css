@@ -115,16 +115,23 @@ dl, dt, dd { margin: 0; }
 .top-end { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); }
 .top .lang { display: flex; align-items: center; gap: .5rem; margin: 0; }
 .top .lang-bt {
-  display: block; position: relative; padding: .4rem .15rem;
-  line-height: 0; text-decoration: none; opacity: .45;
-  transition: opacity .25s var(--ease), transform .25s var(--ease);
+  display: inline-block; vertical-align: middle; position: relative;
+  padding: .4rem .15rem; line-height: 0; text-decoration: none;
+  transition: transform .25s var(--ease);
 }
 .top .lang-bt .flag {
   display: block; width: auto; height: clamp(13px, 1.5vw, 16px);
   border-radius: 2px; overflow: hidden;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
+  /* em repouso as duas ficam apagadas em cinza — cor de terceiro não
+     compete com a paleta da casa; a cor cheia é recompensa do hover.
+     Quem diz qual idioma está no ar é o fio de acento embaixo, não a
+     saturação: por isso ele é obrigatório aqui. */
+  filter: grayscale(1) opacity(.5);
+  transition: filter .3s var(--ease);
 }
-.top .lang-bt.is-on { opacity: 1; }
+/* a do idioma atual fica um degrau acima, ainda em cinza */
+.top .lang-bt.is-on .flag { filter: grayscale(1) opacity(.8); }
 /* fio de acento sob a bandeira da página atual: o mesmo gesto de estado
    ativo que o rail e a sala de projeção usam */
 .top .lang-bt.is-on::after {
@@ -132,9 +139,18 @@ dl, dt, dd { margin: 0; }
   height: 1px; background: var(--accent);
 }
 @media (hover: hover) and (pointer: fine) {
-  .top a.lang-bt:hover { opacity: 1; transform: translateY(-1px); }
+  /* cor cheia no hover, nas duas: a bandeira acende ao ser mirada */
+  .top .lang-bt:hover .flag { filter: none; }
+  .top a.lang-bt:hover { transform: translateY(-1px); }
 }
-.top a.lang-bt:focus-visible { opacity: 1; outline-offset: 4px; }
+.top .lang-bt:focus-visible .flag { filter: none; }
+.top a.lang-bt:focus-visible { outline-offset: 4px; }
+/* sem hover não há como revelar a cor: no toque as duas já entram
+   coloridas, a inativa um pouco mais discreta */
+@media (hover: none) {
+  .top .lang-bt .flag { filter: opacity(.6); }
+  .top .lang-bt.is-on .flag { filter: none; }
+}
 /* LinkedIn: marca de terceiro entra em BRANCO monocromático, a mesma regra
    que normaliza as logos dos clientes — o azul da marca sobre o preto
    quebraria a unidade e daria ar de botão de rede social colado. Altura um
@@ -171,7 +187,8 @@ dl, dt, dd { margin: 0; }
 /* alvo de toque maior no celular, e press seco como o resto da casa */
 @media (hover: none) {
   .top .lang-bt, .top .social { padding: .6rem .35rem; -webkit-tap-highlight-color: transparent; }
-  .top a.lang-bt:active, .top .social:active { opacity: 1; transition-duration: 0s; }
+  .top a.lang-bt:active .flag { filter: none; transition-duration: 0s; }
+  .top .social:active { opacity: 1; transition-duration: 0s; }
 }
 
 /* ---------- hero ---------- */
