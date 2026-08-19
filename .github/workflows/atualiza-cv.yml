@@ -1,14 +1,16 @@
 name: Atualiza o CV a partir do Drive
 
-# Mantém assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf igual ao arquivo do Drive,
-# então o botão "Baixar CV" continua apontando para o mesmo caminho de sempre
-# e o site segue servindo o PDF localmente, sem depender do Drive na hora do
-# clique. Basta subir versão nova NO MESMO arquivo do Drive.
+# Mantém os DOIS currículos do site iguais aos arquivos do Drive: o em
+# português e o em inglês. Assim o site segue servindo os PDFs do próprio
+# domínio — o botão baixa de verdade (o atributo download só vale na mesma
+# origem), o arquivo é indexável pelo Google e nada quebra se o Drive estiver
+# lento. Basta subir versão nova NO MESMO arquivo do Drive: este workflow
+# roda de 6 em 6 horas, e o botão "Run workflow" publica na hora.
 
 on:
   schedule:
-    - cron: '0 6 * * *'   # todo dia às 06:00 UTC (03:00 em Brasília)
-  workflow_dispatch:      # botão manual, para usar logo depois de atualizar o Drive
+    - cron: '0 */6 * * *'   # de 6 em 6 horas
+  workflow_dispatch:        # botão manual, para usar logo depois de atualizar o Drive
 
 permissions:
   contents: write
@@ -18,8 +20,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DRIVE_FILE_ID: 1rFvt5moub2Rd0O8FeGOeOcEiWTjZURKF
-  DESTINO: assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf
+  PT_ID: 1rFvt5moub2Rd0O8FeGOeOcEiWTjZURKF
+  PT_DESTINO: assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf
+  EN_ID: 1S0qfqp_BYDKn0aHgk310AkM2K1fFjfAw
+  EN_DESTINO: assets/RE_GIS_REGI_PORTFOLIO_CV_2026_EN.pdf
 
 jobs:
   sincronizar:
@@ -27,60 +31,81 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Baixar o PDF do Drive
+      - name: Baixar, conferir e atualizar os dois CVs
         run: |
           set -uo pipefail
-          # endpoint atual do Drive; o uc?export fica de reserva caso mude
-          novo=$(mktemp)
-          baixou=0
-          for url in \
-            "https://drive.usercontent.google.com/download?id=${DRIVE_FILE_ID}&export=download" \
-            "https://drive.google.com/uc?export=download&id=${DRIVE_FILE_ID}"
-          do
-            if curl -sSL --max-time 120 --retry 3 --retry-delay 5 -o "$novo" "$url"; then
-              baixou=1
-              echo "baixado de: $url"
-              break
+          falhou=0
+          mudou=0
+
+          # Um arquivo ruim NÃO bloqueia o outro: cada idioma é tratado
+          # isolado, o que passou é publicado e o que falhou derruba o job no
+          # fim. Sem isso, um link do Drive privado no inglês travaria também
+          # a atualização do português.
+          for par in "pt:${PT_ID}:${PT_DESTINO}" "en:${EN_ID}:${EN_DESTINO}"; do
+            idioma="${par%%:*}"; resto="${par#*:}"
+            id="${resto%%:*}"; destino="${resto#*:}"
+            echo "::group::CV ${idioma}"
+
+            novo=$(mktemp)
+            baixou=0
+            # endpoint atual do Drive; o uc?export fica de reserva caso mude
+            for url in \
+              "https://drive.usercontent.google.com/download?id=${id}&export=download" \
+              "https://drive.google.com/uc?export=download&id=${id}"
+            do
+              if curl -sSL --max-time 120 --retry 3 --retry-delay 5 -o "$novo" "$url"; then
+                echo "baixado de: $url"; baixou=1; break
+              fi
+              echo "falhou em: $url"
+            done
+            if [ "$baixou" != "1" ]; then
+              echo "::error::${idioma}: não consegui baixar o arquivo do Drive"
+              falhou=1; echo "::endgroup::"; continue
             fi
-            echo "falhou em: $url"
+
+            # O Drive devolve uma página HTML quando o link perde o
+            # compartilhamento público. Sem esta checagem, esse HTML entraria
+            # no lugar do CV e o botão passaria a baixar lixo.
+            if ! head -c 5 "$novo" | grep -aq '%PDF'; then
+              echo "::error::${idioma}: a resposta não é um PDF (link privado ou interstício do Drive?)"
+              head -c 400 "$novo"
+              falhou=1; echo "::endgroup::"; continue
+            fi
+            tam=$(stat -c%s "$novo")
+            echo "tamanho: $tam bytes"
+            if [ "$tam" -lt 50000 ] || [ "$tam" -gt 26214400 ]; then
+              echo "::error::${idioma}: tamanho fora da faixa aceitável ($tam bytes)"
+              falhou=1; echo "::endgroup::"; continue
+            fi
+            # PDF truncado não tem o marcador de fim
+            if ! tail -c 2048 "$novo" | grep -aq '%%EOF'; then
+              echo "::error::${idioma}: PDF truncado, sem %%EOF no fim"
+              falhou=1; echo "::endgroup::"; continue
+            fi
+
+            if cmp -s "$novo" "$destino"; then
+              echo "${idioma}: idêntico ao que já está no repositório, nada a fazer"
+            else
+              cp "$novo" "$destino"
+              git add "$destino"
+              mudou=1
+              echo "${idioma}: atualizado"
+            fi
+            echo "::endgroup::"
           done
-          [ "$baixou" = "1" ] || { echo "::error::não consegui baixar o arquivo do Drive"; exit 1; }
-          echo "NOVO=$novo" >> "$GITHUB_ENV"
 
-      - name: Conferir que é um PDF íntegro
-        run: |
-          set -euo pipefail
-          # o Drive devolve uma página HTML quando o link perde o
-          # compartilhamento público. Sem esta checagem, esse HTML entraria no
-          # lugar do CV e o botão passaria a baixar lixo.
-          head -c 5 "$NOVO" | grep -aq '%PDF' || {
-            echo "::error::a resposta não é um PDF (link privado ou interstício do Drive?)"
-            head -c 400 "$NOVO"
-            exit 1
-          }
-          tam=$(stat -c%s "$NOVO")
-          echo "tamanho: $tam bytes"
-          [ "$tam" -ge 50000 ]    || { echo "::error::PDF pequeno demais ($tam bytes)"; exit 1; }
-          [ "$tam" -le 26214400 ] || { echo "::error::PDF grande demais ($tam bytes)"; exit 1; }
-          # PDF truncado não tem o marcador de fim
-          tail -c 2048 "$NOVO" | grep -aq '%%EOF' || {
-            echo "::error::PDF truncado, sem %%EOF no fim"
-            exit 1
-          }
-
-      - name: Publicar apenas se mudou
-        run: |
-          set -euo pipefail
-          if cmp -s "$NOVO" "$DESTINO"; then
-            echo "CV idêntico ao que já está no repositório, nada a fazer"
-            exit 0
-          fi
-          cp "$NOVO" "$DESTINO"
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$DESTINO"
-          git commit -m "Atualiza o CV a partir do Drive
+          if [ "$mudou" = "1" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Atualiza o CV a partir do Drive
 
           Sincronizado automaticamente pelo workflow atualiza-cv.yml."
-          git push
-          echo "CV atualizado e publicado"
+            # outro push pode ter entrado entre o checkout e agora
+            git pull --rebase --autostash origin main
+            git push
+            echo "CV publicado"
+          else
+            echo "nenhum CV mudou"
+          fi
+
+          [ "$falhou" = "0" ] || { echo "::error::ao menos um CV falhou"; exit 1; }
