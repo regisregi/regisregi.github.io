@@ -913,13 +913,13 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 /* ---- material 8: entregas em andamento (Mellin) ----
    As três marcas como três ENTREGAS correndo em paralelo, cada uma com a
-   régua de status da pós rodando embaixo: OFFLINE, V1, REVISÃO, CONVERSÃO,
-   CONFORME, ONLINE — em corte seco, palavra substituindo palavra, nada
+   régua de status da pós rodando embaixo, no ciclo natural da ilha:
+   INGEST, CONVERSÃO, ORGANIZAÇÃO, CONFORM, V1, APROVAÇÃO, ONLINE — em corte seco, palavra substituindo palavra, nada
    desliza. As réguas ficam DEFASADAS de um terço de ciclo entre si: três
    campanhas, cada uma num estágio, que é a história do painel. Quando a
    régua bate em ONLINE a logo acende e o fio de acento cresce embaixo —
    a logo é o payoff do ciclo, não decoração.
-   Ciclo de 10,5s: cinco passes de 1,4s + 3,5s de ONLINE no ar. Delays
+   Ciclo de 12s: seis passes de 1,4s + 3,6s de ONLINE no ar. Delays
    NEGATIVOS de propósito: o ciclo já está rodando quando o painel abre —
    ninguém liga uma ilha, a operação já estava em andamento. Fase por
    aritmética (--f da entrega, --k da palavra), sem JS. Estado parado
@@ -970,43 +970,43 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 /* palavra comum: viva por 1,4s do ciclo de 10,5s (13,33%), corte nas bordas */
 @keyframes entrega-passa {
   0% { opacity: 1; }
-  13.31% { opacity: 1; }
-  13.35% { opacity: 0; }
+  11.63% { opacity: 1; }
+  11.67% { opacity: 0; }
   100% { opacity: 0; }
 }
 /* ONLINE: viva por 3,5s (33,33%) */
 @keyframes entrega-final {
   0% { opacity: 1; }
-  33.31% { opacity: 1; }
-  33.35% { opacity: 0; }
+  29.96% { opacity: 1; }
+  30% { opacity: 0; }
   100% { opacity: 0; }
 }
 /* a logo respira baixo durante os passes e acende no ONLINE */
 @keyframes entrega-logo {
   0% { opacity: .5; }
-  66.63% { opacity: .5; }
-  66.7% { opacity: 1; }
+  69.93% { opacity: .5; }
+  70% { opacity: 1; }
   99.96% { opacity: 1; }
   100% { opacity: .5; }
 }
 @keyframes entrega-fio {
   0% { transform: scaleX(0); opacity: 1; }
-  66.63% { transform: scaleX(0); opacity: 1; }
-  67.6% { transform: scaleX(1); opacity: 1; }
+  69.93% { transform: scaleX(0); opacity: 1; }
+  70.9% { transform: scaleX(1); opacity: 1; }
   99.96% { transform: scaleX(1); opacity: .55; }
   100% { transform: scaleX(0); opacity: 1; }
 }
 .row.open .entrega-fila b {
-  animation: entrega-passa 10.5s linear calc(var(--f, 0s) + var(--k, 0) * 1.4s - 10.5s) infinite;
+  animation: entrega-passa 12s linear calc(var(--f, 0s) + var(--k, 0) * 1.4s - 12s) infinite;
 }
 .row.open .entrega-fila b.final {
-  animation: entrega-final 10.5s linear calc(var(--f, 0s) + 7s - 10.5s) infinite;
+  animation: entrega-final 12s linear calc(var(--f, 0s) + 8.4s - 12s) infinite;
 }
 .row.open .entrega-palco img {
-  animation: entrega-logo 10.5s linear calc(var(--f, 0s) - 10.5s) infinite;
+  animation: entrega-logo 12s linear calc(var(--f, 0s) - 12s) infinite;
 }
 .row.open .entrega::after {
-  animation: entrega-fio 10.5s linear calc(var(--f, 0s) - 10.5s) infinite;
+  animation: entrega-fio 12s linear calc(var(--f, 0s) - 12s) infinite;
 }
 
 /* na peça da frase, o trilho do fluxo vira FAIXA DE MÁQUINA no pé do
