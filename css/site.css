@@ -723,6 +723,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .peca .sheet { justify-content: center; max-width: none; padding-top: 0; margin: 0; }
 .peca .sheet figure { flex: 1 1 104px; max-width: 158px; }
 .peca .sheet figcaption { text-align: center; min-height: 0; font-size: .55rem; }
+/* o pôster largo (16:9) dentro de peça ocupa a coluna inteira: sem isto o
+   teto de 158px do contact sheet venceria o .wide por vir depois no arquivo */
+.peca .sheet figure.wide { flex-basis: 100%; max-width: 100%; }
 
 /* ---- material 2b: módulos da Maracutaia ----
    As fotos dos sets recortadas nas formas da própria marca — quadrado,
@@ -1053,48 +1056,18 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   animation: entrega-fio 12s linear calc(var(--f, 0s) - 12s) infinite;
 }
 
-/* na peça da frase, o trilho do fluxo vira FAIXA DE MÁQUINA no pé do
-   cartão: chão preto próprio, fio de separação e sangria total. Antes ele
-   corria metade sobre a chapa, metade sobre a frase-textura — os últimos
-   nós flutuavam sobre letra gigante e o rótulo perdia contraste. Com chão
-   próprio, o pulso corre em superfície limpa e a frase fica inteira para
-   ser textura. As margens negativas são o padding do cartão (mesmo clamp);
-   embaixo isso encosta a faixa na borda no largo e no topo da faixa da
-   frase no estreito, onde o padding-bottom do cartão reserva os 92px. */
-.peca--frase .peca-visual {
+/* a FAIXA DE MÁQUINA: chão preto próprio para o trilho do fluxo, no pé
+   da peça — sangria total, fio de separação, o pulso corre em superfície
+   limpa. Classe própria (.peca-maquina) para qualquer peça usar; as
+   margens negativas são o padding do cartão, mesmo clamp. */
+.peca-maquina {
   margin: .4rem calc(-1 * clamp(1.35rem, 3.2vw, 2.9rem))
           calc(-1 * clamp(1.35rem, 3.2vw, 2.9rem));
   padding: clamp(1rem, 2.2vw, 1.6rem) clamp(1.35rem, 3.2vw, 2.9rem);
   background: var(--bg);
   border-top: 1px solid var(--line);
 }
-.peca--frase .peca-fluxo { margin-top: 0; }
-
-/* ---- textura: frase repetida cortada por chapa sólida ----
-   No largo a chapa cobre a coluna do texto e a frase sobra à direita. No
-   estreito ela deita e vira faixa de altura fixa no pé: em porcentagem a
-   chapa acompanhava a altura do bloco e o botão caía por cima da frase
-   (medido a 390px, CTA em 297px, chapa terminando em 241px). */
-.peca--frase::before {
-  content: ""; position: absolute; inset: 0 40% 0 0; background: var(--bg); z-index: -1;
-}
-.peca--frase .peca-indice { display: none; }
-.peca-frase { position: absolute; inset: -.4rem -1rem; z-index: -2; overflow: hidden; }
-.peca-frase b {
-  display: block; white-space: nowrap; font-weight: 400;
-  font-family: var(--display); text-transform: uppercase;
-  font-size: clamp(2.2rem, 6.2vw, 5.2rem); line-height: 1.08;
-  letter-spacing: -.02em; color: #1b1726;
-}
-.peca-frase b.acesa { color: var(--accent); }
-
-@media (max-width: 720px) {
-  .peca--frase { padding-bottom: calc(clamp(1.35rem, 3.2vw, 2.9rem) + 92px); }
-  .peca--frase::before { inset: 0 0 92px 0; }
-  .peca-frase { inset: auto -1rem 0 -1rem; height: 92px; }
-  .peca-lede { max-width: none; }
-  .peca h3 { max-width: none; }
-}
+.peca-maquina .peca-fluxo { margin-top: 0; }
 
 /* ---------- animação das peças ----------
    A peça só existe depois que a linha abre, então a entrada é one-shot,
@@ -1167,12 +1140,6 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
    perderia o escalonamento e cairia parada no quadro */
 .row.open .peca-cabeca .peca-marca { animation: peca-entra .5s var(--ease) .07s both; }
 .row.open .peca-indice { animation: peca-indice .8s var(--ease) .08s both; }
-.row.open .peca-frase b { animation: peca-entra .7s var(--ease) var(--d, 0s) both; }
-.row.open .peca-frase b:nth-child(2) { --d: .05s; }
-.row.open .peca-frase b:nth-child(3) { --d: .1s; }
-.row.open .peca-frase b:nth-child(4) { --d: .15s; }
-.row.open .peca-frase b:nth-child(5) { --d: .2s; }
-.row.open .peca-frase b:nth-child(6) { --d: .25s; }
 
 .row.open .peca-texto > * { animation: peca-entra .5s var(--ease) var(--d, .1s) both; }
 .row.open .peca-texto > *:nth-child(2) { --d: .145s; }
@@ -1299,7 +1266,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   /* quem pediu menos movimento recebe a peça inteira parada, já montada */
   .row.open .peca-topo, .row.open .peca h3, .row.open .peca-indice,
   .row.open .peca-cabeca .peca-marca,
-  .row.open .peca-frase b, .row.open .peca-texto > *, .row.open .peca-rodape,
+  .row.open .peca-texto > *, .row.open .peca-rodape,
   .row.open .peca :is(.sheet figure, .peca-modulos li, .peca-marcas li, .peca-frentes li, .peca-fluxo li, .entrega),
   .row.open .peca .sheet a img, .row.open .peca-modulos .mod > img,
   .row.open .peca-crono i, .row.open .peca-crono li span,
