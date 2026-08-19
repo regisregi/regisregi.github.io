@@ -116,7 +116,10 @@ dl, dt, dd { margin: 0; }
 /* efeito assinatura: cada linha é uma janela; as letras sobem de dentro dela.
    O JS quebra as linhas em spans .ch com atraso escalonado. */
 .hero-name .ln { display: block; overflow: clip; }
-.hero-name .ch { display: inline-block; }
+/* pre: com o nome em linha única, o espaço entre RÉGIS e REGI vira um .ch
+   próprio, e inline-block colapsaria espaço em branco para largura zero —
+   o nome sairia colado na tela */
+.hero-name .ch { display: inline-block; white-space: pre; }
 .hero-name.split .ch {
   transform: translateY(115%);
   transition: transform .9s var(--ease);

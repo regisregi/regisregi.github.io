@@ -138,13 +138,12 @@
         <span class="mono">Rio de Janeiro</span>
         <span class="mono">2018 → present</span>
       </div>
-      <!-- the space between the two .ln nodes is required and does NOT show on
-           screen: both spans are display:block, so the text node between them
-           is not rendered. Without it the h1 extracts as "RégisRegi", glued,
-           and search engines never find the proper name in the page's main
-           heading — the strongest signal there is for someone searching for
-           "Régis Regi". Same reason for the contact h2. -->
-      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span> <span class="ln" data-txt="Regi">Regi</span></h1>
+      <!-- name on a SINGLE LINE by the owner's decision. One .ln with the
+           whole name: the extracted text reads "Régis Regi" naturally (search
+           signal), the tape glitch cuts across the full name via data-txt,
+           and the space between the words survives the letter-by-letter
+           effect because .ch uses white-space: pre in the CSS. -->
+      <h1 class="hero-name"><span class="ln" data-txt="Régis Regi">Régis Regi</span></h1>
 
       <p class="hero-roles">
         <span><span class="dot dot-coord" aria-hidden="true"></span>Post-Production Coordinator</span>
