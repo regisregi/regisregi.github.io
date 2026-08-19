@@ -92,6 +92,9 @@ dl, dt, dd { margin: 0; }
 .top .wm {
   font-family: var(--mono); font-weight: 700; font-size: .8rem;
   letter-spacing: .24em; text-transform: uppercase; color: #fff; text-decoration: none;
+  /* o nome é assinatura: nunca quebra em duas linhas, nem na tela mais
+     estreita — abaixo o letter-spacing cede antes de a palavra ceder */
+  white-space: nowrap;
 }
 .top .cv {
   font-family: var(--mono); font-weight: 700; font-size: .72rem;
@@ -137,7 +140,12 @@ dl, dt, dd { margin: 0; }
    quebraria a unidade e daria ar de botão de rede social colado. Altura um
    fio acima da bandeira para compensar o peso ótico do glifo vazado. */
 .top .social {
-  display: block; padding: .4rem .15rem; line-height: 0; color: #fff;
+  /* inline-block e não block: assim o ícone senta na MESMA LINHA do nome
+     mesmo que o .top-start perca o display:flex (CSS velho em cache, por
+     exemplo). O flex do grupo é refinamento, não requisito — sem ele o
+     vertical-align segura o alinhamento. */
+  display: inline-block; vertical-align: middle;
+  padding: .4rem .15rem; line-height: 0; color: #fff;
   opacity: .7; transition: opacity .25s var(--ease), transform .25s var(--ease);
 }
 .top .social svg {
@@ -147,6 +155,18 @@ dl, dt, dd { margin: 0; }
   .top .social:hover { opacity: 1; transform: translateY(-1px); }
 }
 .top .social:focus-visible { opacity: 1; outline-offset: 4px; }
+
+/* tela estreita: nome, LinkedIn, bandeiras e CV numa linha só. O que cede
+   é o tracking e o respiro entre grupos, nunca a posição do ícone — ele é
+   aposto do nome e acompanha o nome onde quer que ele esteja. */
+@media (max-width: 430px) {
+  .top { padding-left: 1rem; padding-right: 1rem; }
+  .top .wm { letter-spacing: .12em; font-size: .72rem; }
+  .top .cv { letter-spacing: .06em; font-size: .66rem; }
+  .top-start { gap: .45rem; }
+  .top-end { gap: .8rem; }
+  .top .lang { gap: .3rem; }
+}
 
 /* alvo de toque maior no celular, e press seco como o resto da casa */
 @media (hover: none) {
