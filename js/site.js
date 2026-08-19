@@ -448,7 +448,16 @@
     function pintar(troca) {
       var a = rolo[pos], r = receita(a);
       var fig = a.closest("figure"), cap = fig && fig.querySelector("figcaption");
-      var titulo = cap ? cap.textContent.trim() : ((a.querySelector("img") || {}).alt || "");
+      var linhaDoAlvo = a.closest(".row");
+      var nomeDaLinha = linhaDoAlvo && linhaDoAlvo.querySelector(".row-name");
+      /* cadeia de recurso para o título: legenda do pôster, alt da imagem e,
+         por último, o nome da própria linha de Trabalho. Sem o último elo, quem
+         abre a sala pelo BOTÃO da peça — podcast do MQE, playlist da
+         Maracutaia — via o título VAZIO: o botão não mora dentro de <figure>
+         nem carrega <img>, então os dois primeiros elos falham. */
+      var titulo = (cap ? cap.textContent.trim() : "")
+        || ((a.querySelector("img") || {}).alt || "")
+        || (nomeDaLinha ? nomeDaLinha.textContent.trim() : "");
 
       elTit.textContent = titulo;        /* nome vem do HTML: bilíngue de graça */
       elOut.href = a.href;
