@@ -909,6 +909,23 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   animation-name: fluxo-final;
 }
 
+/* na peça da frase, o trilho do fluxo vira FAIXA DE MÁQUINA no pé do
+   cartão: chão preto próprio, fio de separação e sangria total. Antes ele
+   corria metade sobre a chapa, metade sobre a frase-textura — os últimos
+   nós flutuavam sobre letra gigante e o rótulo perdia contraste. Com chão
+   próprio, o pulso corre em superfície limpa e a frase fica inteira para
+   ser textura. As margens negativas são o padding do cartão (mesmo clamp);
+   embaixo isso encosta a faixa na borda no largo e no topo da faixa da
+   frase no estreito, onde o padding-bottom do cartão reserva os 92px. */
+.peca--frase .peca-visual {
+  margin: .4rem calc(-1 * clamp(1.35rem, 3.2vw, 2.9rem))
+          calc(-1 * clamp(1.35rem, 3.2vw, 2.9rem));
+  padding: clamp(1rem, 2.2vw, 1.6rem) clamp(1.35rem, 3.2vw, 2.9rem);
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+.peca--frase .peca-fluxo { margin-top: 0; }
+
 /* ---- textura: frase repetida cortada por chapa sólida ----
    No largo a chapa cobre a coluna do texto e a frase sobra à direita. No
    estreito ela deita e vira faixa de altura fixa no pé: em porcentagem a
