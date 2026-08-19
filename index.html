@@ -137,12 +137,13 @@
         <span class="mono">Rio de Janeiro</span>
         <span class="mono">2018 → hoje</span>
       </div>
-      <!-- nome em LINHA ÚNICA por decisão do dono. Um .ln só com o nome
-           inteiro: o texto extraído sai "Régis Regi" naturalmente (sinal de
-           busca), o glitch de fita corta o nome inteiro via data-txt, e o
-           espaço entre as palavras sobrevive ao efeito letra-a-letra porque
-           .ch usa white-space: pre no CSS. -->
-      <h1 class="hero-name"><span class="ln" data-txt="Régis Regi">Régis Regi</span></h1>
+      <!-- o espaço entre os dois .ln é obrigatório e NÃO aparece na tela: os
+           dois spans são display:block, então o nó de texto entre eles não é
+           renderizado. Sem ele o texto extraído do h1 sai "RégisRegi", colado,
+           e o buscador não encontra o nome próprio no título principal da
+           página — que é o sinal mais forte que existe para quem procura por
+           "Régis Regi". Vale para o h2 do contato pelo mesmo motivo. -->
+      <h1 class="hero-name"><span class="ln" data-txt="Régis">Régis</span> <span class="ln" data-txt="Regi">Regi</span></h1>
 
       <p class="hero-roles">
         <span><span class="dot dot-coord" aria-hidden="true"></span>Coordenador de Pós-Produção</span>
