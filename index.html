@@ -124,7 +124,11 @@
   <header class="top">
     <a class="wm" href="#top">Régis Regi</a>
     <div class="top-end">
-      <a class="lang" href="en/" hreflang="en" lang="en">EN</a>
+      <!-- seletor de idioma: as duas bandeiras sempre na tela. Bandeira é
+           país, não idioma — por isso cada botão leva o nome do idioma em
+           texto para leitor de tela; o desenho é atalho visual, não a
+           informação. -->
+      <div class="lang" role="group" aria-label="Idioma"><span class="lang-bt is-on" aria-current="true"><svg class="flag" viewBox="0 0 30 21" aria-hidden="true" focusable="false"><rect width="30" height="21" fill="#009C3B"/><path d="M15 2.3 27.7 10.5 15 18.7 2.3 10.5Z" fill="#FFDF00"/><circle cx="15" cy="10.5" r="5.1" fill="#002776"/><clipPath id="bandeira-br"><circle cx="15" cy="10.5" r="5.1"/></clipPath><path d="M9 9.6Q15 14.6 21 9.6" fill="none" stroke="#fff" stroke-width="1.7" clip-path="url(#bandeira-br)"/></svg><span class="visually-hidden">Português — página atual</span></span><a class="lang-bt" href="en/" hreflang="en" lang="en"><svg class="flag" viewBox="0 0 30 18" aria-hidden="true" focusable="false"><rect width="30" height="18" fill="#fff"/><path d="M13.2 0h3.6v18h-3.6zM0 7.2h30v3.6H0z" fill="#CE1124"/></svg><span class="visually-hidden">English</span></a></div>
       <a class="cv" href="assets/RE_GIS_REGI_PORTFOLIO_CV_2026.pdf" download>Baixar CV</a>
     </div>
   </header>

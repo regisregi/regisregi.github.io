@@ -98,15 +98,40 @@ dl, dt, dd { margin: 0; }
   letter-spacing: .12em; text-transform: uppercase; color: #fff;
   text-decoration: none; border-bottom: 1px solid #fff; padding-bottom: 2px;
 }
-/* seletor de idioma: mesma família do "baixar cv", sem o sublinhado,
-   para não competir com ele. O sublinhado marca o link principal. */
+/* seletor de idioma: as duas bandeiras sempre na tela, a da página atual
+   acesa e com o fio de acento embaixo, a outra em meia-luz esperando o
+   clique. Chip de raio 2px com fio interno branco a 18%: unifica as duas
+   na mesma moldura, define a borda da verde e tira o ar de figurinha
+   colada da inglesa, que é quase toda branca. Altura em clamp para ficar
+   proporcional ao mono do cabeçalho, não maior que ele. */
 .top-end { display: flex; align-items: center; gap: clamp(1rem, 3vw, 2rem); }
-.top .lang {
-  font-family: var(--mono); font-weight: 700; font-size: .72rem;
-  letter-spacing: .12em; text-transform: uppercase; color: #fff;
-  text-decoration: none; opacity: .7; transition: opacity .2s var(--ease);
+.top .lang { display: flex; align-items: center; gap: .5rem; margin: 0; }
+.top .lang-bt {
+  display: block; position: relative; padding: .4rem .15rem;
+  line-height: 0; text-decoration: none; opacity: .45;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
 }
-.top .lang:hover, .top .lang:focus-visible { opacity: 1; }
+.top .lang-bt .flag {
+  display: block; width: auto; height: clamp(13px, 1.5vw, 16px);
+  border-radius: 2px; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
+}
+.top .lang-bt.is-on { opacity: 1; }
+/* fio de acento sob a bandeira da página atual: o mesmo gesto de estado
+   ativo que o rail e a sala de projeção usam */
+.top .lang-bt.is-on::after {
+  content: ""; position: absolute; left: .15rem; right: .15rem; bottom: .12rem;
+  height: 1px; background: var(--accent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .top a.lang-bt:hover { opacity: 1; transform: translateY(-1px); }
+}
+.top a.lang-bt:focus-visible { opacity: 1; outline-offset: 4px; }
+/* alvo de toque maior no celular, e press seco como o resto da casa */
+@media (hover: none) {
+  .top .lang-bt { padding: .6rem .35rem; -webkit-tap-highlight-color: transparent; }
+  .top a.lang-bt:active { opacity: 1; transition-duration: 0s; }
+}
 
 /* ---------- hero ---------- */
 .hero {
