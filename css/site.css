@@ -198,18 +198,45 @@ dl, dt, dd { margin: 0; }
 }
 .hero-eyebrow {
   display: flex; gap: 1.5rem; flex-wrap: wrap;
-  margin-bottom: clamp(2rem, 5vh, 3.2rem);
+  /* a folga cresce com a LARGURA tambem, nao so com a altura: o nome escala em
+     15vw e o agudo do E sobe .247em acima da caixa alta, entao em tela larga e
+     baixa (1280x720, 1920x1080) a margem so em vh deixava o acento encostar
+     nesta linha. Medido: folga passou de -11.4px para +11.5px em 1280x720. */
+  margin-bottom: max(clamp(2rem, 5vh, 3.2rem), clamp(1.6rem, 4.6vw, 4.6rem));
 }
 .hero-name {
+  /* flow-root: impede que o margin-top negativo de .ln (abaixo) colapse para fora
+     e arraste o h1 inteiro para cima. Sem isso o nome sobe .28em e desalinha o hero. */
+  display: flow-root;
   font-family: var(--display); font-size: clamp(4rem, 15vw, 15rem);
   line-height: .86; letter-spacing: -.01em; text-transform: uppercase; margin-left: -.05em;
 }
 /* efeito assinatura: cada linha é uma janela; as letras sobem de dentro dela.
    O JS quebra as linhas em spans .ch com atraso escalonado. */
-.hero-name .ln { display: block; overflow: clip; }
+/* O ACENTO. Anton com line-height .86 corta tudo que passa da caixa alta, e o agudo
+   do E sobe .247em acima dela (medido: tinta do E ascende 211px contra 165px do R a
+   192px de corpo). Resultado: o nome lia "REGIS", decapitado.
+   O padding empurra a JANELA de clip .28em para cima e a margem negativa devolve o
+   espaco ao fluxo, entao o acento aparece e o layout nao anda um pixel. A borda de
+   BAIXO da janela nao muda, que e a que segura as letras escondidas do reveal.
+   Nao usar clip-path aqui: ele cria contexto de empilhamento e mexeria no
+   mix-blend-mode das fatias do glitch. Nao usar overflow-clip-margin: abre os quatro
+   lados e vaza o reveal por baixo. */
+.hero-name .ln {
+  display: block; overflow: clip;
+  padding-top: .28em; margin-top: -.28em;
+}
 .hero-name .ch { display: inline-block; }
 .hero-name.split .ch {
-  transform: translateY(115%);
+  /* 130% e nao 115%: a 115% a PONTA do agudo ainda entrava 13px dentro da
+     janela de recorte (medido), e ficava uma lasca branca parada embaixo
+     da linha antes do É subir. O agudo mora .24em acima da caixa alta, e
+     era essa sobra que voltava para dentro. O mínimo medido é 127.9%;
+     130% deixava 2,2px de folga e o antialiasing ainda arranhava a borda,
+     então 136% — a viagem cresce 6% de uma linha, invisível na curva.
+     Isso já acontecia antes de o acento ser destampado — só não dava para
+     ver, porque o topo estava cortado de qualquer jeito. */
+  transform: translateY(136%);
   transition: transform .9s var(--ease);
   transition-delay: var(--d, 0s);
 }
@@ -263,7 +290,10 @@ dl, dt, dd { margin: 0; }
    curva da casa viraria rampa; o corte tem que ser mecânico. */
 .hero-name .ln { position: relative; }
 .hero-name .ln::before, .hero-name .ln::after {
-  content: attr(data-txt); position: absolute; left: 0; top: 0; width: 100%;
+  content: attr(data-txt); position: absolute; left: 0; width: 100%;
+  /* top acompanha o padding-top de .ln: absoluto resolve contra a caixa de padding,
+     entao top:0 jogaria as fatias .28em acima do texto real. */
+  top: .28em;
   pointer-events: none; mix-blend-mode: screen;
 }
 .hero-name .ln::before {
@@ -385,11 +415,121 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .cut.in > * { opacity: 1; transform: none; }
 
 /* ---------- sobre ---------- */
-.about {
-  display: grid; gap: clamp(1.5rem, 3vw, 3rem); max-width: 62ch;
-  font-size: clamp(1.1rem, 1.7vw, 1.5rem); line-height: 1.5; color: var(--ink);
+.about { display: grid; gap: clamp(1.8rem, 3.4vw, 3rem); }
+.about .rest { color: var(--dim); font-size: clamp(.85rem, 1.1vw, .95rem); max-width: 68ch; line-height: 1.6; }
+
+/* ---------- sobre: a tese e as três frentes ----------
+   A tese vem do curriculo ("três competências que raramente andam
+   juntas") e vira o lede em display; embaixo, uma coluna por frente,
+   cada uma assinada pelo MESMO ponto de cor que legenda as frentes sob
+   o nome — a cor aqui é índice, não decoração. */
+.sobre-lede {
+  font-family: var(--display); font-size: clamp(1.9rem, 4.4vw, 3.8rem);
+  line-height: 1.06; text-transform: uppercase; letter-spacing: -.01em;
+  max-width: 24ch;
 }
-.about .rest { color: var(--dim); font-size: .9em; }
+.sobre-lede em { font-style: normal; color: var(--accent); }
+.sobre-tres {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.4rem, 3vw, 2.8rem);
+}
+.sobre-rotulo {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: .85rem;
+}
+.sobre-rotulo .dot {
+  display: inline-block; width: 9px; height: 9px; border-radius: 2px;
+  margin-right: .55rem; vertical-align: baseline;
+}
+.sobre-bloco > p:last-child { font-size: clamp(.9rem, 1.15vw, 1rem); line-height: 1.6; color: var(--ink); }
+.sobre-bloco i { font-style: italic; }
+@media (max-width: 860px) {
+  .sobre-tres { grid-template-columns: 1fr; gap: 1.6rem; }
+}
+
+/* ---------- linha do tempo ----------
+   A linha do curriculo, animada como o site pensa: um fio de progresso
+   que desce com a leitura (o mesmo gesto do playhead no rail) e cada
+   entrada assentando quando entra em cena. Ano à esquerda em mono
+   tabular, ponto de frente sobre o fio, casa em display. Entrada com
+   painel correspondente em TRABALHO navega para ele. */
+.lt { margin-top: clamp(3rem, 7vh, 5rem); }
+.lt-cabeca {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim);
+  margin-bottom: clamp(1.4rem, 3vh, 2rem);
+}
+.lt-lista {
+  /* o reset da casa zera ul, não ol — sem isto os marcadores numéricos
+     aparecem e empurram os pontos para fora do fio */
+  list-style: none; margin: 0; padding: 0;
+  --lt-ano: 8.5rem; --lt-vao: 1.4rem;
+  --fio-x: calc(var(--lt-ano) + var(--lt-vao) + 5px);
+  position: relative;
+}
+/* trilho apagado, de ponto a ponto */
+.lt-lista::before, .lt-lista::after {
+  content: ""; position: absolute; width: 1px;
+  left: var(--fio-x); top: .5rem; bottom: .5rem;
+}
+.lt-lista::before { background: var(--line); }
+/* o fio de progresso: cresce com a leitura via --p (JS). Transform e não
+   height: composito puro, nada de layout por quadro. */
+.lt-lista::after {
+  background: var(--accent);
+  transform-origin: 0 0; transform: scaleY(var(--p, 0));
+}
+.lt-item + .lt-item { margin-top: clamp(1.4rem, 3vh, 2rem); }
+.lt-linha {
+  display: grid; grid-template-columns: var(--lt-ano) 11px 1fr;
+  gap: 0 var(--lt-vao); align-items: start;
+  text-decoration: none; color: inherit;
+}
+.lt-ano {
+  font-family: var(--mono); font-size: .66rem; color: var(--dim);
+  text-align: right; padding-top: .3rem; font-variant-numeric: tabular-nums;
+  letter-spacing: .04em; white-space: nowrap;
+}
+/* o ponto fura o trilho: a sombra da cor do fundo abre a janela */
+.lt-no {
+  width: 11px; height: 11px; border-radius: 2px; margin-top: .3rem;
+  box-shadow: 0 0 0 5px var(--bg);
+}
+.lt-no[data-frente="coord"] { background: var(--coord); }
+.lt-no[data-frente="roteiro"] { background: var(--roteiro); }
+.lt-no[data-frente="edicao"] { background: var(--edicao); }
+.lt-no[data-frente="curadoria"] { background: var(--curadoria); }
+/* formação: vazado — está na linha, mas não é trilha de trabalho */
+.lt-no[data-frente="formacao"] { background: var(--bg); border: 1px solid var(--dim); }
+.lt-oque strong {
+  display: block; font-family: var(--display); font-weight: 400;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: .02em;
+  text-transform: uppercase; line-height: 1.1;
+  transition: color .25s var(--ease);
+}
+.lt-oque em {
+  display: block; font-style: normal; font-size: clamp(.78rem, 1vw, .85rem);
+  color: var(--dim); margin-top: .3rem; line-height: 1.45;
+}
+a.lt-linha:hover .lt-oque strong, a.lt-linha:focus-visible .lt-oque strong { color: var(--accent); }
+
+/* entrada: assenta quando cruza a cena; o ponto acende um tique depois */
+.lt-item { opacity: 0; transform: translateY(12px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.lt-item .lt-no { transform: scale(0); transition: transform .35s var(--ease) .15s; }
+.lt-item.viva { opacity: 1; transform: none; }
+.lt-item.viva .lt-no { transform: none; }
+/* sem JS, nada pode ficar invisível */
+html:not(.js) .lt-item { opacity: 1; transform: none; }
+html:not(.js) .lt-item .lt-no { transform: none; }
+
+@media (max-width: 640px) {
+  .lt-lista { --fio-x: 5px; }
+  .lt-linha { grid-template-columns: 11px 1fr; gap: 0 1rem; }
+  .lt-ano { grid-column: 2; text-align: left; padding-top: 0; order: -1; margin-bottom: .2rem; }
+  .lt-no { grid-row: 2; }
+  .lt-oque { grid-column: 2; grid-row: 2; }
+  .lt-item + .lt-item { margin-top: 1.6rem; }
+}
 
 /* ---------- índice de trabalho ---------- */
 /* o índice recua da margem para os números não competirem com o rail de
@@ -1652,6 +1792,9 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
      regra cobre o caso de a preferência mudar depois do boot (a media query
      do CSS é viva; o snapshot do JS, não). */
   .tc-vivo .rail-tc { display: none; }
+  /* linha do tempo parada é a composição final: fio inteiro, tudo visto */
+  .lt-lista::after { transform: none; }
+  .lt-item, .lt-item .lt-no { opacity: 1; transform: none; transition: none; }
   .marcas-trilho ul:last-child { display: none; }
   .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
   /* a varredura de entrada some inteira; o peso permanente do "+" (Camada 1,
@@ -1706,6 +1849,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   transition: opacity .6s var(--ease) var(--d, 0s), transform .6s var(--ease) var(--d, 0s);
 }
 .about.cut > *:nth-child(2) { --d: .1s; }
+.about.cut > *:nth-child(3) { --d: .2s; }
 
 /* competências: as colunas assentam da esquerda para a direita. As listas
    dentro NÃO escalonam: item entrando dentro de coluna entrando multiplica

@@ -157,6 +157,43 @@
     });
   }
 
+  /* linha do tempo: o fio desce com a leitura — o mesmo gesto do
+     playhead no rail, agora na carreira. --p é a fração da lista que já
+     passou do ponto de leitura (72% da altura da janela); o CSS escala o
+     fio com transform, então cada quadro é composição pura. As entradas
+     assentam uma a uma pelo observador, e com menos-movimento o CSS
+     entrega tudo parado e completo sem passar por aqui. */
+  var ltLista = document.querySelector(".lt-lista");
+  if (ltLista && !reduceMotion) {
+    var ltAgendado = false;
+    var ltPintar = function () {
+      ltAgendado = false;
+      var r = ltLista.getBoundingClientRect();
+      var p = (window.innerHeight * 0.72 - r.top) / r.height;
+      ltLista.style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(4));
+    };
+    var ltPedir = function () {
+      if (!ltAgendado) { ltAgendado = true; window.requestAnimationFrame(ltPintar); }
+    };
+    window.addEventListener("scroll", ltPedir, { passive: true });
+    window.addEventListener("resize", ltPedir, { passive: true });
+    ltPintar();
+
+    var ltItens = ltLista.querySelectorAll(".lt-item");
+    if ("IntersectionObserver" in window) {
+      var ioLt = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("viva"); ioLt.unobserve(e.target); }
+        });
+      }, { threshold: 0.3, rootMargin: "0px 0px -8% 0px" });
+      ltItens.forEach(function (i) { ioLt.observe(i); });
+    } else {
+      ltItens.forEach(function (i) { i.classList.add("viva"); });
+    }
+  } else if (ltLista) {
+    ltLista.querySelectorAll(".lt-item").forEach(function (i) { i.classList.add("viva"); });
+  }
+
   /* corte: cada bloco entra quando aparece */
   var cuts = document.querySelectorAll(".cut");
   if ("IntersectionObserver" in window) {
@@ -269,7 +306,7 @@
      Modificador de teclado ou id inexistente: o href age sozinho. Com
      menos-movimento: salto seco, abertura imediata, sem coreografia. */
   document.addEventListener("click", function (e) {
-    var a = e.target.closest ? e.target.closest(".marcas-trilho a[data-alvo]") : null;
+    var a = e.target.closest ? e.target.closest("a[data-alvo]") : null;
     if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
     var painel = document.getElementById(a.getAttribute("data-alvo"));
     var row = painel && painel.closest(".row");
