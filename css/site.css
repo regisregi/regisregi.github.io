@@ -684,8 +684,13 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .g-rot    { position: static; white-space: normal; }
   .g-nome   { font-size: 1.05rem; }
   .g-meta   { font-size: .56rem; line-height: 1.5; margin-top: .22rem; }
+  /* white-space: normal e obrigatorio: .g-datas nasce com nowrap na regra
+     base (la ela e recortada, e nowrap nao custa nada). Des-escondida no
+     celular, o nowrap fazia o periodo furar a tela — e o recuo de 1.15rem
+     que a trilha do ponto criou foi o que tirou a folga que segurava isso.
+     Medido em 383px: seis .g-datas estourando e rolagem horizontal. */
   .g-datas  { position: static; width: auto; height: auto;
-              overflow: visible; clip: auto; }
+              overflow: visible; clip: auto; white-space: normal; }
   /* saem: sem largura, não são dado */
   .g-eixo, .g-faixa, .g-hoje { display: none; }
   /* a raia vira trilha: fio contínuo na cor da frente, e um ponto por
