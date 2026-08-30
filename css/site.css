@@ -1212,10 +1212,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
    A Fábrica) usam a altura base; emblemas mais altos que largos
    (Mellin, MQE, Grupo Sal, Paramount+, Descomplica) usam .alta, para
    pesarem o mesmo na fileira de painéis. */
-.peca-cabeca {
-  display: flex; align-items: center; flex-wrap: wrap;
-  gap: .6rem clamp(1.1rem, 2.6vw, 2rem); margin-top: .35rem;
-}
+.peca-cabeca { margin-top: .35rem; }
 .peca-cabeca h3 { margin-top: 0; }
 
 /* corpo: no largo, texto de um lado e material do outro */
@@ -1239,9 +1236,33 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .peca--lado .peca-visual { max-width: 360px; }
 }
 
-.peca-marca { line-height: 0; }
-.peca-marca img { display: block; width: auto; height: clamp(30px, 3.6vw, 46px); }
-.peca-marca.alta img { height: clamp(58px, 7vw, 96px); }
+/* ---------- chapa da marca ----------
+   As 11 logos vão de 0.81 a 6.33 de razão de aspecto — 8x de variação entre
+   a mais empilhada (Mellin) e a mais deitada (Maracutaia). Altura fixa,
+   que era o critério antigo, faz a deitada virar uma tira de 291px e a
+   empilhada um bloco alto: nenhuma divide a mesma pegada. E como a marca
+   morava na mesma linha flex do título, centrada nele, a POSIÇÃO dela
+   mudava conforme o título tivesse uma, duas ou três linhas — era isso que
+   deixava a Paramount+ solta no alto à direita.
+
+   Agora a marca abre a peça, sempre no mesmo canto: caixa única, à
+   esquerda, acima da sobrelinha. A ordem de leitura vira marca, contexto,
+   título — um letreiro. object-fit: contain resolve qualquer razão dentro
+   da mesma caixa, então a posição é idêntica nas 11 sem tratar caso a caso.
+
+   --otica corrige o resto: contain favorece quem tem razão parecida com a
+   da caixa (2.5), então DOT e A Fábrica chegavam com o TRIPLO da área das
+   empilhadas. O fator só ENCOLHE, nunca estoura a caixa, e foi calculado
+   por área a partir das dimensões reais dos arquivos. Sem valor, vale 1. */
+.peca-marca {
+  line-height: 0; margin-bottom: clamp(.7rem, 1.6vh, 1rem);
+  width: clamp(112px, 12vw, 140px); height: clamp(44px, 4.6vw, 56px);
+}
+.peca-marca img {
+  display: block;
+  width: calc(100% * var(--otica, 1)); height: calc(100% * var(--otica, 1));
+  object-fit: contain; object-position: left center;
+}
 
 /* .panel-inner .peca-lede e não só .peca-lede: a regra genérica
    ".panel-inner p" (bem acima, no bloco do painel) tem especificidade 0-1-1
