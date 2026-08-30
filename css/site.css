@@ -479,88 +479,209 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .sobre-tres { grid-template-columns: 1fr; gap: 1.6rem; }
 }
 
-/* ---------- linha do tempo ----------
-   A linha do curriculo, animada como o site pensa: um fio de progresso
-   que desce com a leitura (o mesmo gesto do playhead no rail) e cada
-   entrada assentando quando entra em cena. Ano à esquerda em mono
-   tabular, ponto de frente sobre o fio, casa em display. Entrada com
-   painel correspondente em TRABALHO navega para ele. */
-.lt { margin-top: clamp(3rem, 7vh, 5rem); }
-.lt-cabeca {
+/* ---------- bloco de carreira ----------
+   O currículo desenhado: eixo de anos na horizontal, três raias por frente,
+   onze barras ocupando o período real de cada trabalho. Lê-se de uma vez
+   que ele fazia roteiro enquanto já finalizava, e que a curadoria correu
+   por baixo de tudo desde 2018.
+
+   ÍNDICE DE MÊS, a única conta do bloco: i = (ano - 2018) * 12 + (mes - 1),
+   jan/2018 = 0, --ate EXCLUSIVO. Eixo de 108 meses = 9 anos. Um índice
+   errado NÃO gera erro, só põe a barra no lugar errado — conferir sempre
+   contra a tabela no comentário do HTML, nos DOIS idiomas.
+
+   REGRA DE MANUTENÇÃO: a linha de meta tem no MÁXIMO 14 caracteres. É ela,
+   e não o nome, que governa a largura do rótulo — mono tem avanço fixo de
+   .6em em qualquer fallback, Anton não tem. Passar disso encosta um rótulo
+   no outro na largura mínima do regime desktop (861px). */
+.gantt {
+  margin-top: clamp(3rem, 7vh, 5rem);
+  --meses: 108;
+  --anos: 9;
+  --passo: clamp(3rem, 3.6vh, 3.4rem);   /* altura de uma linha plotada */
+  --hoje: 103;                           /* ago/2026 — o JS reescreve no boot */
+  --fios: repeating-linear-gradient(to right,
+          var(--line) 0 1px, transparent 1px calc(100% / var(--anos)));
+}
+
+.g-titulo {
   font-family: var(--mono); font-size: .62rem; letter-spacing: .22em;
   text-transform: uppercase; color: var(--dim);
-  margin-bottom: clamp(1.4rem, 3vh, 2rem);
+  margin-bottom: clamp(1.2rem, 2.6vh, 1.7rem);
 }
-.lt-lista {
-  /* o reset da casa zera ul, não ol — sem isto os marcadores numéricos
-     aparecem e empurram os pontos para fora do fio */
+
+/* eixo: nove células de 1fr com fio à esquerda — exatamente as fronteiras
+   que --fios repete atrás das raias, porque 108 / 9 = 12 meses exatos. */
+.g-eixo {
+  list-style: none; margin: 0; padding: 0;   /* o reset da casa zera ul, não ol */
+  display: grid; grid-template-columns: repeat(var(--anos), 1fr);
+  font-family: var(--mono); font-size: clamp(.5rem, .62vw, .58rem);
+  letter-spacing: .12em; color: var(--dim); font-variant-numeric: tabular-nums;
+}
+.g-eixo li { border-left: 1px solid var(--line); padding: 0 0 .4rem .3rem; }
+
+/* o plot é o bloco contentor do playhead. NÃO remover este position:
+   relative achando que é inútil: sem ele o fio de HOJE resolve contra
+   outro ancestral e migra de lugar. */
+.g-plot { position: relative; padding-top: 1rem; }
+
+.g-hoje {
+  position: absolute; top: 1rem; bottom: 0; width: 1px;
+  left: calc(var(--hoje) / var(--meses) * 100%);
+  background: var(--accent); opacity: .45; pointer-events: none;
+}
+.g-hoje b {
+  position: absolute; bottom: 100%; left: 0; margin-bottom: 3px;
+  transform: translateX(-50%);
+  font-family: var(--mono); font-weight: 400; font-size: .5rem;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+}
+
+.g-raia + .g-raia { margin-top: clamp(1.2rem, 2.6vh, 1.8rem); }
+.g-raia-nome {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: .6rem;
+}
+/* .dot-coord e irmãs só dão a COR; a dimensão mora em .hero-roles .dot e
+   .sobre-rotulo .dot, ambas escopadas. Sem esta regra o quadrado nasce 0x0. */
+.g-raia-nome .dot { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto; }
+
+.g-linhas {
   list-style: none; margin: 0; padding: 0;
-  --lt-ano: 8.5rem; --lt-vao: 1.4rem;
-  --fio-x: calc(var(--lt-ano) + var(--lt-vao) + 5px);
-  position: relative;
+  position: relative; height: calc(var(--linhas) * var(--passo));
+  background-image: var(--fios);
 }
-/* trilho apagado, de ponto a ponto */
-.lt-lista::before, .lt-lista::after {
-  content: ""; position: absolute; width: 1px;
-  left: var(--fio-x); top: .5rem; bottom: .5rem;
+
+.g-item {
+  position: absolute; left: 0; right: 0;
+  top: calc(var(--r) * var(--passo)); height: var(--passo);
 }
-.lt-lista::before { background: var(--line); }
-/* o fio de progresso: cresce com a leitura via --p (JS). Transform e não
-   height: composito puro, nada de layout por quadro. */
-.lt-lista::after {
-  background: var(--accent);
-  transform-origin: 0 0; transform: scaleY(var(--p, 0));
+
+/* o link cobre a linha inteira para que rótulo E barra sejam um alvo só — e
+   é por isso que ele NÃO pode receber ponteiro: itens da mesma linha se
+   sobrepõem por construção, e com pointer-events:auto o último cobriria os
+   anteriores e roubaria os cliques do a[data-alvo]. Falha silenciosa. Os
+   dois filhos VISÍVEIS reativam o ponteiro; o :hover continua funcionando
+   porque propaga do filho atingido para os ancestrais. */
+.g-link { position: absolute; inset: 0; pointer-events: none;
+          text-decoration: none; color: inherit; }
+.g-rot, .g-barra { pointer-events: auto; }
+
+/* rótulo: banda de CIMA, ancorado no início da barra, largura livre para
+   transbordar à direita sobre o preto. Ele nunca desce até a banda da barra
+   — é essa separação vertical que torna o transbordo inofensivo: o rótulo
+   passa por cima da barra do vizinho sem disputar um pixel de clique. */
+.g-rot {
+  position: absolute; top: 0;
+  left: calc(var(--de) / var(--meses) * 100%);
+  white-space: nowrap;
 }
-.lt-item + .lt-item { margin-top: clamp(1.4rem, 3vh, 2rem); }
-.lt-linha {
-  display: grid; grid-template-columns: var(--lt-ano) 11px 1fr;
-  gap: 0 var(--lt-vao); align-items: start;
-  text-decoration: none; color: inherit;
-}
-.lt-ano {
-  font-family: var(--mono); font-size: .66rem; color: var(--dim);
-  text-align: right; padding-top: .3rem; font-variant-numeric: tabular-nums;
-  letter-spacing: .04em; white-space: nowrap;
-}
-/* o ponto fura o trilho: a sombra da cor do fundo abre a janela */
-.lt-no {
-  width: 11px; height: 11px; border-radius: 2px; margin-top: .3rem;
-  box-shadow: 0 0 0 5px var(--bg);
-}
-.lt-no[data-frente="coord"] { background: var(--coord); }
-.lt-no[data-frente="roteiro"] { background: var(--roteiro); }
-.lt-no[data-frente="edicao"] { background: var(--edicao); }
-.lt-no[data-frente="curadoria"] { background: var(--curadoria); }
-/* formação: vazado — está na linha, mas não é trilha de trabalho */
-.lt-no[data-frente="formacao"] { background: var(--bg); border: 1px solid var(--dim); }
-.lt-oque strong {
+.g-nome {
   display: block; font-family: var(--display); font-weight: 400;
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: .02em;
-  text-transform: uppercase; line-height: 1.1;
+  font-size: clamp(.8rem, 1.15vw, 1.1rem); letter-spacing: .02em;
+  text-transform: uppercase; line-height: 1.05; color: var(--ink);
   transition: color .25s var(--ease);
 }
-.lt-oque em {
-  display: block; font-style: normal; font-size: clamp(.78rem, 1vw, .85rem);
-  color: var(--dim); margin-top: .3rem; line-height: 1.45;
+.g-meta {
+  display: block; margin-top: .18rem;
+  font-family: var(--mono); font-size: clamp(.5rem, .62vw, .58rem);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+  font-variant-numeric: tabular-nums;
 }
-a.lt-linha:hover .lt-oque strong, a.lt-linha:focus-visible .lt-oque strong { color: var(--accent); }
 
-/* entrada: assenta quando cruza a cena; o ponto acende um tique depois */
-.lt-item { opacity: 0; transform: translateY(12px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
-.lt-item .lt-no { transform: scale(0); transition: transform .35s var(--ease) .15s; }
-.lt-item.viva { opacity: 1; transform: none; }
-.lt-item.viva .lt-no { transform: none; }
-/* sem JS, nada pode ficar invisível */
-html:not(.js) .lt-item { opacity: 1; transform: none; }
-html:not(.js) .lt-item .lt-no { transform: none; }
+/* o período por extenso: recortado no desktop (o eixo dá o ano, o painel dá
+   a data exata), visível no celular. Classe PRÓPRIA, nunca a
+   .visually-hidden global — des-esconder um utilitário compartilhado por
+   consulta de mídia é armadilha. */
+.g-datas { position: absolute; width: 1px; height: 1px;
+           overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-@media (max-width: 640px) {
-  .lt-lista { --fio-x: 5px; }
-  .lt-linha { grid-template-columns: 11px 1fr; gap: 0 1rem; }
-  .lt-ano { grid-column: 2; text-align: left; padding-top: 0; order: -1; margin-bottom: .2rem; }
-  .lt-no { grid-row: 2; }
-  .lt-oque { grid-column: 2; grid-row: 2; }
-  .lt-item + .lt-item { margin-top: 1.6rem; }
+/* a faixa é o trilho de largura total e o bloco contentor da barra nos DOIS
+   regimes: absoluta no desktop, relativa em fluxo no celular. É ela que faz
+   uma tabela só de --de/--ate servir as duas formas sem recalcular nada. */
+.g-faixa { position: absolute; left: 0; right: 0; bottom: 0; height: 9px; }
+
+.g-barra {
+  position: absolute; top: 0; bottom: 0;
+  left:  calc(var(--de) / var(--meses) * 100%);
+  width: calc((var(--ate) - var(--de)) / var(--meses) * 100%);
+  border-radius: 1px; opacity: .78; transform-origin: 0 50%;
+  transition: opacity .25s var(--ease);
+}
+.g-barra[data-frente="coord"]   { background-color: var(--coord); }
+.g-barra[data-frente="roteiro"] { background-color: var(--roteiro); }
+.g-barra[data-frente="edicao"]  { background-color: var(--edicao); }
+/* curadoria É literalmente o acento (#a48bff). Numa composição onde violeta
+   é interface — foco, hover, o fio de HOJE — uma barra violeta maciça
+   quebraria a doutrina da casa. A hachura devolve a barra à condição de
+   índice: é textura, não estado. E funciona sem cor. */
+.g-barra[data-frente="curadoria"] {
+  background-color: var(--curadoria);
+  background-image: repeating-linear-gradient(135deg, #000 0 1px, transparent 1px 4px);
+}
+/* em curso: dissolve na ponta em vez de fingir uma data de saída. */
+.g-aberta {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent);
+          mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent);
+}
+
+.g-link:hover .g-nome, .g-link:focus-visible .g-nome { color: var(--accent); }
+.g-link:hover .g-barra { opacity: 1; }
+/* o link tem a largura do plot inteiro: um anel nele seria uma faixa de
+   ponta a ponta. O anel vai nos dois filhos, que são a área visível. */
+.g-link:focus-visible { outline: none; }
+.g-link:focus-visible .g-rot,
+.g-link:focus-visible .g-barra { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.g-formacao {
+  margin-top: clamp(1.4rem, 3vh, 2rem); padding-top: .9rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: clamp(.55rem, .68vw, .62rem);
+  letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+  line-height: 1.7;
+}
+.g-formacao b { color: var(--ink); font-weight: 400; }
+
+/* um corte por bloco: as barras se escrevem da esquerda para a direita na
+   ordem em que a carreira aconteceu. O atraso sai do PRÓPRIO dado — --de é
+   o mês de início — então não há segunda ordenação para manter à mão. Só
+   transform: não multiplica com o fade-up do .cut do pai. Sob .cut.in, sem
+   JS nada anima e as barras nascem inteiras. */
+@keyframes g-wipe { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.gantt.cut.in .g-barra {
+  animation: g-wipe .5s var(--ease) both;
+  animation-delay: calc(var(--de) * 4ms);
+}
+
+/* CELULAR: a MESMA tabela de índices, outra forma. Sem rolagem horizontal —
+   janela que mostra dois anos por vez contradiz o próprio pedido de ver a
+   carreira inteira de uma vez, e rolagem lateral dentro de página vertical
+   é armadilha de toque. Cada trabalho ganha a sua linha, em ordem, com o
+   trilho de anos atrás da barra. */
+@media (max-width: 860px) {
+  .g-plot   { padding-top: 0; }
+  .g-linhas { height: auto; background-image: none; }
+  .g-item   { position: static; height: auto; }
+  .g-item + .g-item { margin-top: 1.05rem; }
+  .g-link   { position: static; display: block; pointer-events: auto; }
+  .g-rot    { position: static; white-space: normal; }
+  .g-nome   { font-size: 1rem; }
+  .g-meta   { font-size: .55rem; line-height: 1.5; }
+  .g-datas  { position: static; width: auto; height: auto;
+              overflow: visible; clip: auto; display: block; }
+  /* display:block é obrigatório: .g-faixa é um <span>, e sem position
+     absolute (que blocava no desktop) ele volta a ser inline e o trilho
+     nasce com largura zero — a barra some sem erro nenhum. */
+  .g-faixa  { display: block; position: relative; height: 8px; margin-top: .45rem;
+              background-image: var(--fios); }
+  .g-hoje   { display: none; }
+  /* a marca de HOJE migra para dentro de cada trilho, sem markup novo */
+  .g-faixa::after {
+    content: ""; position: absolute; top: -2px; bottom: -2px; width: 1px;
+    left: calc(var(--hoje) / var(--meses) * 100%);
+    background: var(--accent); opacity: .5;
+  }
 }
 
 /* ---------- índice de trabalho ---------- */
@@ -1824,9 +1945,8 @@ html:not(.js) .lt-item .lt-no { transform: none; }
      regra cobre o caso de a preferência mudar depois do boot (a media query
      do CSS é viva; o snapshot do JS, não). */
   .tc-vivo .rail-tc { display: none; }
-  /* linha do tempo parada é a composição final: fio inteiro, tudo visto */
-  .lt-lista::after { transform: none; }
-  .lt-item, .lt-item .lt-no { opacity: 1; transform: none; transition: none; }
+  /* bloco de carreira parado é a composição final: barras inteiras */
+  .gantt.cut.in .g-barra { animation: none; }
   .marcas-trilho ul:last-child { display: none; }
   .marcas-trilho ul { flex-wrap: wrap; gap: .8rem 1.4rem; }
   /* a varredura de entrada some inteira; o peso permanente do "+" (Camada 1,
@@ -1882,6 +2002,10 @@ html:not(.js) .lt-item .lt-no { transform: none; }
 }
 .about.cut > *:nth-child(2) { --d: .1s; }
 .about.cut > *:nth-child(3) { --d: .2s; }
+.gantt.cut > * { transition: opacity .55s var(--ease) var(--d, 0s), transform .55s var(--ease) var(--d, 0s); }
+.gantt.cut > .g-eixo { --d: .05s; }
+.gantt.cut > .g-plot { --d: .1s; }
+.gantt.cut > .g-formacao { --d: .18s; }
 
 /* competências: as colunas assentam da esquerda para a direita. As listas
    dentro NÃO escalonam: item entrando dentro de coluna entrando multiplica

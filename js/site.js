@@ -157,41 +157,16 @@
     });
   }
 
-  /* linha do tempo: o fio desce com a leitura — o mesmo gesto do
-     playhead no rail, agora na carreira. --p é a fração da lista que já
-     passou do ponto de leitura (72% da altura da janela); o CSS escala o
-     fio com transform, então cada quadro é composição pura. As entradas
-     assentam uma a uma pelo observador, e com menos-movimento o CSS
-     entrega tudo parado e completo sem passar por aqui. */
-  var ltLista = document.querySelector(".lt-lista");
-  if (ltLista && !reduceMotion) {
-    var ltAgendado = false;
-    var ltPintar = function () {
-      ltAgendado = false;
-      var r = ltLista.getBoundingClientRect();
-      var p = (window.innerHeight * 0.72 - r.top) / r.height;
-      ltLista.style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(4));
-    };
-    var ltPedir = function () {
-      if (!ltAgendado) { ltAgendado = true; window.requestAnimationFrame(ltPintar); }
-    };
-    window.addEventListener("scroll", ltPedir, { passive: true });
-    window.addEventListener("resize", ltPedir, { passive: true });
-    ltPintar();
-
-    var ltItens = ltLista.querySelectorAll(".lt-item");
-    if ("IntersectionObserver" in window) {
-      var ioLt = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting) { e.target.classList.add("viva"); ioLt.unobserve(e.target); }
-        });
-      }, { threshold: 0.3, rootMargin: "0px 0px -8% 0px" });
-      ltItens.forEach(function (i) { ioLt.observe(i); });
-    } else {
-      ltItens.forEach(function (i) { i.classList.add("viva"); });
-    }
-  } else if (ltLista) {
-    ltLista.querySelectorAll(".lt-item").forEach(function (i) { i.classList.add("viva"); });
+  /* HOJE é dado, não decoração: cravar o índice do mês no HTML
+     envelheceria em silêncio nos dois idiomas, que é o pior tipo de erro.
+     O CSS tem um padrão (103 = ago/2026); isto o corrige no boot. O teto
+     de 107 segura a marca dentro do plot se a página passar de dez/2026
+     sem alguém esticar o eixo. */
+  var gantt = document.querySelector(".gantt");
+  if (gantt) {
+    var hj = new Date();
+    gantt.style.setProperty("--hoje",
+      Math.max(0, Math.min(107, (hj.getFullYear() - 2018) * 12 + hj.getMonth())));
   }
 
   /* corte: cada bloco entra quando aparece */
