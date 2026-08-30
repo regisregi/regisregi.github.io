@@ -1,0 +1,88 @@
+# Mantém o ?v= de css/js igual à impressão do conteúdo do arquivo.
+#
+# POR QUE EXISTE: sem versão no endereço, o navegador pode servir uma folha
+# de estilo velha do cache junto com um HTML novo. Aconteceu de verdade: as
+# logos foram para dentro da linha do índice, e quem estava com o CSS
+# anterior em cache viu as marcas no tamanho natural do arquivo, empurradas
+# para debaixo do nome. O HTML e a folha precisam viajar juntos.
+#
+# POR QUE É UM ROBÔ E NÃO DISCIPLINA: a versão é manual por natureza, e
+# esquecer de atualizá-la reproduz exatamente o defeito que ela conserta —
+# só que em silêncio. Aqui o push conserta sozinho e avisa no commit.
+
+name: versiona assets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'css/**'
+      - 'js/**'
+      - 'index.html'
+      - 'en/index.html'
+      - 'analise.html'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: versiona-assets
+  cancel-in-progress: false
+
+jobs:
+  versiona:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recalcula as versões e reescreve os links
+        id: v
+        run: |
+          python3 - <<'PY'
+          import hashlib, io, re, os
+
+          def dig(p):
+              return hashlib.sha1(open(p, 'rb').read()).hexdigest()[:8]
+
+          # arquivo -> (prefixo do caminho no HTML, lista de assets)
+          PAGINAS = {
+              'index.html':    ('',     ['css/tokens.css', 'css/site.css', 'js/site.js']),
+              'en/index.html': ('../',  ['css/tokens.css', 'css/site.css', 'js/site.js']),
+              'analise.html':  ('',     ['css/style.css', 'js/analise.js']),
+          }
+
+          mudou = []
+          for pagina, (pre, assets) in PAGINAS.items():
+              s = io.open(pagina, encoding='utf-8').read()
+              orig = s
+              for a in assets:
+                  if not os.path.exists(a):
+                      raise SystemExit('asset inexistente: ' + a)
+                  v = dig(a)
+                  alvo = re.escape(pre + a)
+                  # casa com ou sem ?v= anterior
+                  s, n = re.subn(r'(["\'])%s(\?v=[0-9a-f]+)?\1' % alvo,
+                                 r'\g<1>%s%s?v=%s\g<1>' % (pre, a, v), s)
+                  if n != 1:
+                      raise SystemExit('esperava 1 link de %s em %s, achei %d' % (a, pagina, n))
+              if s != orig:
+                  io.open(pagina, 'w', encoding='utf-8', newline='').write(s)
+                  mudou.append(pagina)
+
+          print('mudou=' + ','.join(mudou))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('mudou=%s\n' % ('sim' if mudou else 'nao'))
+          PY
+
+      - name: Publica se algo mudou
+        if: steps.v.outputs.mudou == 'sim'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html en/index.html analise.html
+          git commit -m "Versiona assets: ?v= volta a bater com o conteudo
+
+          Automatico. Sem isso o navegador pode servir CSS velho do cache
+          junto com HTML novo, e a pagina chega quebrada em silencio."
+          git pull --rebase --autostash
+          git push

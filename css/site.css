@@ -538,6 +538,13 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 
 .g-raia + .g-raia { margin-top: clamp(1.2rem, 2.6vh, 1.8rem); }
+/* --fio-raia alimenta o fio lateral do celular; no desktop não é usado */
+.g-raia:has(.dot-coord)     { --fio-raia: color-mix(in srgb, var(--coord) 55%, transparent); }
+.g-raia:has(.dot-roteiro)   { --fio-raia: color-mix(in srgb, var(--roteiro) 55%, transparent); }
+.g-raia:has(.dot-edicao)    { --fio-raia: color-mix(in srgb, var(--edicao) 55%, transparent); }
+/* o ponto do item segue a frente da BARRA, nao a da raia: a Maracutaia e
+   curadoria dentro da raia de edicao, e o violeta dela precisa aparecer. */
+.g-item:has(.g-barra[data-frente="curadoria"]) { --fio-raia: var(--curadoria); }
 .g-raia-nome {
   display: flex; align-items: center; gap: .5rem;
   font-family: var(--mono); font-size: .6rem; letter-spacing: .2em;
@@ -654,34 +661,50 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   animation-delay: calc(var(--de) * 4ms);
 }
 
-/* CELULAR: a MESMA tabela de índices, outra forma. Sem rolagem horizontal —
-   janela que mostra dois anos por vez contradiz o próprio pedido de ver a
-   carreira inteira de uma vez, e rolagem lateral dentro de página vertical
-   é armadilha de toque. Cada trabalho ganha a sua linha, em ordem, com o
-   trilho de anos atrás da barra. */
+/* CELULAR: o gantt vira lista agrupada, e a barra SAI.
+   Medido em 412px antes de mexer: bloco de 1062px, e a barra mais curta
+   ocupava 4,6% do trilho — 15px de traço, que não diz nada. Pior, o eixo
+   de nove anos era redesenhado atrás de cada uma das onze linhas. Numa
+   coluna estreita a barra não tem resolução para ser dado: vira ruído.
+   Então o "quando" passa a ser dito por extenso (o período já existe em
+   .g-datas, que só estava recortado no desktop), a cor da raia continua
+   agrupando, e some tudo que fingia ser gráfico sem ter largura para
+   isso. O bloco desktop segue intacto — é lá que a simultaneidade entre
+   as frentes se lê, e é para isso que ele existe. */
 @media (max-width: 860px) {
   .g-plot   { padding-top: 0; }
   .g-linhas { height: auto; background-image: none; }
-  .g-item   { position: static; height: auto; }
-  .g-item + .g-item { margin-top: 1.05rem; }
+  /* position: relative (necessario para ancorar o ponto na trilha) reativa
+     o "top: calc(var(--r) * var(--passo))" que a regra de desktop poe em
+     .g-item — e ai todo item de segunda linha da raia descia um passo e
+     caia em cima do vizinho. Zerar o top e obrigatorio, nao cosmetico. */
+  .g-item   { position: relative; top: auto; height: auto; }
+  .g-item + .g-item { margin-top: .85rem; }
   .g-link   { position: static; display: block; pointer-events: auto; }
   .g-rot    { position: static; white-space: normal; }
-  .g-nome   { font-size: 1rem; }
-  .g-meta   { font-size: .55rem; line-height: 1.5; }
+  .g-nome   { font-size: 1.05rem; }
+  .g-meta   { font-size: .56rem; line-height: 1.5; margin-top: .22rem; }
   .g-datas  { position: static; width: auto; height: auto;
-              overflow: visible; clip: auto; display: block; }
-  /* display:block é obrigatório: .g-faixa é um <span>, e sem position
-     absolute (que blocava no desktop) ele volta a ser inline e o trilho
-     nasce com largura zero — a barra some sem erro nenhum. */
-  .g-faixa  { display: block; position: relative; height: 8px; margin-top: .45rem;
-              background-image: var(--fios); }
-  .g-hoje   { display: none; }
-  /* a marca de HOJE migra para dentro de cada trilho, sem markup novo */
-  .g-faixa::after {
-    content: ""; position: absolute; top: -2px; bottom: -2px; width: 1px;
-    left: calc(var(--hoje) / var(--meses) * 100%);
-    background: var(--accent); opacity: .5;
+              overflow: visible; clip: auto; }
+  /* saem: sem largura, não são dado */
+  .g-eixo, .g-faixa, .g-hoje { display: none; }
+  /* a raia vira trilha: fio contínuo na cor da frente, e um ponto por
+     entrada encostado nele. É o que faz o bloco continuar lendo como
+     linha do tempo em vez de virar lista — a leitura de cima para baixo
+     é cronológica dentro de cada frente. */
+  .g-raia { padding-left: 1.15rem; position: relative; }
+  .g-raia::before {
+    content: ""; position: absolute; left: 0; top: .35rem; bottom: .1rem;
+    width: 1px; background: var(--fio-raia, var(--line));
   }
+  .g-raia-nome { margin-left: -1.15rem; padding-left: 1.15rem; }
+  .g-item::before {
+    content: ""; position: absolute; left: -1.15rem; top: .58rem;
+    width: 7px; height: 7px; border-radius: 2px;
+    background: var(--fio-raia, var(--dim));
+    transform: translateX(-3px);
+  }
+  .g-titulo { margin-bottom: 1rem; }
 }
 
 /* ---------- caixa da playlist (Maracutaia) ----------
