@@ -695,8 +695,14 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   grid-column: 1 / -1; justify-self: stretch;
   display: grid; grid-template-columns: auto 1fr auto;
   align-items: center; gap: 0 clamp(.9rem, 2vw, 1.3rem);
-  padding: clamp(.9rem, 2vh, 1.15rem) clamp(1rem, 2.4vw, 1.4rem);
-  border: 1px solid var(--line); border-radius: 4px;
+  /* a caixa é a chamada principal daquele painel, e é também a peça que
+     fecha a diferença de altura entre texto e arte na Maracutaia: com
+     esta altura as duas colunas terminam a 13px uma da outra, contra os
+     137px de antes. */
+  padding: clamp(1.4rem, 3.4vh, 2rem) clamp(1.2rem, 2.8vw, 1.6rem);
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  background-color: color-mix(in srgb, var(--accent) 9%, transparent);
+  border-radius: 4px;
   text-decoration: none; color: inherit; position: relative; overflow: hidden;
   transition: border-color .25s var(--ease), background-color .25s var(--ease);
 }
@@ -709,8 +715,8 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   transform: translateX(-100%);
 }
 .playlist:hover, .playlist:focus-visible {
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  background-color: color-mix(in srgb, var(--accent) 5%, transparent);
+  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent) 17%, transparent);
 }
 .playlist:hover::before, .playlist:focus-visible::before {
   transition: transform 1.1s var(--ease); transform: translateX(100%);
@@ -722,19 +728,19 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   transition: transform .35s var(--ease);
 }
 .playlist:hover .playlist-marca { transform: rotate(90deg); }
-.playlist-corpo { display: grid; gap: .3rem; min-width: 0; }
+.playlist-corpo { display: grid; gap: .62rem; min-width: 0; }
 .playlist-lema {
-  font-family: var(--body); font-size: clamp(.82rem, 1.15vw, .95rem);
-  line-height: 1.35; color: var(--ink);
+  font-family: var(--body); font-size: clamp(.9rem, 1.25vw, 1.05rem);
+  line-height: 1.45; color: var(--ink);
 }
 .playlist-rotulo {
   font-family: var(--mono); font-size: .58rem; letter-spacing: .3em;
-  text-transform: uppercase; color: var(--dim);
+  text-transform: uppercase; color: color-mix(in srgb, var(--accent) 88%, transparent);
   transition: color .25s var(--ease);
 }
-.playlist:hover .playlist-rotulo { color: var(--accent); }
+.playlist:hover .playlist-rotulo { color: var(--ink); }
 .playlist-seta {
-  font-family: var(--mono); font-size: 1rem; color: var(--dim); line-height: 1;
+  font-family: var(--mono); font-size: 1rem; color: var(--accent); line-height: 1;
   transition: transform .25s var(--ease), color .25s var(--ease);
 }
 .playlist:hover .playlist-seta { color: var(--accent); transform: translate(2px, -2px); }
@@ -1217,17 +1223,43 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .peca-texto { display: grid; gap: clamp(.75rem, 1.4vw, 1.15rem); align-content: start; }
 .peca-visual { display: grid; gap: clamp(.7rem, 1.4vw, 1.1rem); align-content: start; }
 @media (min-width: 860px) {
-  .peca--lado .peca-corpo { grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); align-items: start; }
+  /* MEDIDO: com .92/1.08 o texto acabava 137px (Maracutaia) e 147px (Porta)
+     antes do fim da arte — a coluna de imagem era a mais larga e mandava na
+     altura do bloco. Invertida a hierarquia: o texto passa a ser a coluna
+     larga e a arte encolhe, e as duas fecham quase juntas (+29 e -23 num
+     1280, contra 137/147). O ponto foi achado varrendo a proporção no
+     navegador; passar de 1.24 zera a Maracutaia mas joga o Porta para -49,
+     porque os dois painéis têm volumes de texto diferentes. */
+  .peca--lado .peca-corpo { grid-template-columns: minmax(0, 1.24fr) minmax(0, .76fr); align-items: start; }
+  /* teto na arte: sem ele, acima de ~1400px a coluna de imagem volta a
+     crescer enquanto o texto trava no corpo máximo e em 40ch, e a
+     diferença reabre (medido: 45px num 1600). Com 360px a diferença fica
+     em 18px de 1440 a 1920, e em 1280 o teto nem chega a morder, porque
+     ali a coluna já mede 355px. */
+  .peca--lado .peca-visual { max-width: 360px; }
 }
 
 .peca-marca { line-height: 0; }
 .peca-marca img { display: block; width: auto; height: clamp(30px, 3.6vw, 46px); }
 .peca-marca.alta img { height: clamp(58px, 7vw, 96px); }
 
-.peca-lede {
-  max-width: 52ch; font-size: clamp(.92rem, 1.15vw, 1.05rem);
+/* .panel-inner .peca-lede e não só .peca-lede: a regra genérica
+   ".panel-inner p" (bem acima, no bloco do painel) tem especificidade 0-1-1
+   e vencia a de classe única, então TANTO o corpo QUANTO a cor deste
+   parágrafo vinham de lá — o lede saía em --dim, mais apagado do que o
+   desenho pedia, e qualquer ajuste de tamanho aqui era inerte. */
+.panel-inner .peca-lede {
+  max-width: 52ch; font-size: clamp(1.03rem, 1.36vw, 1.22rem);
   line-height: 1.6; color: #b3adbd;
 }
+/* nos dois painéis de coluna dupla a medida fecha em 40ch: com a coluna de
+   texto agora larga, 52ch deixaria a linha comprida demais para ler e ainda
+   por cima encurtaria o bloco, que é o defeito que se está corrigindo. */
+/* 42ch, achado varrendo a medida no navegador: em 40ch o texto passa da
+   arte, em 45ch fica curto demais e a arte volta a sobrar. Em 41-43ch o
+   resultado é o mesmo, então 42 fica no meio da faixa estável e aguenta
+   variação de fonte sem sair do lugar. */
+.panel-inner .peca--lado .peca-lede { max-width: 42ch; }
 .peca-lede strong { color: var(--ink); font-weight: 600; }
 
 .peca-ficha {
