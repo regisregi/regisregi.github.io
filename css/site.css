@@ -209,8 +209,13 @@ dl, dt, dd { margin: 0; }
      e arraste o h1 inteiro para cima. Sem isso o nome sobe .28em e desalinha o hero. */
   display: flow-root;
   font-family: var(--display); font-size: clamp(4rem, 15vw, 15rem);
-  line-height: .86; letter-spacing: -.01em; text-transform: uppercase; margin-left: -.05em;
+  line-height: .9; letter-spacing: -.01em; text-transform: uppercase; margin-left: -.05em;
+  /* --fator é a largura de "RÉGIS REGI" em em, MEDIDA no Anton por canvas
+     (3.895 a 100px); --alvo é a fração da largura útil que o nome ocupa.
+     Só valem acima de 701px, onde o nome vira uma linha só. */
+  --fator: 3.97; --alvo: .54;
 }
+
 /* efeito assinatura: cada linha é uma janela; as letras sobem de dentro dela.
    O JS quebra as linhas em spans .ch com atraso escalonado. */
 /* O ACENTO. Anton com line-height .86 corta tudo que passa da caixa alta, e o agudo
@@ -227,6 +232,33 @@ dl, dt, dd { margin: 0; }
   padding-top: .28em; margin-top: -.28em;
 }
 .hero-name .ch { display: inline-block; }
+
+/* ---------- o nome em UMA linha, centrado (desktop) ----------
+   No celular seguem duas linhas na grade à esquerda: em coluna estreita
+   não há ar para ler um eixo central, e a condensada em uma linha ficaria
+   pequena demais. Acima de 701px o nome vira objeto centrado — ~45% da
+   tela, ar generoso dos dois lados — enquanto sobrelinha, frentes e
+   rodapé do hero continuam na grade. É a gramática de cartaz: o objeto
+   central só ganha destaque porque o resto obedece à margem.
+
+   Os dois .ln viram inline-block: continuam sendo as janelas de recorte
+   (o reveal letra a letra e as fatias do glitch moram neles), mas passam
+   a dividir a mesma linha, e o nó de texto entre os spans volta a ser
+   desenhado — é ele que separa as palavras. */
+@media (min-width: 701px) {
+  .hero-name {
+    font-size: min(calc((100vw - 2 * var(--edge)) * var(--alvo) / var(--fator)), 15rem);
+    text-align: center;
+    /* o -.05em é compensação óptica de alinhamento à ESQUERDA; num eixo
+       central ele só entorta o conjunto. */
+    margin-left: 0;
+    /* cinto: se a calibragem errar por 1px o nome NÃO pode quebrar em
+       duas — sangra 1px invisível em vez de derrubar o REGI. */
+    white-space: nowrap;
+  }
+  .hero-name .ln { display: inline-block; }
+}
+
 .hero-name.split .ch {
   /* 130% e nao 115%: a 115% a PONTA do agudo ainda entrava 13px dentro da
      janela de recorte (medido), e ficava uma lasca branca parada embaixo
