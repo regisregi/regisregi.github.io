@@ -679,11 +679,10 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
      .g-item — e ai todo item de segunda linha da raia descia um passo e
      caia em cima do vizinho. Zerar o top e obrigatorio, nao cosmetico. */
   .g-item   { position: relative; top: auto; height: auto; }
-  .g-item + .g-item { margin-top: .85rem; }
   .g-link   { position: static; display: block; pointer-events: auto; }
   .g-rot    { position: static; white-space: normal; }
-  .g-nome   { font-size: 1.05rem; }
-  .g-meta   { font-size: .56rem; line-height: 1.5; margin-top: .22rem; }
+  .g-nome   { font-size: .95rem; }
+  .g-meta   { font-size: .52rem; line-height: 1.5; margin-top: .2rem; }
   /* white-space: normal e obrigatorio: .g-datas nasce com nowrap na regra
      base (la ela e recortada, e nowrap nao custa nada). Des-escondida no
      celular, o nowrap fazia o periodo furar a tela — e o recuo de 1.15rem
@@ -693,22 +692,27 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
               overflow: visible; clip: auto; white-space: normal; }
   /* saem: sem largura, não são dado */
   .g-eixo, .g-faixa, .g-hoje { display: none; }
-  /* a raia vira trilha: fio contínuo na cor da frente, e um ponto por
-     entrada encostado nele. É o que faz o bloco continuar lendo como
-     linha do tempo em vez de virar lista — a leitura de cima para baixo
-     é cronológica dentro de cada frente. */
-  .g-raia { padding-left: 1.15rem; position: relative; }
-  .g-raia::before {
-    content: ""; position: absolute; left: 0; top: .35rem; bottom: .1rem;
-    width: 1px; background: var(--fio-raia, var(--line));
+  /* O ANO É O ELEMENTO GRÁFICO. Escolhido entre três tratamentos testados
+     em bancada. Sai o fio, sai o ponto, sai o recuo da trilha: em coluna
+     estreita esse mobiliário custava altura e não dizia nada que o texto
+     já não dissesse. Fica o ano em mono grande à esquerda, na cor da
+     frente, com nome e cargo à direita — a estrutura vem do alinhamento
+     da coluna de anos, não de enfeite. Medido em 412px: 687px de bloco
+     contra 743px da versão com trilha, e 1062px da versão com barras.
+     data-ano vem do próprio --de no HTML (2018 + de/12), então não há um
+     segundo lugar para o ano envelhecer. */
+  .g-raia { padding-left: 0; }
+  .g-raia-nome {
+    font-size: .5rem; letter-spacing: .24em; margin: 0 0 .5rem;
   }
-  .g-raia-nome { margin-left: -1.15rem; padding-left: 1.15rem; }
+  .g-raia + .g-raia { margin-top: 1.3rem; }
+  .g-item { padding-left: 4.2rem; }
   .g-item::before {
-    content: ""; position: absolute; left: -1.15rem; top: .58rem;
-    width: 7px; height: 7px; border-radius: 2px;
-    background: var(--fio-raia, var(--dim));
-    transform: translateX(-3px);
+    content: attr(data-ano); position: absolute; left: 0; top: .1rem;
+    font-family: var(--mono); font-size: .92rem; letter-spacing: -.02em;
+    color: var(--fio-raia, var(--dim)); font-variant-numeric: tabular-nums;
   }
+  .g-item + .g-item { margin-top: .62rem; }
   .g-titulo { margin-bottom: 1rem; }
 }
 
