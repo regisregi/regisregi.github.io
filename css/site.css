@@ -192,10 +192,26 @@ dl, dt, dd { margin: 0; }
 }
 
 /* ---------- hero ---------- */
+/* MEDIDO: com o nome em uma linha o conteúdo do hero encolheu ~175px, e
+   como o bloco era centrado num quadro de 100svh o vazio absorveu tudo —
+   233px mortos em cima e 273px embaixo num 1440x900, com os quatro
+   elementos amontoados no meio. Duas mudanças:
+
+   1. O quadro cai para 84svh. Continua sendo tela cheia na leitura, mas
+      deixa a faixa "Exibido em" espiar por baixo — o vazio vira convite a
+      rolar em vez de margem morta.
+   2. Sai o justify-content: center. A sobrelinha ancora no topo, o nome
+      flutua no terço superior e o rodapé (lede + "role") ancora embaixo,
+      pelas duas margens automáticas. É a estrutura de cartaz: o conteúdo
+      usa o quadro em vez de se encolher no meio dele.
+
+   Resultado medido: a maior folga cai de 273px para 148px num 1440x900, e
+   fica entre 109 e 192px de 1280x720 a 1920x1080. */
 .hero {
-  min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+  min-height: 84svh; display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(4.5rem, 9vh, 6rem) var(--edge) clamp(2.2rem, 4.5vh, 3rem);
 }
+
 .hero-eyebrow {
   display: flex; gap: 1.5rem; flex-wrap: wrap;
   /* a folga cresce com a LARGURA tambem, nao so com a altura: o nome escala em
@@ -213,7 +229,7 @@ dl, dt, dd { margin: 0; }
   /* --fator é a largura de "RÉGIS REGI" em em, MEDIDA no Anton por canvas
      (3.895 a 100px); --alvo é a fração da largura útil que o nome ocupa.
      Só valem acima de 701px, onde o nome vira uma linha só. */
-  --fator: 3.97; --alvo: .54;
+  --fator: 3.97; --alvo: .62;
 }
 
 /* efeito assinatura: cada linha é uma janela; as letras sobem de dentro dela.
@@ -298,6 +314,14 @@ dl, dt, dd { margin: 0; }
 }
 .hero-foot p { max-width: 46ch; font-size: clamp(.95rem, 1.3vw, 1.1rem); color: var(--ink); }
 .hero-scroll { white-space: nowrap; }
+
+/* as duas âncoras do hero moram AQUI e não junto de .hero: a regra de
+   .hero-foot acima define margin-top e, vindo depois, vencia a âncora —
+   o rodapé colava no lede e a folga toda ia para cima do nome (medido:
+   203px contra os 148px previstos). Mesma especificidade, quem decide é
+   a ordem. */
+.hero-name { margin-top: auto; }
+.hero-foot { margin-top: auto; }
 
 /* ---------- glitch do nome: "corte de fita" ----------
    Duas fatias do nome saltam na lateral em amarelo (roteiro) e violeta
