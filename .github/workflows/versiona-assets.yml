@@ -46,9 +46,11 @@ jobs:
               # copia de trabalho em CRLF e o runner faz checkout em LF, e sem
               # isto o mesmo arquivo rende duas impressoes — o robo "consertava"
               # a cada push e o autor via divergencia entre local e servido.
-              b = open(p, 'rb').read().replace(b'
-', b'
-')
+              # bytes([13,10]) e bytes([10]) no lugar dos escapes: o heredoc do
+              # shell dentro do YAML come a barra invertida, e uma tentativa
+              # anterior virou quebra de linha literal dentro da string — erro
+              # de sintaxe que so aparece quando o robo roda.
+              b = open(p, 'rb').read().replace(bytes([13, 10]), bytes([10]))
               return hashlib.sha1(b).hexdigest()[:8]
 
           # arquivo -> (prefixo do caminho no HTML, lista de assets)
