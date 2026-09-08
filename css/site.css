@@ -211,6 +211,19 @@ dl, dt, dd { margin: 0; }
   min-height: 84svh; display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(4.5rem, 9vh, 6rem) var(--edge) clamp(2.2rem, 4.5vh, 3rem);
 }
+/* "visualização no computador" num celular (e tablet em pé): janela em
+   RETRATO com layout de desktop. Aí 84svh vira ~1800px e as duas âncoras
+   de margem automática esticam o cartaz em vazio morto — medido: 673px
+   entre sobrelinha e nome num 980x2123. Em retrato o quadro passa a se
+   medir pela LARGURA, que é a proporção de cartaz que o desenho pede; as
+   âncoras continuam distribuindo, só o palco encolhe. 84vw devolve a
+   folga por âncora para a faixa de 109–192px que o comentário acima já
+   sancionou em paisagem (medido: 190/144px num 980x2123). Acima de 701px
+   porque abaixo vale o layout de celular, onde retrato com svh cheio é o
+   comportamento certo. */
+@media (orientation: portrait) and (min-width: 701px) {
+  .hero { min-height: min(84svh, 84vw); }
+}
 
 .hero-eyebrow {
   display: flex; gap: 1.5rem; flex-wrap: wrap;
@@ -2153,6 +2166,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 /* ---------- contato ---------- */
 .end { min-height: 46svh; display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 5.5vh, 4.2rem) var(--edge); }
+/* mesmo remédio do hero para janela retrato com layout desktop: o fecho
+   se mede pela largura, não pelos ~2100px de svh do celular em modo
+   "visualização no computador". 40vw ≈ os 414px que 46svh dá num 1440x900. */
+@media (orientation: portrait) and (min-width: 701px) {
+  .end { min-height: min(46svh, 40vw); }
+}
 /* o fecho estava competindo com o nome no topo: 13vw punha "CONVERSAR"
    em 166px num 1280 contra os 153px do próprio nome. Baixado para 9.5vw
    com teto de 8.5rem — continua sendo o maior tipo da página depois do
