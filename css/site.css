@@ -211,6 +211,45 @@ dl, dt, dd { margin: 0; }
   min-height: 84svh; display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(4.5rem, 9vh, 6rem) var(--edge) clamp(2.2rem, 4.5vh, 3rem);
 }
+/* Teto do quadro em janela ALTA: celular em "ver versão para computador",
+   tablet em pé, monitor girado. MEDIDO: no modo computador do Chrome no
+   Android a meta viewport é ignorada e a janela de layout fica com 980px
+   de largura e a altura na proporção do aparelho, ~2000px num 20:9 (o
+   Safari do iPhone mantém a largura do aparelho nesta página e não tem o
+   defeito; o iPad usa a largura real, que é o caso do tablet em pé). Aí
+   84svh virava um quadro de
+   1680px para 490px de conteúdo, e as duas margens automáticas abriam
+   621px acima do nome e 569px acima do lede: dois buracos pretos entre
+   sobrelinha, nome e rodapé. No iPad em pé (820x1180) eram 286px e 235px.
+
+   O quadro passa a ter teto proporcional à LARGURA: 68vw é o 84svh de uma
+   janela 5:4 (67,2, arredondado para cima), a mais quadrada que um monitor
+   tem, então de 5:4 para mais largo (16:10, 16:9, iPad deitado) o svh já é
+   menor e não muda um pixel.
+   Em janela mais alta que larga o quadro para de crescer com a altura e
+   volta a ser cartaz deitado com o conteúdo ocupando o quadro. Só a partir
+   de 701px, onde o nome vira uma linha: no celular de verdade o hero é
+   outro (duas linhas, coluna estreita) e a folga dele é a calibrada, não
+   este defeito. Medido depois, já com o piso abaixo: 45px de margem
+   automática de cada lado em 980x2000 (96px sobrelinha→nome, 80px
+   frentes→lede), contra 621px e 569px. */
+@media (min-width: 701px) {
+  .hero { min-height: min(84svh, 68vw); }
+}
+/* Com o teto valendo, o quadro pode ficar preso ao conteúdo (iPad em pé,
+   768 a 820px de largura: o nome escala com a largura e as margens em rem
+   não), e aí a margem automática do rodapé zera: o fio do lede colava a
+   8px das frentes. Piso na folga que cresce com a MORDIDA do teto,
+   84svh − 68vw: é zero enquanto 84svh cabe em 68vw (monitor e tablet
+   deitado não mudam, e lá a margem automática nunca cai abaixo de 34px),
+   sobe em rampa contínua a partir da razão 84:68 e para no clamp que
+   .hero-foot declara em margin-top e a âncora margin-top:auto sobrescreve.
+   Rampa, e não media query de aspect-ratio: a MQ lê a janela de layout e
+   o teto lê svh, duas alturas que podem divergir no celular, e o degrau
+   redistribuía 12 a 16px entre as folgas ao cruzar a razão redimensionando. */
+@media (min-width: 701px) {
+  .hero-roles { margin-bottom: clamp(0px, calc(84svh - 68vw), clamp(1.2rem, 3vh, 2.2rem)); }
+}
 
 .hero-eyebrow {
   display: flex; gap: 1.5rem; flex-wrap: wrap;
@@ -2153,6 +2192,14 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 /* ---------- contato ---------- */
 .end { min-height: 46svh; display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 5.5vh, 4.2rem) var(--edge); }
+/* mesmo teto do hero, pela mesma razão: no modo computador do celular
+   46svh de ~2000px dava um quadro de 920px para 274px de conteúdo, com
+   "Conversar" perdido no meio de 330px de preto para cada lado. 37vw é o
+   46svh de uma janela 5:4 (36,8, arredondado para cima); monitor e tablet
+   deitado não mudam. */
+@media (min-width: 701px) {
+  .end { min-height: min(46svh, 37vw); }
+}
 /* o fecho estava competindo com o nome no topo: 13vw punha "CONVERSAR"
    em 166px num 1280 contra os 153px do próprio nome. Baixado para 9.5vw
    com teto de 8.5rem — continua sendo o maior tipo da página depois do
