@@ -157,18 +157,6 @@
     });
   }
 
-  /* HOJE é dado, não decoração: cravar o índice do mês no HTML
-     envelheceria em silêncio nos dois idiomas, que é o pior tipo de erro.
-     O CSS tem um padrão (103 = ago/2026); isto o corrige no boot. O teto
-     de 107 segura a marca dentro do plot se a página passar de dez/2026
-     sem alguém esticar o eixo. */
-  var gantt = document.querySelector(".gantt");
-  if (gantt) {
-    var hj = new Date();
-    gantt.style.setProperty("--hoje",
-      Math.max(0, Math.min(107, (hj.getFullYear() - 2018) * 12 + hj.getMonth())));
-  }
-
   /* corte: cada bloco entra quando aparece */
   var cuts = document.querySelectorAll(".cut");
   if ("IntersectionObserver" in window) {
@@ -298,7 +286,7 @@
         row.classList.add("open");
         btn.setAttribute("aria-expanded", "true");
         if (typeof window.gtag === "function") {
-          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
+          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: a.closest(".filmo") ? "creditos" : "exibido_em" });
         }
         pixel("ViewContent", { content_name: btn.textContent.trim() });
       }

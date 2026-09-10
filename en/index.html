@@ -16,7 +16,7 @@
        accent rule, the four disciplines). Absolute, not relative: og:image
        consumers do not resolve relative paths. The same image serves both
        languages — it is the name, which does not translate. -->
-  <meta property="og:image" content="https://regisregi.com/assets/og-regis-regi.jpg">
+  <meta property="og:image" content="https://regisregi.com/assets/og-regis-regi-2-en.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Régis Regi · post-production coordination, writing, editing and curation, Rio de Janeiro">
@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/tokens.css?v=16772c9d">
-  <link rel="stylesheet" href="../css/site.css?v=d03591c0">
+  <link rel="stylesheet" href="../css/site.css?v=3f61dad4">
   <!-- Google Analytics 4 (same block as index.html and analise.html) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R19SB2FGP1"></script>
   <script>
@@ -143,7 +143,7 @@
     <section class="hero" aria-label="Opening">
       <div class="hero-eyebrow">
         <span class="mono">Rio de Janeiro</span>
-        <span class="mono">Streaming · TV · Independent</span>
+        <span class="mono">Streaming · TV · Features</span>
       </div>
       <!-- the space between the two .ln nodes is required and does NOT show on
            screen: both spans are display:block, so the text node between them
@@ -197,7 +197,7 @@
     <div class="stats-band" aria-label="Overview">
       <dl class="stats">
         <div class="stat"><dt>Years in film &amp; TV</dt><dd>08</dd></div>
-        <div class="stat"><dt>Platforms &amp; networks</dt><dd>09</dd></div>
+        <div class="stat"><dt>Platforms &amp; networks</dt><dd>10</dd></div>
         <div class="stat"><dt>Productions delivered</dt><dd>20+</dd></div>
         <div class="stat"><dt>Areas of work</dt><dd>04</dd></div>
       </dl>
@@ -215,7 +215,7 @@
           </div>
           <div class="sobre-bloco">
             <p class="sobre-rotulo"><span class="dot dot-roteiro" aria-hidden="true"></span>Writing &amp; formats</p>
-            <p>Original formats for Discovery, NotCo and Descomplica, from a live game show to branded content. A Film degree from UFF and a screenwriting specialization from AIC.</p>
+            <p>Original formats for Discovery+, NotCo and Descomplica, from educational content to branded content, plus daily writing on a live game show. A Film degree from UFF and a screenwriting specialization from AIC.</p>
           </div>
           <div class="sobre-bloco">
             <p class="sobre-rotulo"><span class="dot dot-curadoria" aria-hidden="true"></span>Criticism &amp; curation</p>
@@ -225,71 +225,293 @@
         <p class="rest">In the workflow, AI accelerates post: automated transcription and logging, text-based editing, assisted quality control, always in service of the technical standard and of the story.</p>
       </div>
 
-      <!-- créditos: a carreira por FUNÇÃO, sem eixo de tempo. Entrou no lugar
-           do bloco de carreira (gantt), que desenhava a duração de cada
-           passagem como comprimento de barra: num mercado em que o contrato
-           acompanha o projeto, o gráfico transformava o formato do setor em
-           defeito do profissional. Dentro de cada função os nomes vão em
-           ordem alfabética, a convenção dos créditos, justamente para não
-           sugerir cronologia. Cada nome abre o painel dele em Trabalho
-           (data-alvo, o mesmo handler da faixa "Exibido em"). -->
-      <div class="creditos cut">
-        <p class="cr-titulo">Credits · by role</p>
-        <div class="cr-grade">
-          <div class="cr-frente cr-frente--longa">
-            <h3 class="cr-frente-nome"><span class="dot dot-coord" aria-hidden="true"></span>Coordination &amp; post</h3>
-            <dl class="cr-lista">
-              <dt>Post coordination</dt>
-              <dd><a href="#work" data-alvo="p-fabrica">A Fábrica</a><span class="cr-ctx">series and features</span></dd>
-              <dd><a href="#work" data-alvo="p-porta">Porta dos Fundos</a><span class="cr-ctx">weekly comedy</span></dd>
-              <dt>Coordination assistant</dt>
-              <dd><a href="#work" data-alvo="p-dot">DOT Cine</a><span class="cr-ctx">global streaming</span></dd>
-              <dd><a href="#work" data-alvo="p-gruposal">Grupo Sal</a><span class="cr-ctx">Canal OFF</span></dd>
-              <dd><a href="#work" data-alvo="p-mellin">Mellin Studio</a><span class="cr-ctx">Canal OFF</span></dd>
-              <dd><a href="#work" data-alvo="p-para">Paramount+</a><span class="cr-ctx">Brazilian originals</span></dd>
-              <dt>Finishing</dt>
-              <dd><a href="#work" data-alvo="p-dafinae">Dafina</a><span class="cr-ctx">Canal Brasil · A&amp;E</span></dd>
-            </dl>
+      <!-- créditos por título: a carreira no formato dos créditos finais.
+           A função abre a faixa; os títulos correm em bloco, cada um com a
+           plataforma em corpo técnico. Dentro de cada função a ordem é por
+           alcance da plataforma. Cada título abre o painel da produtora em
+           Trabalho (data-alvo, o mesmo handler da faixa "Exibido em"). -->
+      <div class="filmo cut">
+        <p class="fl-titulo">Credits · by title</p>
+        <dl class="fl-lista">
+          <div class="fl-grupo">
+            <dt><span class="dot dot-coord" aria-hidden="true"></span>Post-production coordinator</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-fabrica"><span class="fl-t">A Estranha na Cama</span><span class="fl-p">Netflix</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-fabrica"><span class="fl-t">Galera FC</span><span class="fl-p">TNT</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-fabrica"><span class="fl-t">Agentes Muito Especiais</span><span class="fl-p">feature</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-fabrica"><span class="fl-t">Temporada de Bônus</span><span class="fl-p">feature</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-porta"><span class="fl-t">Porta dos Fundos</span><span class="fl-p">3 sketches a week</span></a>
+            </dd>
           </div>
-          <div class="cr-frente">
-            <h3 class="cr-frente-nome"><span class="dot dot-roteiro" aria-hidden="true"></span>Writing &amp; formats</h3>
-            <dl class="cr-lista">
-              <dt>Format creation</dt>
-              <dd><a href="#work" data-alvo="p-dafinaf">Dafina</a><span class="cr-ctx">Discovery · NotCo</span></dd>
-              <dt>Writing</dt>
-              <dd><a href="#work" data-alvo="p-desco">Descomplica</a><span class="cr-ctx">live game show</span></dd>
-            </dl>
+          <div class="fl-grupo">
+            <dt><span class="dot dot-coord" aria-hidden="true"></span>Assistant post-production coordinator</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">Bom Dia, Verônica</span><span class="fl-p">Netflix</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">Isabella: o Caso Nardoni</span><span class="fl-p">Netflix</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">O Lado Bom de Ser Traída</span><span class="fl-p">Netflix</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">A Magia de Aruna</span><span class="fl-p">Disney+</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">Desejos S.A.</span><span class="fl-p">Star+</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dot"><span class="fl-t">Luva de Pedreiro</span><span class="fl-p">HBO Max</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-para"><span class="fl-t">As Seguidoras</span><span class="fl-p">Paramount+</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-para"><span class="fl-t">Coração Suburbano</span><span class="fl-p">Paramount+</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-gruposal"><span class="fl-t">É Tudo Delas</span><span class="fl-p">Canal OFF</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-gruposal"><span class="fl-t">Ninguém Me Domina</span><span class="fl-p">Canal OFF</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-gruposal"><span class="fl-t">Histórias do Coletivo</span><span class="fl-p">Canal OFF</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-gruposal"><span class="fl-t">Por Trás do Desafio</span><span class="fl-p">Canal OFF</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-mellin"><span class="fl-t">Documentary and lifestyle</span><span class="fl-p">Canal OFF</span></a>
+            </dd>
           </div>
-          <div class="cr-frente">
-            <h3 class="cr-frente-nome"><span class="dot dot-edicao" aria-hidden="true"></span>Editing &amp; curation</h3>
-            <dl class="cr-lista">
-              <dt>Editing</dt>
-              <dd><a href="#work" data-alvo="p-mqe">Mulheres que Escrevem</a><span class="cr-ctx">podcast</span></dd>
-              <dt>Curation</dt>
-              <dd><a href="#work" data-alvo="p-mara">Maracutaia.fm</a><span class="cr-ctx">Rio electronic</span></dd>
-            </dl>
+          <div class="fl-grupo">
+            <dt><span class="dot dot-coord" aria-hidden="true"></span>Finishing assistant</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-dafinae"><span class="fl-t">302</span><span class="fl-p">Canal Brasil</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dafinae"><span class="fl-t">502</span><span class="fl-p">Canal Brasil</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dafinae"><span class="fl-t">Era de Ouro</span><span class="fl-p">A&amp;E</span></a>
+            </dd>
           </div>
-        </div>
-        <p class="g-formacao"><b>Education</b> · BA in Film and Audiovisual, UFF · Screenwriting specialization, AIC</p>
+          <div class="fl-grupo">
+            <dt><span class="dot dot-roteiro" aria-hidden="true"></span>Writing and formats</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-desco"><span class="fl-t">Dez Segundos</span><span class="fl-p">Descomplica · live</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dafinaf"><span class="fl-t">Original formats</span><span class="fl-p">Discovery+ · NotCo · Descomplica</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-dafinae"><span class="fl-t">Promos and digital content</span><span class="fl-p">Canal Brasil</span></a>
+            </dd>
+          </div>
+          <div class="fl-grupo">
+            <dt><span class="dot dot-edicao" aria-hidden="true"></span>Editing and finishing</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-mqe"><span class="fl-t">Mulheres que Escrevem</span><span class="fl-p">podcast</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-mara"><span class="fl-t">Maracutaia.fm</span><span class="fl-p">audiovisual sets</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-mellin"><span class="fl-t">Banco C6</span><span class="fl-p">campaign</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-mellin"><span class="fl-t">Cerveja Praya</span><span class="fl-p">campaign</span></a>
+              <a class="fl-cred" href="#work" data-alvo="p-mellin"><span class="fl-t">Brasil Surfe Clube</span><span class="fl-p">campaign</span></a>
+            </dd>
+          </div>
+          <div class="fl-grupo">
+            <dt><span class="dot dot-curadoria" aria-hidden="true"></span>Curation</dt>
+            <dd>
+              <a class="fl-cred" href="#work" data-alvo="p-mara"><span class="fl-t">Maracutaia.fm</span><span class="fl-p">50+ sets · ongoing</span></a>
+            </dd>
+          </div>
+        </dl>
+        <p class="fl-formacao"><b>Education</b> · BA in Film and Audiovisual, UFF · Screenwriting specialization, AIC</p>
       </div>
     </section>
 
     <!-- 02 WORK -->
     <section id="work">
       <div class="head cut"><span class="n">02</span><h2>Work</h2></div>
-      <div class="work-intro cut"><p class="work-nota">In post-production, the contract follows the project: a season, a feature, a delivery cycle.</p></div>
       <ul class="work cut">
 
         <li class="row">
           <span class="row-idx">01</span>
+          <span class="row-marca" style="--otica:.69" aria-hidden="true"><img src="../assets/posters/marcas/a-fabrica.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-fabrica">A Fábrica</button>
+          <span class="row-meta">Post Coordinator · Netflix · TNT</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
+            <div class="peca">
+              <span class="peca-indice" aria-hidden="true">01</span>
+              <p class="peca-topo">Post coordination · series and features</p>
+              <div class="peca-cabeca">
+                <h3>From the schedule<br>to final delivery</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">I coordinated the full post cycle of <strong>four productions</strong> across series and features, including <strong>A Estranha na Cama</strong> (Netflix) and <strong>Galera FC</strong> (TNT), from planning to final delivery. I owned the technical and financial viability of each project: master schedule, budget, variance analysis and resource reallocation, with a standardized pipeline and asset management between executive production and the technical departments.</p>
+                  <ul class="peca-ficha">
+                    <li><b>04</b> productions</li>
+                    <li><b>Series</b> and features</li>
+                  </ul>
+                </div>
+                <div class="peca-visual">
+                  <div class="sheet">
+            <figure><a href="https://www.youtube.com/watch?v=bZp_isvYVZc" target="_blank" rel="noopener" data-embed="yt" data-id="bZp_isvYVZc"><img src="../assets/posters/galera-fc.jpg" alt="Galera FC poster" loading="lazy" decoding="async"></a><figcaption>Galera FC</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=LvlqcTjahDE" target="_blank" rel="noopener" data-embed="yt" data-id="LvlqcTjahDE"><img src="../assets/posters/agentes-muito-especiais.jpg" alt="Agentes Muito Especiais poster" loading="lazy" decoding="async"></a><figcaption>Agentes Muito Especiais</figcaption></figure>
+            <figure class="mute"><img src="../assets/posters/temporada-de-bonus.jpg" alt="Temporada de Bônus poster" loading="lazy" decoding="async"><figcaption>Temporada de Bônus</figcaption></figure>
+            <figure class="mute"><img src="../assets/posters/a-estranha-na-cama.jpg" alt="A Estranha na Cama poster" loading="lazy" decoding="async"><figcaption>A Estranha na Cama</figcaption></figure>
+            </div>
+                </div>
+              </div>
+            </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">02</span>
+          <span class="row-marca" style="--otica:.65" aria-hidden="true"><img src="../assets/posters/marcas/porta-dos-fundos.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-porta">Porta dos Fundos</button>
+          <span class="row-meta">Post Coordinator · 3 sketches a week</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-porta"><div><div class="panel-inner">
+            <div class="peca peca--lado">
+              <span class="peca-indice" aria-hidden="true">02</span>
+              <p class="peca-topo">Post coordination · weekly comedy</p>
+              <div class="peca-cabeca">
+                <h3>The comedy<br>production line</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">I ran the operation that put <strong>three new sketches on air every week</strong>, across multiple platforms, under high demand and critical deadlines: <strong>editing, motion and finishing running in parallel</strong>, hour allocation per team and a standardized process between creative, production and post. The workflow and quality control reports I built informed the calls on production capacity.</p>
+                  <ul class="peca-ficha">
+                    <li><b>03</b> deliveries a week</li>
+                    <li><b>Multiplatform</b></li>
+                  </ul>
+                </div>
+                <div class="peca-visual">
+                  <!-- televisão: o mesmo desenho do favicon (tubo com antenas)
+                       virado moldura. A antena e o gabinete são pseudo-elementos;
+                       o clique continua sendo o <a> de sempre, com data-embed. -->
+                  <div class="tv">
+                    <span class="tv-antena" aria-hidden="true"></span>
+                    <figure class="tv-tubo">
+                      <a href="https://www.youtube.com/watch?v=h26072NTKvQ" target="_blank" rel="noopener" data-embed="yt" data-id="h26072NTKvQ">
+                        <img src="../assets/posters/porta-esquete.jpg" alt="Still from the sketch Dia da Mulher, by Porta dos Fundos" loading="lazy" decoding="async">
+                        <span class="tv-varre" aria-hidden="true"></span>
+                        <span class="tv-play" aria-hidden="true"></span>
+                      </a>
+                      <figcaption><span class="tv-luz" aria-hidden="true"></span>Dia da Mulher<span class="tv-canal">On air</span></figcaption>
+                    </figure>
+                  </div>
+                </div>
+              </div>
+              <div class="peca-maquina">
+                <ol class="peca-fluxo">
+                    <li><span class="no" aria-hidden="true"></span><span>Script</span></li>
+                    <li><span class="no" aria-hidden="true"></span><span>Shoot</span></li>
+                    <li><span class="no" aria-hidden="true"></span><span>Edit</span></li>
+                    <li><span class="no" aria-hidden="true"></span><span>Post</span></li>
+                    <li><span class="no" aria-hidden="true"></span><span>On air</span></li>
+                  </ol>
+              </div>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">03</span>
+          <span class="row-marca" style="--otica:.73" aria-hidden="true"><img src="../assets/posters/marcas/dot.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-dot">DOT Cine</button>
+          <span class="row-meta">Assistant Coordinator · 6 originals · 4 streamers</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-dot"><div><div class="panel-inner">
+            <div class="peca">
+              <span class="peca-indice" aria-hidden="true">03</span>
+              <p class="peca-topo">Assistant post-production coordinator · global streamers</p>
+              <div class="peca-cabeca">
+                <h3>Originals for<br>global streaming</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">I managed material and deliverable flow on <strong>six productions</strong> for <strong>Netflix, Disney+, Star+ and HBO Max</strong>, under international technical standards and hard deadlines. I was the liaison between production companies, edit suites and platforms, anticipating bottlenecks on multi-episode projects and owning technical conform for each spec.</p>
+                  <ul class="peca-ficha">
+                    <li><b>06</b> productions</li>
+                    <li><b>04</b> global platforms</li>
+                  </ul>
+                </div>
+                <div class="peca-visual">
+                  <div class="sheet">
+            <figure><a href="https://www.youtube.com/watch?v=4oDn5TBJA84" target="_blank" rel="noopener" data-embed="yt" data-id="4oDn5TBJA84"><img src="../assets/posters/bom-dia-veronica.jpg" alt="Bom Dia, Verônica poster" loading="lazy" decoding="async"></a><figcaption>Bom Dia, Verônica</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=q9xURvz3fCM" target="_blank" rel="noopener" data-embed="yt" data-id="q9xURvz3fCM"><img src="../assets/posters/a-magia-de-aruna.jpg" alt="A Magia de Aruna poster" loading="lazy" decoding="async"></a><figcaption>A Magia de Aruna</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=isSQESXVgQ4" target="_blank" rel="noopener" data-embed="yt" data-id="isSQESXVgQ4"><img src="../assets/posters/desejos-sa.jpg" alt="Desejos S.A. poster" loading="lazy" decoding="async"></a><figcaption>Desejos S.A.</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=HggZDpcmeO4" target="_blank" rel="noopener" data-embed="yt" data-id="HggZDpcmeO4"><img src="../assets/posters/o-lado-bom-de-ser-traida.jpg" alt="O Lado Bom de Ser Traída poster" loading="lazy" decoding="async"></a><figcaption>O Lado Bom de Ser Traída</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=TDi4yirmR00" target="_blank" rel="noopener" data-embed="yt" data-id="TDi4yirmR00"><img src="../assets/posters/luva-de-pedreiro.jpg" alt="Luva de Pedreiro poster" loading="lazy" decoding="async"></a><figcaption>Luva de Pedreiro</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=zvDnxmhlc9Y" target="_blank" rel="noopener" data-embed="yt" data-id="zvDnxmhlc9Y"><img src="../assets/posters/isabella-o-caso-nardoni.jpg" alt="Isabella: o Caso Nardoni poster" loading="lazy" decoding="async"></a><figcaption>Isabella: o Caso Nardoni</figcaption></figure>
+            </div>
+                </div>
+              </div>
+            </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">04</span>
+          <span class="row-marca" style="--otica:.89" aria-hidden="true"><img src="../assets/posters/marcas/paramount.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-para">Paramount+</button>
+          <span class="row-meta">Assistant Coordinator · Brazilian originals</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-para"><div><div class="panel-inner">
+            <div class="peca">
+              <span class="peca-indice" aria-hidden="true">04</span>
+              <p class="peca-topo">Assistant post-production coordinator · Brazilian originals</p>
+              <div class="peca-cabeca">
+                <h3>The first original<br>fiction on Paramount+</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">On <strong>As Seguidoras</strong>, the first original fiction production of Paramount+ in Brazil, I conformed materials across every post stage and supervised the creation and integration of the device screens, a central dramatic element of the show. On <strong>Coração Suburbano</strong>, a documentary starring Rafael Portugal, I organized and conformed materials and standardized deliveries inside the platform deadline.</p>
+                  <ul class="peca-ficha">
+                    <li><b>02</b> productions</li>
+                    <li><b>Paramount+</b> Brazil</li>
+                  </ul>
+                </div>
+                <div class="peca-visual">
+                  <div class="sheet">
+            <figure><a href="https://www.youtube.com/watch?v=8ZNqLAqp_Y8" target="_blank" rel="noopener" data-embed="yt" data-id="8ZNqLAqp_Y8"><img src="../assets/posters/as-seguidoras.jpg" alt="As Seguidoras poster" loading="lazy" decoding="async"></a><figcaption>As Seguidoras</figcaption></figure>
+            <figure><a href="https://www.youtube.com/watch?v=HC9PjbCKTT0" target="_blank" rel="noopener" data-embed="yt" data-id="HC9PjbCKTT0"><img src="../assets/posters/coracao-suburbano.jpg" alt="Coração Suburbano poster" loading="lazy" decoding="async"></a><figcaption>Coração Suburbano</figcaption></figure>
+            </div>
+                </div>
+              </div>
+            </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">05</span>
+          <span class="row-marca" style="--otica:1.15" aria-hidden="true"><img src="../assets/posters/marcas/grupo-sal.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-gruposal">Grupo Sal</button>
+          <span class="row-meta">Assistant Coordinator · Canal OFF · 32 episodes</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-gruposal"><div><div class="panel-inner">
+            <div class="peca">
+              <span class="peca-indice" aria-hidden="true">05</span>
+              <p class="peca-topo">Assistant post-production coordinator · Canal OFF</p>
+              <div class="peca-cabeca">
+                <h3>Episode by episode,<br>at channel standard</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">I organized and supervised post on <strong>four Canal OFF series</strong>, 32 episodes across documentary and lifestyle, aligning deadlines, crews and deliveries with the channel standard and holding technical and narrative cohesion episode by episode.</p>
+                  <ul class="peca-ficha">
+                    <li><b>04</b> Canal OFF series</li>
+                    <li><b>32</b> episodes</li>
+                  </ul>
+                </div>
+                <div class="peca-visual">
+                  <div class="sheet">
+            <figure><a href="https://www.instagram.com/reel/DCkTfXAx_Wl/" target="_blank" rel="noopener" data-embed="ig" data-id="reel/DCkTfXAx_Wl"><img src="../assets/posters/e-tudo-delas.jpg" alt="É Tudo Delas poster" loading="lazy" decoding="async"></a><figcaption>É Tudo Delas</figcaption></figure>
+            <figure><a href="https://www.instagram.com/p/DPMf_8aDmNV/" target="_blank" rel="noopener" data-embed="ig" data-id="p/DPMf_8aDmNV"><img src="../assets/posters/ninguem-me-domina.jpg" alt="Ninguém Me Domina poster" loading="lazy" decoding="async"></a><figcaption>Ninguém Me Domina</figcaption></figure>
+            <figure><a href="https://www.instagram.com/mellinstudio.br/reel/DPkCyBqEtCL/" target="_blank" rel="noopener" data-embed="ig" data-id="reel/DPkCyBqEtCL"><img src="../assets/posters/historias-do-coletivo.jpg" alt="Histórias do Coletivo poster" loading="lazy" decoding="async"></a><figcaption>Histórias do Coletivo</figcaption></figure>
+            <figure><a href="https://www.instagram.com/p/DQEdCi7jiX0/" target="_blank" rel="noopener" data-embed="ig" data-id="p/DQEdCi7jiX0"><img src="../assets/posters/por-tras-do-desafio.jpg" alt="Por Trás do Desafio poster" loading="lazy" decoding="async"></a><figcaption>Por Trás do Desafio</figcaption></figure>
+            </div>
+                </div>
+              </div>
+            </div>
+                </div>
+              </div>
+            </div>
+          </div></div></div>
+        </li>
+
+        <li class="row">
+          <span class="row-idx">06</span>
           <span class="row-marca" style="--otica:1.08" aria-hidden="true"><img src="../assets/posters/marcas/mellin.png" alt="" loading="lazy" decoding="async"></span>
           <button class="row-name" aria-expanded="false" aria-controls="p-mellin">Mellin Studio</button>
-          <span class="row-meta">Assistant Coordinator · Canal OFF</span>
+          <span class="row-meta">Assistant Coordinator · Canal OFF and brands</span>
           <span class="row-plus" aria-hidden="true"></span>
           <div class="panel" id="p-mellin"><div><div class="panel-inner">
             <div class="peca">
-              <span class="peca-indice" aria-hidden="true">01</span>
-              <p class="peca-topo">Post-production coordination assistant · Canal OFF</p>
+              <span class="peca-indice" aria-hidden="true">06</span>
+              <p class="peca-topo">Assistant post-production coordinator · Canal OFF</p>
               <div class="peca-cabeca">
                 <h3>Channel standard,<br>agency pace</h3>
               </div>
@@ -329,257 +551,31 @@
         </li>
 
         <li class="row">
-          <span class="row-idx">02</span>
-          <span class="row-marca" style="--otica:.9" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-mara">Maracutaia.fm</button>
-          <span class="row-meta">Curation · Rio electronic</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-mara"><div><div class="panel-inner">
-            <div class="peca peca--lado">
-              <span class="peca-indice" aria-hidden="true">02</span>
-              <p class="peca-topo">Curation and audiovisual · electronic scene of Rio</p>
-              <div class="peca-cabeca">
-                <h3>Audiovisual<br>sets</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">I pick the artists, set the aesthetic line of each session and sign off on editing and finishing. From the first episode to the last, <strong>one identity</strong>, plus the promo pieces that carry the reach of the brand.</p>
-                  <ul class="peca-ficha">
-                    <li><b>50+</b> sets recorded</li>
-                    <li><b>Curation</b>, editing and finishing</li>
-                    <li><b>Ongoing</b> project</li>
-                  </ul>
-                  <a class="playlist" href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye">
-                    <span class="playlist-marca" aria-hidden="true">◈</span>
-                    <span class="playlist-corpo">
-                      <span class="playlist-lema">In the ethereal realm of the waves, Maracutaia resounds</span>
-                      <span class="playlist-rotulo">Playlist on YouTube</span>
-                    </span>
-                    <span class="playlist-seta" aria-hidden="true">↗</span>
-                  </a>
-                </div>
-                <div class="peca-visual">
-                  <ul class="peca-modulos">
-                    <li>
-                      <span class="mod"><img src="../assets/posters/maracutaia/azo.jpg" alt="Azo in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
-                      <span><b>001</b> Azo</span>
-                    </li>
-                    <li>
-                      <span class="mod padrao" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia-padrao.jpg" alt="" loading="lazy" decoding="async"></span>
-                      <span><b>·</b> Identidade visual</span>
-                    </li>
-                    <li>
-                      <span class="mod circ"><img src="../assets/posters/maracutaia/caiao.jpg" alt="Caiao in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
-                      <span><b>002</b> Caiao</span>
-                    </li>
-                    <li>
-                      <span class="mod arco"><img src="../assets/posters/maracutaia/marta-supernova.jpg" alt="Marta Supernova in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
-                      <span><b>003</b> Marta Supernova</span>
-                    </li>
-                    <li>
-                      <span class="mod violeta" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia-simbolo.png" alt="" loading="lazy" decoding="async"></span>
-                      <span><b>·</b> maracutaia.fm</span>
-                    </li>
-                    <li>
-                      <span class="mod dee"><img src="../assets/posters/maracutaia/rafael-nao-existe.jpg" alt="Rafael Não Existe in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
-                      <span><b>004</b> Rafael Não Existe</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="peca-rodape"><span>Sets recorded live</span><span><span class="acento">◆</span> no reino étereo das ondas, maracutaia ressoa</span></div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <span class="row-idx">03</span>
-          <span class="row-marca" style="--otica:.69" aria-hidden="true"><img src="../assets/posters/marcas/a-fabrica.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-fabrica">A Fábrica</button>
-          <span class="row-meta">Post Coordinator · series and features</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-fabrica"><div><div class="panel-inner">
-            <div class="peca">
-              <span class="peca-indice" aria-hidden="true">03</span>
-              <p class="peca-topo">Post coordination · series and features</p>
-              <div class="peca-cabeca">
-                <h3>From the schedule<br>to final delivery</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">I coordinated the full post cycle of <strong>four productions</strong> across series and features, including <strong>A Estranha na Cama</strong> (Netflix) and <strong>Galera FC</strong> (TNT), from planning to final delivery. I owned the technical and financial viability of each project: master schedule, budget, variance analysis and resource reallocation, with a standardized pipeline and asset management between executive production and the technical departments.</p>
-                  <ul class="peca-ficha">
-                    <li><b>04</b> productions</li>
-                    <li><b>Series</b> and features</li>
-                  </ul>
-                </div>
-                <div class="peca-visual">
-                  <div class="sheet">
-            <figure><a href="https://www.youtube.com/watch?v=bZp_isvYVZc" target="_blank" rel="noopener" data-embed="yt" data-id="bZp_isvYVZc"><img src="../assets/posters/galera-fc.jpg" alt="Galera FC poster" loading="lazy" decoding="async"></a><figcaption>Galera FC</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=LvlqcTjahDE" target="_blank" rel="noopener" data-embed="yt" data-id="LvlqcTjahDE"><img src="../assets/posters/agentes-muito-especiais.jpg" alt="Agentes Muito Especiais poster" loading="lazy" decoding="async"></a><figcaption>Agentes Muito Especiais</figcaption></figure>
-            <figure class="mute"><img src="../assets/posters/temporada-de-bonus.jpg" alt="Temporada de Bônus poster" loading="lazy" decoding="async"><figcaption>Temporada de Bônus</figcaption></figure>
-            <figure class="mute"><img src="../assets/posters/a-estranha-na-cama.jpg" alt="A Estranha na Cama poster" loading="lazy" decoding="async"><figcaption>A Estranha na Cama</figcaption></figure>
-            </div>
-                </div>
-              </div>
-            </div>
-                </div>
-              </div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <span class="row-idx">04</span>
-          <span class="row-marca" style="--otica:1.15" aria-hidden="true"><img src="../assets/posters/marcas/grupo-sal.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-gruposal">Grupo Sal</button>
-          <span class="row-meta">Assistant Coordinator · Canal OFF</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-gruposal"><div><div class="panel-inner">
-            <div class="peca">
-              <span class="peca-indice" aria-hidden="true">04</span>
-              <p class="peca-topo">Coordination assistant · Canal OFF</p>
-              <div class="peca-cabeca">
-                <h3>Episode by episode,<br>at channel standard</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">I organized and supervised post on <strong>four Canal OFF series</strong>, 32 episodes across documentary and lifestyle, aligning deadlines, crews and deliveries with the channel standard and holding technical and narrative cohesion episode by episode.</p>
-                  <ul class="peca-ficha">
-                    <li><b>04</b> Canal OFF series</li>
-                    <li><b>32</b> episodes</li>
-                  </ul>
-                </div>
-                <div class="peca-visual">
-                  <div class="sheet">
-            <figure><a href="https://www.instagram.com/reel/DCkTfXAx_Wl/" target="_blank" rel="noopener" data-embed="ig" data-id="reel/DCkTfXAx_Wl"><img src="../assets/posters/e-tudo-delas.jpg" alt="É Tudo Delas poster" loading="lazy" decoding="async"></a><figcaption>É Tudo Delas</figcaption></figure>
-            <figure><a href="https://www.instagram.com/p/DPMf_8aDmNV/" target="_blank" rel="noopener" data-embed="ig" data-id="p/DPMf_8aDmNV"><img src="../assets/posters/ninguem-me-domina.jpg" alt="Ninguém Me Domina poster" loading="lazy" decoding="async"></a><figcaption>Ninguém Me Domina</figcaption></figure>
-            <figure><a href="https://www.instagram.com/mellinstudio.br/reel/DPkCyBqEtCL/" target="_blank" rel="noopener" data-embed="ig" data-id="reel/DPkCyBqEtCL"><img src="../assets/posters/historias-do-coletivo.jpg" alt="Histórias do Coletivo poster" loading="lazy" decoding="async"></a><figcaption>Histórias do Coletivo</figcaption></figure>
-            <figure><a href="https://www.instagram.com/p/DQEdCi7jiX0/" target="_blank" rel="noopener" data-embed="ig" data-id="p/DQEdCi7jiX0"><img src="../assets/posters/por-tras-do-desafio.jpg" alt="Por Trás do Desafio poster" loading="lazy" decoding="async"></a><figcaption>Por Trás do Desafio</figcaption></figure>
-            </div>
-                </div>
-              </div>
-            </div>
-                </div>
-              </div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <span class="row-idx">05</span>
-          <span class="row-marca" style="--otica:.73" aria-hidden="true"><img src="../assets/posters/marcas/dot.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-dot">DOT Cine</button>
-          <span class="row-meta">Assistant Coordinator · global streaming</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-dot"><div><div class="panel-inner">
-            <div class="peca">
-              <span class="peca-indice" aria-hidden="true">05</span>
-              <p class="peca-topo">Coordination assistant · global streamers</p>
-              <div class="peca-cabeca">
-                <h3>Originals for<br>global streaming</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">I managed material and deliverable flow on <strong>six productions</strong> for <strong>Netflix, Disney+, Star+ and HBO Max</strong>, under international technical standards and hard deadlines. I was the liaison between production companies, edit suites and platforms, anticipating bottlenecks on multi-episode projects and owning technical conform for each spec.</p>
-                  <ul class="peca-ficha">
-                    <li><b>06</b> productions</li>
-                    <li><b>04</b> global platforms</li>
-                  </ul>
-                </div>
-                <div class="peca-visual">
-                  <div class="sheet">
-            <figure><a href="https://www.youtube.com/watch?v=4oDn5TBJA84" target="_blank" rel="noopener" data-embed="yt" data-id="4oDn5TBJA84"><img src="../assets/posters/bom-dia-veronica.jpg" alt="Bom Dia, Verônica poster" loading="lazy" decoding="async"></a><figcaption>Bom Dia, Verônica</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=q9xURvz3fCM" target="_blank" rel="noopener" data-embed="yt" data-id="q9xURvz3fCM"><img src="../assets/posters/a-magia-de-aruna.jpg" alt="A Magia de Aruna poster" loading="lazy" decoding="async"></a><figcaption>A Magia de Aruna</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=isSQESXVgQ4" target="_blank" rel="noopener" data-embed="yt" data-id="isSQESXVgQ4"><img src="../assets/posters/desejos-sa.jpg" alt="Desejos S.A. poster" loading="lazy" decoding="async"></a><figcaption>Desejos S.A.</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=HggZDpcmeO4" target="_blank" rel="noopener" data-embed="yt" data-id="HggZDpcmeO4"><img src="../assets/posters/o-lado-bom-de-ser-traida.jpg" alt="O Lado Bom de Ser Traída poster" loading="lazy" decoding="async"></a><figcaption>O Lado Bom de Ser Traída</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=TDi4yirmR00" target="_blank" rel="noopener" data-embed="yt" data-id="TDi4yirmR00"><img src="../assets/posters/luva-de-pedreiro.jpg" alt="Luva de Pedreiro poster" loading="lazy" decoding="async"></a><figcaption>Luva de Pedreiro</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=zvDnxmhlc9Y" target="_blank" rel="noopener" data-embed="yt" data-id="zvDnxmhlc9Y"><img src="../assets/posters/isabella-o-caso-nardoni.jpg" alt="Isabella: o Caso Nardoni poster" loading="lazy" decoding="async"></a><figcaption>Isabella: o Caso Nardoni</figcaption></figure>
-            </div>
-                </div>
-              </div>
-            </div>
-                </div>
-              </div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <span class="row-idx">06</span>
-          <span class="row-marca" style="--otica:.65" aria-hidden="true"><img src="../assets/posters/marcas/porta-dos-fundos.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-porta">Porta dos Fundos</button>
-          <span class="row-meta">Post Coordinator · weekly comedy</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-porta"><div><div class="panel-inner">
-            <div class="peca peca--lado">
-              <span class="peca-indice" aria-hidden="true">06</span>
-              <p class="peca-topo">Post coordination · weekly comedy</p>
-              <div class="peca-cabeca">
-                <h3>The comedy<br>production line</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">I ran the operation that put <strong>three new sketches on air every week</strong>, across multiple platforms, under high demand and critical deadlines: <strong>editing, motion and finishing running in parallel</strong>, hour allocation per team and a standardized process between creative, production and post. The workflow and quality control reports I built informed the calls on production capacity.</p>
-                  <ul class="peca-ficha">
-                    <li><b>03</b> deliveries a week</li>
-                    <li><b>Multiplatform</b></li>
-                  </ul>
-                </div>
-                <div class="peca-visual">
-                  <!-- televisão: o mesmo desenho do favicon (tubo com antenas)
-                       virado moldura. A antena e o gabinete são pseudo-elementos;
-                       o clique continua sendo o <a> de sempre, com data-embed. -->
-                  <div class="tv">
-                    <span class="tv-antena" aria-hidden="true"></span>
-                    <figure class="tv-tubo">
-                      <a href="https://www.youtube.com/watch?v=h26072NTKvQ" target="_blank" rel="noopener" data-embed="yt" data-id="h26072NTKvQ">
-                        <img src="assets/posters/porta-esquete.jpg" alt="Still from the sketch Dia da Mulher, by Porta dos Fundos" loading="lazy" decoding="async">
-                        <span class="tv-varre" aria-hidden="true"></span>
-                        <span class="tv-play" aria-hidden="true"></span>
-                      </a>
-                      <figcaption><span class="tv-luz" aria-hidden="true"></span>Dia da Mulher<span class="tv-canal">On air</span></figcaption>
-                    </figure>
-                  </div>
-                </div>
-              <div class="peca-maquina">
-                <ol class="peca-fluxo">
-                    <li><span class="no" aria-hidden="true"></span><span>Script</span></li>
-                    <li><span class="no" aria-hidden="true"></span><span>Shoot</span></li>
-                    <li><span class="no" aria-hidden="true"></span><span>Edit</span></li>
-                    <li><span class="no" aria-hidden="true"></span><span>Post</span></li>
-                    <li><span class="no" aria-hidden="true"></span><span>On air</span></li>
-                  </ol>
-              </div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
           <span class="row-idx">07</span>
-          <span class="row-marca" style="--otica:.89" aria-hidden="true"><img src="../assets/posters/marcas/paramount.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-para">Paramount+</button>
-          <span class="row-meta">Assistant Coordinator · Brazilian originals</span>
+          <span class="row-marca" style="--otica:.76" aria-hidden="true"><img src="../assets/posters/marcas/dafina.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-dafinae">Dafina · Finishing</button>
+          <span class="row-meta">Finishing Assistant · Canal Brasil · A&amp;E</span>
           <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-para"><div><div class="panel-inner">
+          <div class="panel" id="p-dafinae"><div><div class="panel-inner">
             <div class="peca">
               <span class="peca-indice" aria-hidden="true">07</span>
-              <p class="peca-topo">Coordination assistant · Brazilian originals</p>
+              <p class="peca-topo">Finishing assistant and writer · Canal Brasil and A&amp;E</p>
               <div class="peca-cabeca">
-                <h3>The first original<br>fiction on Paramount+</h3>
+                <h3>Technical finishing,<br>script polish</h3>
               </div>
               <div class="peca-corpo">
                 <div class="peca-texto">
-                  <p class="peca-lede">On <strong>As Seguidoras</strong>, the first original fiction production of Paramount+ in Brazil, I conformed materials across every post stage and supervised the creation and integration of the device screens, a central dramatic element of the show. On <strong>Coração Suburbano</strong>, a documentary starring Rafael Portugal, I organized and conformed materials and standardized deliveries inside the platform deadline.</p>
+                  <p class="peca-lede">On the series <strong>302</strong> and <strong>502</strong>, for Canal Brasil, I prepared and technically finished the episodes while holding visual and narrative consistency across seasons, and wrote promos and digital content for social. On <strong>Era de Ouro</strong>, for A&amp;E, I supported finishing and worked on script and edit refinement with Omelete.</p>
                   <ul class="peca-ficha">
-                    <li><b>02</b> productions</li>
-                    <li><b>Paramount+</b> Brazil</li>
+                    <li><b>03</b> productions</li>
+                    <li><b>Canal Brasil</b> · A&amp;E</li>
                   </ul>
                 </div>
                 <div class="peca-visual">
                   <div class="sheet">
-            <figure><a href="https://www.youtube.com/watch?v=8ZNqLAqp_Y8" target="_blank" rel="noopener" data-embed="yt" data-id="8ZNqLAqp_Y8"><img src="../assets/posters/as-seguidoras.jpg" alt="As Seguidoras poster" loading="lazy" decoding="async"></a><figcaption>As Seguidoras</figcaption></figure>
-            <figure><a href="https://www.youtube.com/watch?v=HC9PjbCKTT0" target="_blank" rel="noopener" data-embed="yt" data-id="HC9PjbCKTT0"><img src="../assets/posters/coracao-suburbano.jpg" alt="Coração Suburbano poster" loading="lazy" decoding="async"></a><figcaption>Coração Suburbano</figcaption></figure>
+            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" data-start="0"><img src="../assets/posters/serie-302.jpg" alt="Series 302 poster" loading="lazy" decoding="async"></a><figcaption>Series 302</figcaption></figure>
+            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" data-start="3"><img src="../assets/posters/serie-502.jpg" alt="Series 502 poster" loading="lazy" decoding="async"></a><figcaption>Series 502</figcaption></figure>
+            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6"><img src="../assets/posters/era-de-ouro.jpg" alt="Era de Ouro: O Nascimento dos Super-Heróis poster" loading="lazy" decoding="async"></a><figcaption>Era de Ouro</figcaption></figure>
             </div>
                 </div>
               </div>
@@ -594,7 +590,7 @@
           <span class="row-idx">08</span>
           <span class="row-marca" style="--otica:.76" aria-hidden="true"><img src="../assets/posters/marcas/dafina.png" alt="" loading="lazy" decoding="async"></span>
           <button class="row-name" aria-expanded="false" aria-controls="p-dafinaf">Dafina · Formats</button>
-          <span class="row-meta">Writing · Discovery · NotCo</span>
+          <span class="row-meta">Format creation · three fronts</span>
           <span class="row-plus" aria-hidden="true"></span>
           <div class="panel" id="p-dafinaf"><div><div class="panel-inner">
             <div class="peca">
@@ -605,7 +601,7 @@
               </div>
               <div class="peca-corpo">
                 <div class="peca-texto">
-                  <p class="peca-lede">I developed and wrote original formats on three fronts, each with a different audience and editorial bar: educational content with a retention target at <strong>Descomplica</strong>, brand narrative at <strong>NotCo</strong> and digital portfolio expansion at <strong>Discovery+</strong>.</p>
+                  <p class="peca-lede">At the same production company where I started as a finishing assistant, I moved on to developing and writing original formats on three fronts, each with a different audience and editorial bar: educational content with a retention target at <strong>Descomplica</strong>, brand narrative at <strong>NotCo</strong> and digital portfolio expansion at <strong>Discovery+</strong>.</p>
                   <ul class="peca-ficha">
                     <li><b>Development</b> and writing</li>
                     <li><b>03</b> fronts</li>
@@ -643,49 +639,13 @@
 
         <li class="row">
           <span class="row-idx">09</span>
-          <span class="row-marca" style="--otica:.76" aria-hidden="true"><img src="../assets/posters/marcas/dafina.png" alt="" loading="lazy" decoding="async"></span>
-          <button class="row-name" aria-expanded="false" aria-controls="p-dafinae">Dafina · Finishing</button>
-          <span class="row-meta">Editing · Canal Brasil · A&amp;E</span>
-          <span class="row-plus" aria-hidden="true"></span>
-          <div class="panel" id="p-dafinae"><div><div class="panel-inner">
-            <div class="peca">
-              <span class="peca-indice" aria-hidden="true">09</span>
-              <p class="peca-topo">Editing and finishing · Canal Brasil and A&amp;E</p>
-              <div class="peca-cabeca">
-                <h3>Technical finishing,<br>script polish</h3>
-              </div>
-              <div class="peca-corpo">
-                <div class="peca-texto">
-                  <p class="peca-lede">On the series <strong>302</strong> and <strong>502</strong>, for Canal Brasil, I prepared and technically finished the episodes while holding visual and narrative consistency across seasons, and wrote promos and digital content for social. On <strong>Era de Ouro</strong>, for A&amp;E, I supported finishing and worked on script and edit refinement with Omelete.</p>
-                  <ul class="peca-ficha">
-                    <li><b>03</b> productions</li>
-                    <li><b>Canal Brasil</b> · A&amp;E</li>
-                  </ul>
-                </div>
-                <div class="peca-visual">
-                  <div class="sheet">
-            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" data-start="0"><img src="../assets/posters/serie-302.jpg" alt="Series 302 poster" loading="lazy" decoding="async"></a><figcaption>Series 302</figcaption></figure>
-            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCBxwSvJLfvS7eYRyJUZ6id" data-start="3"><img src="../assets/posters/serie-502.jpg" alt="Series 502 poster" loading="lazy" decoding="async"></a><figcaption>Series 502</figcaption></figure>
-            <figure><a href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfCU5ZhM3XQBPJQpcydHrGg6"><img src="../assets/posters/era-de-ouro.jpg" alt="Era de Ouro: O Nascimento dos Super-Heróis poster" loading="lazy" decoding="async"></a><figcaption>Era de Ouro</figcaption></figure>
-            </div>
-                </div>
-              </div>
-            </div>
-                </div>
-              </div>
-            </div>
-          </div></div></div>
-        </li>
-
-        <li class="row">
-          <span class="row-idx">10</span>
           <span class="row-marca" style="--otica:.94" aria-hidden="true"><img src="../assets/posters/marcas/descomplica.png" alt="" loading="lazy" decoding="async"></span>
           <button class="row-name" aria-expanded="false" aria-controls="p-desco">Descomplica</button>
           <span class="row-meta">Writing · live game show</span>
           <span class="row-plus" aria-hidden="true"></span>
           <div class="panel" id="p-desco"><div><div class="panel-inner">
             <div class="peca">
-              <span class="peca-indice" aria-hidden="true">10</span>
+              <span class="peca-indice" aria-hidden="true">09</span>
               <p class="peca-topo">Daily writing · live game show</p>
               <div class="peca-cabeca">
                 <h3>Ten seconds<br>to answer</h3>
@@ -719,14 +679,14 @@
         </li>
 
         <li class="row">
-          <span class="row-idx">11</span>
+          <span class="row-idx">10</span>
           <span class="row-marca" style="--otica:1.08" aria-hidden="true"><img src="../assets/posters/marcas/mqe.png" alt="" loading="lazy" decoding="async"></span>
           <button class="row-name" aria-expanded="false" aria-controls="p-mqe">Mulheres que Escrevem</button>
           <span class="row-meta">Editing · podcast</span>
           <span class="row-plus" aria-hidden="true"></span>
           <div class="panel" id="p-mqe"><div><div class="panel-inner">
             <div class="peca">
-              <span class="peca-indice" aria-hidden="true">11</span>
+              <span class="peca-indice" aria-hidden="true">10</span>
               <p class="peca-topo">Editing and finishing · literary podcast</p>
               <!-- header in the global pattern: title first, brand after -->
               <div class="peca-cabeca">
@@ -796,6 +756,70 @@
           </div></div></div>
         </li>
 
+
+        <li class="row">
+          <span class="row-idx">11</span>
+          <span class="row-marca" style="--otica:.9" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia.png" alt="" loading="lazy" decoding="async"></span>
+          <button class="row-name" aria-expanded="false" aria-controls="p-mara">Maracutaia.fm</button>
+          <span class="row-meta">Curation · ongoing</span>
+          <span class="row-plus" aria-hidden="true"></span>
+          <div class="panel" id="p-mara"><div><div class="panel-inner">
+            <div class="peca peca--lado">
+              <span class="peca-indice" aria-hidden="true">11</span>
+              <p class="peca-topo">Curation and audiovisual · electronic scene of Rio</p>
+              <div class="peca-cabeca">
+                <h3>Audiovisual<br>sets</h3>
+              </div>
+              <div class="peca-corpo">
+                <div class="peca-texto">
+                  <p class="peca-lede">I pick the artists, set the aesthetic line of each session and sign off on editing and finishing. Session after session, <strong>one identity</strong>, plus the promo pieces that carry the reach of the brand.</p>
+                  <ul class="peca-ficha">
+                    <li><b>50+</b> sets recorded</li>
+                    <li><b>Curation</b>, editing and finishing</li>
+                    <li><b>Ongoing</b> project</li>
+                  </ul>
+                  <a class="playlist" href="https://www.youtube.com/playlist?list=PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye" target="_blank" rel="noopener" data-embed="yt-list" data-id="PLeN4eLs3ScfDhsppcAUj3U6U7azva0Vye">
+                    <span class="playlist-marca" aria-hidden="true">◈</span>
+                    <span class="playlist-corpo">
+                      <span class="playlist-lema">In the ethereal realm of the waves, Maracutaia resounds</span>
+                      <span class="playlist-rotulo">Playlist on YouTube</span>
+                    </span>
+                    <span class="playlist-seta" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+                <div class="peca-visual">
+                  <ul class="peca-modulos">
+                    <li>
+                      <span class="mod"><img src="../assets/posters/maracutaia/azo.jpg" alt="Azo in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
+                      <span><b>001</b> Azo</span>
+                    </li>
+                    <li>
+                      <span class="mod padrao" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia-padrao.jpg" alt="" loading="lazy" decoding="async"></span>
+                      <span><b>·</b> Identidade visual</span>
+                    </li>
+                    <li>
+                      <span class="mod circ"><img src="../assets/posters/maracutaia/caiao.jpg" alt="Caiao in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
+                      <span><b>002</b> Caiao</span>
+                    </li>
+                    <li>
+                      <span class="mod arco"><img src="../assets/posters/maracutaia/marta-supernova.jpg" alt="Marta Supernova in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
+                      <span><b>003</b> Marta Supernova</span>
+                    </li>
+                    <li>
+                      <span class="mod violeta" aria-hidden="true"><img src="../assets/posters/marcas/maracutaia-simbolo.png" alt="" loading="lazy" decoding="async"></span>
+                      <span><b>·</b> maracutaia.fm</span>
+                    </li>
+                    <li>
+                      <span class="mod dee"><img src="../assets/posters/maracutaia/rafael-nao-existe.jpg" alt="Rafael Não Existe in a set recorded for Maracutaia.fm" loading="lazy" decoding="async"></span>
+                      <span><b>004</b> Rafael Não Existe</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="peca-rodape"><span>Sets recorded live</span><span><span class="acento">◆</span> no reino étereo das ondas, maracutaia ressoa</span></div>
+            </div>
+          </div></div></div>
+        </li>
       </ul>
     </section>
 
@@ -1014,6 +1038,6 @@
   ]
 }
   </script>
-  <script src="../js/site.js?v=b8c97f55"></script>
+  <script src="../js/site.js?v=8543cf10"></script>
 </body>
 </html>
