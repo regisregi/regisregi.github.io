@@ -745,6 +745,86 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   .g-formacao { margin-top: 0; padding-top: 0; border-top: none; }
 }
 
+/* ---------- créditos (protótipo sem anos) ----------
+   A carreira por FUNÇÃO, no formato dos créditos finais: função à esquerda
+   alinhada à direita, nomes à direita alinhados à esquerda, o vão no meio é
+   o eixo. Sem eixo de tempo de propósito: o bloco anterior (gantt) desenhava
+   a duração de cada contrato como barra, e num mercado que contrata por
+   projeto isso lia como rotatividade.
+   O dl põe todo dt na coluna 1 e todo dd na coluna 2, e o auto-placement
+   ESPARSO da grade faz o resto: um dt que vem depois de dds não volta para
+   trás, pula para a linha seguinte. Cada função abre a própria faixa sem
+   nenhum grid-row escrito à mão. */
+.creditos { margin-top: clamp(3rem, 7vh, 5rem); }
+.cr-titulo {
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--dim);
+  margin-bottom: clamp(1.2rem, 2.6vh, 1.7rem);
+}
+.cr-grade {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 4.5vh, 2.8rem) clamp(2rem, 5vw, 5rem);
+  border-top: 1px solid var(--line); padding-top: clamp(1.4rem, 3vh, 2rem);
+}
+/* coordenação tem 7 nomes, as outras duas frentes 2 cada: a longa ocupa a
+   coluna da esquerda inteira e as curtas empilham na direita. */
+.cr-frente--longa { grid-row: span 2; }
+.cr-frente-nome {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .2em; font-weight: 400;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 1.1rem;
+}
+.cr-frente-nome .dot { width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto; }
+.cr-lista {
+  display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  column-gap: 1.1rem; row-gap: .45rem; align-items: baseline; margin: 0;
+}
+.cr-lista dt {
+  grid-column: 1; text-align: right;
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--dim);
+}
+.cr-lista dd {
+  grid-column: 2; margin: 0;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .7rem;
+}
+/* ar entre funções: vai no dt E no dd da mesma faixa, senão o baseline da
+   linha desencontra (a margem de um item só desloca aquele item). */
+.cr-lista dt:not(:first-child),
+.cr-lista dt:not(:first-child) + dd { margin-top: 1rem; }
+.cr-lista a {
+  font-family: var(--display); font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+  line-height: 1.05; text-transform: uppercase; letter-spacing: .01em;
+  color: var(--ink); text-decoration: none; transition: color .25s var(--ease);
+}
+.cr-lista a:hover { color: var(--accent); }
+.cr-ctx {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--dim);
+}
+.creditos.cut > * { transition: opacity .55s var(--ease) var(--d, 0s), transform .55s var(--ease) var(--d, 0s); }
+.creditos.cut > .cr-grade   { --d: .08s; }
+.creditos.cut > .g-formacao { --d: .18s; }
+
+/* a frase de abertura de Trabalho: mesma margem da lista que ela apresenta */
+.work-intro { margin: 0 0 clamp(1.2rem, 2.6vh, 1.7rem); }
+.work-nota {
+  max-width: 46ch; font-family: var(--body);
+  font-size: clamp(.95rem, 1.2vw, 1.08rem); line-height: 1.55; color: var(--dim);
+}
+@media not all and (max-width: 860px) {
+  .work-intro { margin-left: clamp(2rem, 5vw, 5.5rem); }
+}
+
+/* CELULAR: mesma decisão do bloco anterior. Os créditos repetem os nomes
+   do índice de Trabalho logo abaixo, e no celular não há espaço para dizer
+   a mesma coisa duas vezes. Fica só a formação, que não aparece em outro
+   lugar. A frase de Trabalho fica: é contexto, não repetição. */
+@media (max-width: 860px) {
+  .cr-titulo, .cr-grade { display: none; }
+  .creditos { margin-top: clamp(1.6rem, 4vh, 2.4rem); }
+}
+
 /* ---------- caixa da playlist (Maracutaia) ----------
    Referência: o bloco do currículo, que não é um botão — é um convite com
    três camadas: o losango ◈, o lema da rádio e o rótulo espaçado
