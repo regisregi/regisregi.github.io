@@ -1991,6 +1991,16 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .col li { color: var(--dim); font-size: .95rem; padding: .35rem 0; }
 
+/* abertura de Competências: a tese da IA no fluxo, no mesmo desenho do
+   lede de Sobre mas um degrau menor, porque aqui ela apresenta quatro
+   colunas e não a seção inteira. O sujeito (IA) leva o acento. */
+.comp-lede {
+  font-family: var(--display); font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+  line-height: 1.08; text-transform: uppercase; letter-spacing: -.01em;
+  max-width: 30ch; margin: 0 0 clamp(1.6rem, 3.5vh, 2.6rem);
+}
+.comp-lede em { font-style: normal; color: var(--accent); }
+
 /* ---------- contato ---------- */
 .end { min-height: 46svh; display: flex; flex-direction: column; justify-content: center; padding: clamp(3rem, 5.5vh, 4.2rem) var(--edge); }
 /* mesmo teto do hero, pela mesma razão: no modo computador do celular

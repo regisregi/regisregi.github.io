@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css?v=16772c9d">
-  <link rel="stylesheet" href="css/site.css?v=1e7199c3">
+  <link rel="stylesheet" href="css/site.css?v=7390d9d7">
   <!-- Google Analytics 4 (mesmo bloco em analise.html) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R19SB2FGP1"></script>
   <script>
@@ -747,22 +747,26 @@
     <!-- 03 COMPETÊNCIAS -->
     <section id="competencias">
       <div class="head cut"><span class="n">03</span><h2>Competências</h2></div>
+      <!-- abertura da seção: a tese da IA no fluxo, em display, antes das
+           colunas. Vive num .cut próprio para não entrar na contagem do
+           escalonamento das colunas (.cols.cut > *:nth-child). -->
+      <div class="comp-abre cut"><p class="comp-lede"><em>IA</em> acelera o fluxo. O critério continua humano.</p></div>
       <div class="cols cut">
         <div class="col">
+          <h3>IA na pós-produção</h3>
+          <ul><li>Transcrição com Whisper</li><li>Decupagem por tema com LLM</li><li>Edição baseada em texto</li><li>Magic Mask · Voice Isolation</li><li>Legendas e tradução assistidas</li><li>QC assistido · legendas · LUFS</li></ul>
+        </div>
+        <div class="col">
           <h3>Edição &amp; finalização</h3>
-          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico</li><li>Organização de mídias</li><li>Soluções de backup</li></ul>
+          <ul><li>DaVinci Resolve</li><li>Adobe Premiere Pro</li><li>Conform técnico e QC final</li><li>Organização de mídias</li><li>Rotinas de backup</li></ul>
         </div>
         <div class="col">
           <h3>Operação &amp; gestão</h3>
-          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Relatórios de fluxo e QC</li><li>Padrões de streaming</li></ul>
+          <ul><li>Cronograma macro</li><li>Gestão de ativos</li><li>Padronização de pipeline</li><li>Relatórios de fluxo com LLM</li><li>Padrões de streaming</li></ul>
         </div>
         <div class="col">
           <h3>Conteúdo &amp; editorial</h3>
-          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria de conteúdo</li><li>Escrita crítica e curatorial</li></ul>
-        </div>
-        <div class="col">
-          <h3>IA no audiovisual</h3>
-          <ul><li>Transcrição e decupagem</li><li>Edição baseada em texto</li><li>Magic Mask · Voice Isolation</li><li>QC assistido</li><li>NLP aplicado a conteúdo</li></ul>
+          <ul><li>Roteiro de formatos</li><li>Promos</li><li>Curadoria de conteúdo</li><li>Análise de roteiro com NLP</li><li>Escrita crítica e curatorial</li></ul>
         </div>
       </div>
     </section>
