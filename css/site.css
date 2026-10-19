@@ -351,7 +351,6 @@ dl, dt, dd { margin: 0; }
   gap: 2rem; flex-wrap: wrap; margin-top: clamp(1.2rem, 3vh, 2.2rem);
   border-top: 1px solid var(--line); padding-top: 1.4rem;
 }
-.hero-foot p { max-width: 46ch; font-size: clamp(.95rem, 1.3vw, 1.1rem); color: var(--ink); }
 .hero-scroll { white-space: nowrap; }
 
 /* as duas âncoras do hero moram AQUI e não junto de .hero: a regra de
