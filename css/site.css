@@ -197,7 +197,10 @@ dl, dt, dd { margin: 0; }
    233px mortos em cima e 273px embaixo num 1440x900, com os quatro
    elementos amontoados no meio. Duas mudanças:
 
-   1. O quadro cai para 84svh. Continua sendo tela cheia na leitura, mas
+   1. O quadro cai para 84svh (depois 74svh: sem lede e sem "role" o
+      conteúdo do hero encolheu mais 92px e a folga voltou a abrir, 204px
+      acima do nome num 1440x900; 74svh devolve ~150). Continua sendo
+      tela cheia na leitura, mas
       deixa a faixa "Exibido em" espiar por baixo — o vazio vira convite a
       rolar em vez de margem morta.
    2. Sai o justify-content: center. A sobrelinha ancora no topo, o nome
@@ -208,7 +211,7 @@ dl, dt, dd { margin: 0; }
    Resultado medido: a maior folga cai de 273px para 148px num 1440x900, e
    fica entre 109 e 192px de 1280x720 a 1920x1080. */
 .hero {
-  min-height: 84svh; display: flex; flex-direction: column; justify-content: flex-start;
+  min-height: 74svh; display: flex; flex-direction: column; justify-content: flex-start;
   padding: clamp(4.5rem, 9vh, 6rem) var(--edge) clamp(2.2rem, 4.5vh, 3rem);
 }
 /* Teto do quadro em janela ALTA: celular em "ver versão para computador",
@@ -222,8 +225,8 @@ dl, dt, dd { margin: 0; }
    621px acima do nome e 569px acima do lede: dois buracos pretos entre
    sobrelinha, nome e rodapé. No iPad em pé (820x1180) eram 286px e 235px.
 
-   O quadro passa a ter teto proporcional à LARGURA: 68vw é o 84svh de uma
-   janela 5:4 (67,2, arredondado para cima), a mais quadrada que um monitor
+   O quadro passa a ter teto proporcional à LARGURA: 60vw é o 74svh de uma
+   janela 5:4 (59,2, arredondado para cima), a mais quadrada que um monitor
    tem, então de 5:4 para mais largo (16:10, 16:9, iPad deitado) o svh já é
    menor e não muda um pixel.
    Em janela mais alta que larga o quadro para de crescer com a altura e
@@ -234,21 +237,21 @@ dl, dt, dd { margin: 0; }
    automática de cada lado em 980x2000 (96px sobrelinha→nome, 80px
    frentes→lede), contra 621px e 569px. */
 @media (min-width: 701px) {
-  .hero { min-height: min(84svh, 68vw); }
+  .hero { min-height: min(74svh, 60vw); }
 }
 /* Com o teto valendo, o quadro pode ficar preso ao conteúdo (iPad em pé,
    768 a 820px de largura: o nome escala com a largura e as margens em rem
    não), e aí a margem automática do rodapé zera: o fio do lede colava a
    8px das frentes. Piso na folga que cresce com a MORDIDA do teto,
-   84svh − 68vw: é zero enquanto 84svh cabe em 68vw (monitor e tablet
+   74svh − 60vw: é zero enquanto 74svh cabe em 60vw (monitor e tablet
    deitado não mudam, e lá a margem automática nunca cai abaixo de 34px),
    sobe em rampa contínua a partir da razão 84:68 e para no clamp que
-   .hero-foot declara em margin-top e a âncora margin-top:auto sobrescreve.
+   .marcas declararia em margin-top e a âncora margin-top:auto sobrescreve.
    Rampa, e não media query de aspect-ratio: a MQ lê a janela de layout e
    o teto lê svh, duas alturas que podem divergir no celular, e o degrau
    redistribuía 12 a 16px entre as folgas ao cruzar a razão redimensionando. */
 @media (min-width: 701px) {
-  .hero-roles { margin-bottom: clamp(0px, calc(84svh - 68vw), clamp(1.2rem, 3vh, 2.2rem)); }
+  .hero-roles { margin-bottom: clamp(0px, calc(74svh - 60vw), clamp(1.2rem, 3vh, 2.2rem)); }
 }
 
 .hero-eyebrow {
@@ -346,20 +349,11 @@ dl, dt, dd { margin: 0; }
 .dot-curadoria { background: var(--curadoria); }
 .hero-roles .sep { color: var(--dim); opacity: .5; }
 
-.hero-foot {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 2rem; flex-wrap: wrap; margin-top: clamp(1.2rem, 3vh, 2.2rem);
-  border-top: 1px solid var(--line); padding-top: 1.4rem;
-}
-.hero-scroll { white-space: nowrap; }
-
-/* as duas âncoras do hero moram AQUI e não junto de .hero: a regra de
-   .hero-foot acima define margin-top e, vindo depois, vencia a âncora —
-   o rodapé colava no lede e a folga toda ia para cima do nome (medido:
-   203px contra os 148px previstos). Mesma especificidade, quem decide é
-   a ordem. */
+/* âncora de cima do hero: a sobrelinha fica no topo, o nome flutua, e a
+   folga se divide entre esta margem e a da faixa "Exibido em" (abaixo,
+   na regra de .marcas). O rodapé do hero (lede e "role") saiu a pedido
+   do dono; a faixa passou a ser o pé do quadro. */
 .hero-name { margin-top: auto; }
-.hero-foot { margin-top: auto; }
 
 /* ---------- glitch do nome: "corte de fita" ----------
    Duas fatias do nome saltam na lateral em amarelo (roteiro) e violeta
@@ -427,7 +421,11 @@ dl, dt, dd { margin: 0; }
    segunda cópia começa, então o laço não salta. O rótulo fica fixo à
    esquerda para responder "que lista é essa" sem precisar de legenda
    separada. */
-.marcas { display: flex; align-items: stretch; margin-top: clamp(1.4rem, 3.5vh, 2.4rem); }
+/* margin-top: auto é a âncora de baixo do hero (a de cima é .hero-name):
+   com o rodapé do hero fora, a faixa é o pé do quadro e divide a folga
+   com o nome. O mínimo entre frentes e faixa em janela alta continua
+   sendo a rampa de margin-bottom de .hero-roles. */
+.marcas { display: flex; align-items: stretch; margin-top: auto; }
 .marcas-rot {
   flex: 0 0 auto; display: flex; align-items: center;
   padding: 0 clamp(1rem, 2.5vw, 1.8rem) 0 var(--edge);
