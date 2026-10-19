@@ -597,9 +597,20 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .filmo.cut > .fl-lista    { --d: .08s; }
 .filmo.cut > .fl-formacao { --d: .18s; }
 
+/* computador: a seção sai. Na tela grande, com Sobre, o índice de
+   Trabalho e os painéis à vista, trinta títulos a mais viram excesso de
+   informação; a decisão é do dono. A marcação continua uma só e quem
+   decide é a largura, porque no celular a seção fica (abaixo). O bloco
+   escondido nunca intersecta, então o revelador de .cut simplesmente
+   não dispara para ele. */
+@media (min-width: 861px) {
+  .filmo { display: none; }
+}
+
 /* celular: fica. Ao contrário do bloco de empresas, os títulos não se
    repetem no índice de Trabalho (moram dentro dos painéis), então aqui
-   é informação nova. A função sobe para cima dos títulos. */
+   é informação que não aparece em outro lugar. A função sobe para cima
+   dos títulos. */
 @media (max-width: 860px) {
   .filmo { margin-top: clamp(2rem, 5vh, 3rem); }
   .fl-grupo { grid-template-columns: 1fr; gap: .55rem; padding: 1rem 0; }
