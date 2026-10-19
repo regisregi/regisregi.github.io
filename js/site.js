@@ -286,7 +286,7 @@
         row.classList.add("open");
         btn.setAttribute("aria-expanded", "true");
         if (typeof window.gtag === "function") {
-          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: a.closest(".filmo") ? "creditos" : "exibido_em" });
+          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
         }
         pixel("ViewContent", { content_name: btn.textContent.trim() });
       }
