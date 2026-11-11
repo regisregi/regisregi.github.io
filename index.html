@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/tokens.css?v=16772c9d">
-  <link rel="stylesheet" href="css/site.css?v=7390d9d7">
+  <link rel="stylesheet" href="css/site.css?v=06171236">
   <!-- Google Analytics 4 (mesmo bloco em analise.html) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R19SB2FGP1"></script>
   <script>
@@ -112,11 +112,11 @@
   <div class="grain" aria-hidden="true"></div>
 
   <nav class="rail" aria-label="Índice de cenas">
-    <a href="#sobre" data-sec="sobre">01</a>
-    <a href="#trabalho" data-sec="trabalho">02</a>
-    <a href="#competencias" data-sec="competencias">03</a>
-    <a href="#escrita" data-sec="escrita">04</a>
-    <a href="#contato" data-sec="contato">05</a>
+    <a href="#sobre" data-sec="sobre">01<span class="rail-nome"> Sobre</span></a>
+    <a href="#trabalho" data-sec="trabalho">02<span class="rail-nome"> Trabalho</span></a>
+    <a href="#competencias" data-sec="competencias">03<span class="rail-nome"> Competências</span></a>
+    <a href="#escrita" data-sec="escrita">04<span class="rail-nome"> Escrita</span></a>
+    <a href="#contato" data-sec="contato">05<span class="rail-nome"> Contato</span></a>
     <!-- playhead: js/site.js faz o timecode correr com a rolagem -->
     <span class="rail-tc mono" aria-hidden="true">00:00:00:00</span>
   </nav>
@@ -197,7 +197,7 @@
     </div>
 
     <!-- 01 SOBRE -->
-    <section id="sobre">
+    <section id="sobre" aria-label="Sobre">
       <div class="head cut"><span class="n">01</span><h2>Sobre</h2></div>
       <div class="about cut">
         <p class="sobre-lede">Três competências que <em>raramente</em> andam juntas.</p>
@@ -220,7 +220,7 @@
     </section>
 
     <!-- 02 TRABALHO -->
-    <section id="trabalho">
+    <section id="trabalho" aria-label="Trabalho">
       <div class="head cut"><span class="n">02</span><h2>Trabalho</h2></div>
       <ul class="work cut">
 
@@ -745,7 +745,7 @@
     </section>
 
     <!-- 03 COMPETÊNCIAS -->
-    <section id="competencias">
+    <section id="competencias" aria-label="Competências">
       <div class="head cut"><span class="n">03</span><h2>Competências</h2></div>
       <!-- abertura da seção: a tese da IA no fluxo, em display, antes das
            colunas. Vive num .cut próprio para não entrar na contagem do
@@ -772,7 +772,7 @@
     </section>
 
     <!-- 04 ESCRITA -->
-    <section id="escrita">
+    <section id="escrita" aria-label="Escrita">
       <div class="head cut"><span class="n">04</span><h2>Escrita</h2></div>
       <ul class="work cut">
         <li class="row row-out">
@@ -820,7 +820,7 @@
     </section>
 
     <!-- 05 CONTATO -->
-    <section class="end cut" id="contato">
+    <section class="end cut" id="contato" aria-label="Contato">
       <h2 class="end-big"><span class="end-ln"><span>Vamos</span></span> <span class="end-ln"><span><a class="mail" href="mailto:eu@regisregi.com">conversar.</a></span></span></h2>
       <div class="end-links">
         <a href="mailto:eu@regisregi.com">eu@regisregi.com</a>
@@ -963,6 +963,6 @@
   ]
 }
   </script>
-  <script src="js/site.js?v=d9fec395"></script>
+  <script src="js/site.js?v=fdb07e14"></script>
 </body>
 </html>

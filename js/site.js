@@ -200,16 +200,20 @@
     stats.forEach(function (s) { seen.observe(s); });
   }
 
-  /* rail: cena ativa */
+  /* rail: cena ativa. aria-current acompanha a classe, para o leitor de
+     tela saber em que cena está sem depender da cor. */
   var railLinks = {};
   document.querySelectorAll(".rail a").forEach(function (a) { railLinks[a.dataset.sec] = a; });
   if ("IntersectionObserver" in window) {
     var spy = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) { return; }
-        Object.keys(railLinks).forEach(function (k) { railLinks[k].classList.remove("on"); });
+        Object.keys(railLinks).forEach(function (k) {
+          railLinks[k].classList.remove("on");
+          railLinks[k].removeAttribute("aria-current");
+        });
         var link = railLinks[e.target.id];
-        if (link) { link.classList.add("on"); }
+        if (link) { link.classList.add("on"); link.setAttribute("aria-current", "true"); }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
     /* os ids das seções vêm do próprio rail, então o mesmo script serve
@@ -220,11 +224,207 @@
     });
   }
 
-  /* linhas do índice: a linha inteira expande, o nome é o botão.
+  /* ---------- índice de Trabalho ----------
+     A linha inteira expande, o nome é o botão. Quatro regras:
+
+     1. UM PAINEL POR VEZ, EM CORTE SECO. Abrir uma linha fecha a que
+        estava aberta. Antes cada clique só alternava a própria linha:
+        duas tentativas e o índice de onze linhas virava um corredor de
+        painéis. A anterior fecha SEM transição e a rolagem desconta, no
+        mesmo quadro, a altura que sumiu acima da âncora (a linha tocada,
+        ou o link clicado no "Exibido em"), para nada fugir do dedo.
+
+     2. ENDEREÇO PRÓPRIO. Abrir grava #dot, #porta... na barra
+        (replaceState, nunca pushState: o voltar continua saindo do site,
+        não vira desfazer), e chegar com o endereço abre a linha. A chave
+        é o id do painel sem o "p-" de propósito: como nenhum elemento tem
+        esse id, o navegador não tenta rolar sozinho até um painel de
+        altura zero e brigar com a chegada.
+
+     3. PAINEL FECHADO SAI DO TAB E DO LEITOR DE TELA. Fechado só por
+        altura zero, os 21 links de dentro continuavam no caminho do Tab
+        (21 de 60 paradas). Onde existe hidden="until-found", o texto
+        segue achável no Ctrl+F e a busca ABRE a linha; onde não existe,
+        aria-hidden e tabindex resolvem o Tab sem tirar o texto da busca.
+
+     4. Esc com o foco dentro da linha fecha e devolve o foco ao nome.
+
      Cliques em links de dentro do painel passam direto. */
-  document.querySelectorAll(".row").forEach(function (row) {
-    var btn = row.querySelector("button.row-name");
-    if (!btn) { return; }
+  var rows = Array.prototype.filter.call(document.querySelectorAll(".row"), function (r) {
+    return !!r.querySelector("button.row-name") && !!r.querySelector(".panel");
+  });
+  var mqSemMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var ATE_ACHAR = "onbeforematch" in document.body;
+  var FOCAVEIS = "a[href], button, iframe, [tabindex]";
+
+  function botaoDe(row) { return row.querySelector("button.row-name"); }
+  function painelDe(row) { return row.querySelector(".panel"); }
+  function mioloDe(row) { var p = painelDe(row); return p ? p.firstElementChild : null; }
+  function chaveDe(row) { var p = painelDe(row); return p && p.id ? p.id.replace(/^p-/, "") : ""; }
+
+  /* html{scroll-behavior:smooth} animaria qualquer scrollTo: o salto seco
+     desliga a regra só durante a chamada, o mesmo truque da sala */
+  function saltoSeco(y) {
+    var h = document.documentElement.style, antes = h.scrollBehavior;
+    h.scrollBehavior = "auto";
+    window.scrollTo(0, Math.max(0, y));
+    h.scrollBehavior = antes;
+  }
+  /* o topo da linha menos o scroll-margin-top dela: o respiro do topo
+     fixo, lido do CSS para não duplicar a medida */
+  function alvoDe(row) {
+    var margem = parseFloat(getComputedStyle(row).scrollMarginTop) || 0;
+    return Math.max(0, row.getBoundingClientRect().top + window.pageYOffset - margem);
+  }
+
+  function selar(row) {
+    var m = mioloDe(row); if (!m) { return; }
+    if (ATE_ACHAR) { m.setAttribute("hidden", "until-found"); return; }
+    m.setAttribute("aria-hidden", "true");
+    Array.prototype.forEach.call(m.querySelectorAll(FOCAVEIS), function (el) {
+      if (!el.hasAttribute("data-tab0")) {
+        el.setAttribute("data-tab0", el.hasAttribute("tabindex") ? el.getAttribute("tabindex") : "");
+      }
+      el.setAttribute("tabindex", "-1");
+    });
+  }
+  function desselar(row) {
+    var m = mioloDe(row); if (!m) { return; }
+    window.clearTimeout(row._selo);
+    m.removeAttribute("hidden");
+    m.removeAttribute("aria-hidden");
+    Array.prototype.forEach.call(m.querySelectorAll("[data-tab0]"), function (el) {
+      var v = el.getAttribute("data-tab0");
+      if (v === "") { el.removeAttribute("tabindex"); } else { el.setAttribute("tabindex", v); }
+      el.removeAttribute("data-tab0");
+    });
+  }
+
+  function endereco(row, aberto) {
+    var k = chaveDe(row);
+    if (!k || !window.history || !history.replaceState) { return; }
+    try {
+      if (aberto) { history.replaceState(history.state, "", "#" + k); }
+      else if (location.hash === "#" + k) { history.replaceState(history.state, "", location.pathname + location.search); }
+    } catch (err) {}
+  }
+  function linhaDoHash() {
+    var k = "";
+    try { k = decodeURIComponent((location.hash || "").slice(1)); } catch (err) {}
+    if (!k || !/^[a-z0-9-]+$/i.test(k)) { return null; }
+    var p = document.getElementById("p-" + k);
+    var r = p && p.classList.contains("panel") ? p.closest(".row") : null;
+    return r && rows.indexOf(r) >= 0 ? r : null;
+  }
+
+  /* medição: abrir o painel não gera navegação, então o Analytics não
+     enxerga sozinho. Enviamos só na abertura, com a origem quando ela não
+     é o clique direto na linha ("exibido_em", "link", "busca"). Se o gtag
+     não estiver ativo (bloqueador), não faz nada. */
+  function registrar(row, origem) {
+    var nome = botaoDe(row).textContent.trim();
+    if (typeof window.gtag === "function") {
+      var dados = { projeto: nome };
+      if (origem) { dados.origem = origem; }
+      window.gtag("event", "abrir_projeto", dados);
+    }
+    pixel("ViewContent", { content_name: nome });
+  }
+
+  /* seca = sem a transição de altura, para quem mede a página logo depois */
+  function fechar(row, seca) {
+    if (!row.classList.contains("open")) { return; }
+    var painel = painelDe(row);
+    window.clearTimeout(row._selo);
+    if (seca && painel) { painel.style.transition = "none"; }
+    row.classList.remove("open");
+    botaoDe(row).setAttribute("aria-expanded", "false");
+    endereco(row, false);
+    if (seca) {
+      if (painel) { void painel.offsetHeight; painel.style.transition = ""; }
+      selar(row);
+    } else {
+      /* o miolo só é selado depois que a altura terminou de fechar (.5s
+         no CSS), senão o conteúdo sumiria no meio do movimento */
+      row._selo = window.setTimeout(function () {
+        if (!row.classList.contains("open")) { selar(row); }
+      }, 560);
+    }
+  }
+  function abrirLinha(row, origem, seca) {
+    if (row.classList.contains("open")) { return false; }
+    var painel = painelDe(row);
+    desselar(row);
+    if (seca && painel) { painel.style.transition = "none"; }
+    row.classList.add("open");
+    botaoDe(row).setAttribute("aria-expanded", "true");
+    if (seca && painel) { void painel.offsetHeight; painel.style.transition = ""; }
+    endereco(row, true);
+    registrar(row, origem);
+    return true;
+  }
+  /* fecha as outras em corte seco e segura a âncora no lugar: se o painel
+     fechado estava ACIMA dela, a página encolheu por cima e a rolagem
+     desconta a diferença no mesmo quadro. Abaixo, nada se mexe. */
+  function fecharOutras(row, ancora) {
+    var antes = ancora ? ancora.getBoundingClientRect().top : 0, houve = false;
+    rows.forEach(function (r) {
+      if (r !== row && r.classList.contains("open")) { fechar(r, true); houve = true; }
+    });
+    if (houve && ancora) {
+      var delta = ancora.getBoundingClientRect().top - antes;
+      if (Math.abs(delta) > 0.5) { saltoSeco((window.pageYOffset || 0) + delta); }
+    }
+    return houve;
+  }
+
+  /* chegar e abrir, em DOIS TEMPOS, não um. Rolagem e expansão juntas eram
+     dois movimentos brigando: a página crescia embaixo enquanto o scroll
+     corria e a chegada parecia fora do lugar. Sequenciado lê como cena:
+     chega, abre. Serve ao "Exibido em", ao endereço (#dot) e ao hashchange.
+
+     A chegada é vigiada por POSIÇÃO (pageYOffset dentro de 4px do alvo,
+     com rede de 1,2s), não por scrollend, que o Safari demorou a ter.
+     Depois de abrir, um assentamento: linha perto do PÉ da página não
+     alcança o alvo antes de abrir (não existe rolagem sobrando), então o
+     painel crescendo libera altura e um segundo scrollTo curto encosta a
+     linha no lugar. Só roda se ficou longe (>8px).
+
+     seco = salto e abertura imediatos, sem coreografia: é o caso de quem
+     chega pelo endereço (a página já abre cortada no trabalho) e de quem
+     pediu menos movimento. */
+  function chegarEAbrir(row, origem, ancora, seco) {
+    var btn = botaoDe(row);
+    fecharOutras(row, ancora || null);
+    var alvo = alvoDe(row);
+    if (seco || mqSemMovimento.matches) {
+      saltoSeco(alvo);
+      abrirLinha(row, origem, true);
+      btn.focus({ preventScroll: true });
+      return;
+    }
+    var abrir = function () {
+      abrirLinha(row, origem, false);
+      btn.focus({ preventScroll: true });
+      window.setTimeout(function () {
+        if (Math.abs(window.pageYOffset - alvo) > 8) {
+          window.scrollTo({ top: alvo, behavior: "smooth" });
+        }
+      }, 120);
+    };
+    if (Math.abs(window.pageYOffset - alvo) < 4) { abrir(); return; }
+    window.scrollTo({ top: alvo, behavior: "smooth" });
+    var desde = Date.now();
+    var vigiar = function () {
+      if (Math.abs(window.pageYOffset - alvo) < 4 || Date.now() - desde > 1200) { abrir(); return; }
+      window.requestAnimationFrame(vigiar);
+    };
+    window.requestAnimationFrame(vigiar);
+  }
+
+  rows.forEach(function (row) {
+    var btn = botaoDe(row);
+    selar(row);                       /* todas nascem fechadas */
 
     row.addEventListener("click", function (e) {
       /* qualquer clique DENTRO do painel aberto não deve alternar a linha,
@@ -236,87 +436,72 @@
          abrir a linha pelo nome. */
       if (e.target.closest(".panel")) { return; }
       if (e.target.closest("a")) { return; }
-      var open = row.classList.toggle("open");
-      btn.setAttribute("aria-expanded", open ? "true" : "false");
-
-      /* medição: abrir o painel não gera navegação, então o Analytics não
-         enxerga sozinho. Enviamos só na abertura. Se o gtag não estiver
-         ativo (bloco do GA ainda comentado, ou bloqueador), não faz nada. */
-      if (open && typeof window.gtag === "function") {
-        window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim() });
-      }
-      if (open) {
-        pixel("ViewContent", { content_name: btn.textContent.trim() });
+      if (row.classList.contains("open")) { fechar(row, false); return; }
+      fecharOutras(row, row);
+      abrirLinha(row, "", false);
+      /* linha tocada na metade de BAIXO da tela: o painel nasceria abaixo
+         da dobra. Só nesse caso a linha sobe até a margem do topo; com o
+         cabeçalho na metade de cima a página não se mexe. */
+      if (row.getBoundingClientRect().top > window.innerHeight * 0.5) {
+        var alvo = alvoDe(row);
+        if (mqSemMovimento.matches) { saltoSeco(alvo); }
+        else { window.scrollTo({ top: alvo, behavior: "smooth" }); }
       }
     });
+
+    row.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" || !row.classList.contains("open")) { return; }
+      fechar(row, false);
+      btn.focus({ preventScroll: true });
+    });
+
+    /* a busca do navegador achou texto dentro de um painel fechado: abre a
+       linha em corte seco ANTES de o navegador rolar até o achado, para
+       ele pousar já na página final. Só existe com hidden="until-found". */
+    var miolo = mioloDe(row);
+    if (miolo && ATE_ACHAR) {
+      miolo.addEventListener("beforematch", function () {
+        fecharOutras(row, null);
+        abrirLinha(row, "busca", true);
+      });
+    }
   });
 
-  /* faixa "Exibido em": cada canal leva à subseção mais relevante — em
-     DOIS TEMPOS, não um. Rolagem e expansão juntas eram dois movimentos
-     brigando: a página crescia embaixo enquanto o scroll corria e a
-     chegada parecia fora do lugar. Sequenciado lê como cena: chega, abre.
-
-     A chegada é vigiada por POSIÇÃO (pageYOffset dentro de 4px do alvo,
-     com rede de 1,2s), não por scrollend, que o Safari demorou a ter.
-     O alvo é o topo da linha menos o scroll-margin-top dela — o mesmo
-     respiro do topo fixo, lido do CSS para não duplicar a medida.
-
-     Depois de abrir, um assentamento: linha perto do PÉ da página não
-     alcança o alvo antes de abrir (não existe rolagem sobrando), então o
-     painel crescendo libera altura e um segundo scrollTo curto encosta a
-     linha no lugar. Só roda se ficou longe (>8px), senão nada se move.
-
-     Modificador de teclado ou id inexistente: o href age sozinho. Com
-     menos-movimento: salto seco, abertura imediata, sem coreografia. */
+  /* faixa "Exibido em" (e qualquer link com data-alvo): cada canal leva à
+     subseção mais relevante. Modificador de teclado ou id inexistente: o
+     href age sozinho. */
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest("a[data-alvo]") : null;
     if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) { return; }
     var painel = document.getElementById(a.getAttribute("data-alvo"));
     var row = painel && painel.closest(".row");
-    var btn = row && row.querySelector("button.row-name");
-    if (!btn) { return; }
+    if (!row || rows.indexOf(row) < 0) { return; }
     e.preventDefault();
-
-    var margem = parseFloat(getComputedStyle(row).scrollMarginTop) || 0;
-    var alvo = Math.max(0, row.getBoundingClientRect().top + window.pageYOffset - margem);
-    var semMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    var abrir = function () {
-      if (!row.classList.contains("open")) {
-        row.classList.add("open");
-        btn.setAttribute("aria-expanded", "true");
-        if (typeof window.gtag === "function") {
-          window.gtag("event", "abrir_projeto", { projeto: btn.textContent.trim(), origem: "exibido_em" });
-        }
-        pixel("ViewContent", { content_name: btn.textContent.trim() });
-      }
-      btn.focus({ preventScroll: true });
-      /* assentamento: o painel aberto liberou altura; se a linha parou
-         longe do alvo, encosta. O atraso deixa a expansão ganhar corpo
-         antes de medir de novo. */
-      if (!semMovimento) {
-        window.setTimeout(function () {
-          if (Math.abs(window.pageYOffset - alvo) > 8) {
-            window.scrollTo({ top: alvo, behavior: "smooth" });
-          }
-        }, 120);
-      }
-    };
-
-    if (semMovimento) {
-      window.scrollTo(0, alvo);
-      abrir();
-      return;
-    }
-    if (Math.abs(window.pageYOffset - alvo) < 4) { abrir(); return; }
-    window.scrollTo({ top: alvo, behavior: "smooth" });
-    var desde = Date.now();
-    var vigiar = function () {
-      if (Math.abs(window.pageYOffset - alvo) < 4 || Date.now() - desde > 1200) { abrir(); return; }
-      window.requestAnimationFrame(vigiar);
-    };
-    window.requestAnimationFrame(vigiar);
+    chegarEAbrir(row, "exibido_em", a, false);
   });
+
+  /* quem chega com o endereço de um trabalho (regisregi.com/#dot) cai na
+     linha já aberta. Como fontes e imagens ainda podem empurrar a página
+     depois do boot, o pouso é refeito no load, a menos que a pessoa já
+     tenha mexido na página. hashchange cobre o endereço trocado à mão. */
+  (function () {
+    var row = linhaDoHash();
+    if (row) {
+      chegarEAbrir(row, "link", null, true);
+      var firme = true;
+      var soltar = function () { firme = false; };
+      ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (ev) {
+        window.addEventListener(ev, soltar, { passive: true, once: true });
+      });
+      window.addEventListener("load", function () {
+        if (firme && row.classList.contains("open")) { saltoSeco(alvoDe(row)); }
+      });
+    }
+    window.addEventListener("hashchange", function () {
+      var r = linhaDoHash();
+      if (r && !r.classList.contains("open")) { chegarEAbrir(r, "link", null, false); }
+    });
+  })();
 
   /* ---------- sala de projeção ----------
      Clicar num pôster abre o vídeo aqui dentro em vez de mandar o visitante

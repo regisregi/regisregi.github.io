@@ -6,7 +6,12 @@
    ============================================================ */
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* scroll-padding-top: o topo fixo tem ~75px e a seção só ~45px de respiro,
+   então todo salto por âncora (rail, "pular para o trabalho", link com #
+   vindo de fora) pousava com o título 30px debaixo da barra. Com 3.4rem
+   de recuo o título fica inteiro abaixo dela, com folga. Vale para todo
+   salto nativo e para o foco; os scrollTo com conta própria não mudam. */
+html { scroll-behavior: smooth; scroll-padding-top: 3.4rem; }
 body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: var(--body); font-size: 1rem; line-height: 1.6;
@@ -59,6 +64,21 @@ dl, dt, dd { margin: 0; }
 }
 .rail a.on { opacity: 1; color: var(--accent); }
 .rail a.on::before { width: 26px; }
+/* o rail só mostrava 01..05, a meia opacidade e sem hover: o principal
+   controle de navegação do computador não dizia o nome da cena. O nome
+   aparece no hover e no foco, ao lado do número, e fica no HTML para o
+   leitor de tela ("01 Sobre", não "zero um"). Absoluto e sem eventos de
+   ponteiro para não alargar a área do link; fundo da cor da página para
+   não brigar com o texto que estiver atrás. */
+.rail a { position: relative; }
+.rail a:hover, .rail a:focus-visible { opacity: 1; }
+.rail-nome {
+  position: absolute; left: calc(100% + .7rem); top: 50%; transform: translateY(-50%);
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  color: var(--ink); background: var(--bg); box-shadow: 0 0 0 .35rem var(--bg);
+  text-transform: uppercase; transition: opacity .2s var(--ease);
+}
+.rail a:hover .rail-nome, .rail a:focus-visible .rail-nome { opacity: 1; }
 /* playhead do rail: timecode que corre com a rolagem, 3px = 1 quadro a 24fps,
    pintado por js/site.js. O rail diz QUAL cena; o timecode dá a posição
    contínua na linha do tempo da página. Textura numérica no limiar da
@@ -974,6 +994,11 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 .panel { grid-column: 1 / -1; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s var(--ease); }
 .panel > div { overflow: hidden; }
+/* a linha inteira é clicável (cursor: pointer em .row), mas DENTRO do
+   painel aberto só os links agem: sem isto a mão aparecia sobre parágrafo
+   e sobre pôster sem vídeo, prometendo um clique que não existe. Os
+   links recuperam a mão pelo padrão do navegador. */
+.panel { cursor: auto; }
 .row.open .panel { grid-template-rows: 1fr; }
 /* a medida de 70ch é do TEXTO, não do painel: assim o contact sheet pode
    usar a largura inteira da linha e o pôster cresce junto com a tela */
@@ -1041,6 +1066,14 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 }
 /* pôster sem material público não é link: fica um pouco recuado */
 .sheet figure.mute img { opacity: .82; }
+/* a seta só entra na legenda de quem SAI do site. O JS tira o target dos
+   pôsteres que abrem a sala de projeção, então o que sobra com target é
+   o que ainda leva para fora (hoje, os do Instagram). Mesmo vocabulário
+   de Escrita e de "Ver original ↗": a seta quer dizer uma coisa só. */
+.sheet a[target] + figcaption::after { content: " \2197"; }
+/* e, pelo mesmo motivo, some de quem passou a abrir a sala */
+.peca-cta[aria-haspopup="dialog"] span[aria-hidden],
+.playlist[aria-haspopup="dialog"] .playlist-seta { display: none; }
 
 /* ---------- peça de painel: cada subseção é uma peça viva ----------
    Todo painel de Trabalho abre numa peça desenhada, não num parágrafo com
