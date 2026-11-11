@@ -71,14 +71,25 @@ dl, dt, dd { margin: 0; }
    ponteiro para não alargar a área do link; fundo da cor da página para
    não brigar com o texto que estiver atrás. */
 .rail a { position: relative; }
-.rail a:hover, .rail a:focus-visible { opacity: 1; }
+.rail a:focus-visible { opacity: 1; }
 .rail-nome {
   position: absolute; left: calc(100% + .7rem); top: 50%; transform: translateY(-50%);
   white-space: nowrap; pointer-events: none; opacity: 0;
   color: var(--ink); background: var(--bg); box-shadow: 0 0 0 .35rem var(--bg);
   text-transform: uppercase; transition: opacity .2s var(--ease);
 }
-.rail a:hover .rail-nome, .rail a:focus-visible .rail-nome { opacity: 1; }
+/* ponte invisível sobre o vão de .7rem: o ponteiro vai do número ao nome
+   sem perder o :hover. Herda o pointer-events do rótulo, então só existe
+   enquanto ele está à vista. */
+.rail-nome::before { content: ""; position: absolute; right: 100%; top: 0; bottom: 0; width: .7rem; }
+/* "calado" é o Esc (js/site.js): some o nome sem tirar foco nem ponteiro */
+.rail:not(.calado) a:focus-visible .rail-nome { opacity: 1; }
+/* hover só com mouse: no toque (iPad deitado mostra o rail) o :hover
+   grudava depois do toque e o nome ficava aceso sobre o conteúdo */
+@media (hover: hover) and (pointer: fine) {
+  .rail a:hover { opacity: 1; }
+  .rail:not(.calado) a:hover .rail-nome { opacity: 1; pointer-events: auto; }
+}
 /* playhead do rail: timecode que corre com a rolagem, 3px = 1 quadro a 24fps,
    pintado por js/site.js. O rail diz QUAL cena; o timecode dá a posição
    contínua na linha do tempo da página. Textura numérica no limiar da
@@ -733,9 +744,12 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
   display: grid; grid-template-columns: 2.6rem 1fr auto 1.6rem; align-items: baseline;
   gap: .8rem 1.2rem; padding: clamp(.85rem, 1.6vh, 1.15rem) 0;
   border-bottom: 1px solid var(--line); cursor: pointer; position: relative;
-  /* quem chega por link da faixa "Exibido em" rola até aqui: a margem
-     impede a linha de parar embaixo do topo fixo */
-  scroll-margin-top: clamp(3.8rem, 8vh, 5rem);
+  /* quem chega pelo "Exibido em", por endereço (#dot) ou pela busca rola
+     até aqui: a margem impede a linha de parar embaixo do topo fixo. O
+     piso é 5rem porque a barra tem 75px no computador e 78px no celular:
+     com o piso antigo de 3.8rem, num celular baixo (667px) a linha parava
+     a 61px e o nome ficava debaixo da barra. */
+  scroll-margin-top: clamp(5rem, 8vh, 5.6rem);
 }
 /* ---------- a marca na linha fechada ----------
    As logos saíram do corpo do painel e vieram para o índice, a pedido do
@@ -1068,9 +1082,11 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 .sheet figure.mute img { opacity: .82; }
 /* a seta só entra na legenda de quem SAI do site. O JS tira o target dos
    pôsteres que abrem a sala de projeção, então o que sobra com target é
-   o que ainda leva para fora (hoje, os do Instagram). Mesmo vocabulário
-   de Escrita e de "Ver original ↗": a seta quer dizer uma coisa só. */
-.sheet a[target] + figcaption::after { content: " \2197"; }
+   o que ainda leva para fora (hoje, os do Instagram). Mesmo sentido da
+   seta de Escrita: quer dizer uma coisa só. Decorativa para o leitor de
+   tela (texto alternativo vazio); motor sem a sintaxe fica com a primeira
+   declaração e só mostra a seta. */
+.sheet a[target] + figcaption::after { content: " \2197"; content: " \2197" / ""; }
 /* e, pelo mesmo motivo, some de quem passou a abrir a sala */
 .peca-cta[aria-haspopup="dialog"] span[aria-hidden],
 .playlist[aria-haspopup="dialog"] .playlist-seta { display: none; }
@@ -2063,6 +2079,7 @@ section { padding: clamp(2.6rem, 5vh, 3.9rem) var(--edge); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .panel { transition: none; }
   .js .cut > * { opacity: 1; transform: none; transition: none; }
   /* .row-out .row-name precisa da mesma especificidade da regra que liga a
      transição lá em cima, senão ela vence aqui e o movimento sobrevive */

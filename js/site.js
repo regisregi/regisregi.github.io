@@ -216,12 +216,32 @@
         if (link) { link.classList.add("on"); link.setAttribute("aria-current", "true"); }
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
+    /* abertura e panorama como sentinelas sem link: quando uma delas entra
+       na faixa, o rail é limpo e nenhuma cena fica marcada. Sem isto, quem
+       voltava ao topo deixava o 01 aceso. Observadas ANTES das seções para
+       que, no mesmo lote, a seção que entra seja a última e vença. */
+    [".hero", ".stats-band"].forEach(function (sel) {
+      var s = document.querySelector(sel);
+      if (s) { spy.observe(s); }
+    });
     /* os ids das seções vêm do próprio rail, então o mesmo script serve
        para a página em português e para a versão em inglês em /en/ */
     Object.keys(railLinks).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) { spy.observe(el); }
     });
+  }
+  /* o nome da cena aparece sobre a margem do conteúdo: Esc o cala sem
+     tirar o foco nem o ponteiro do lugar (WCAG 1.4.13). Só conta com o
+     rail sob o ponteiro ou com o foco, para o Esc que fecha painel ou sala
+     não calar o próximo hover. */
+  var railNav = document.querySelector(".rail");
+  if (railNav) {
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && railNav.matches(":hover, :focus-within")) { railNav.classList.add("calado"); }
+    });
+    railNav.addEventListener("focusin", function () { railNav.classList.remove("calado"); });
+    railNav.addEventListener("pointerleave", function () { railNav.classList.remove("calado"); });
   }
 
   /* ---------- índice de Trabalho ----------
@@ -246,9 +266,11 @@
         (21 de 60 paradas). Onde existe hidden="until-found", o texto
         segue achável no Ctrl+F e a busca ABRE a linha; onde não existe,
         aria-hidden e tabindex resolvem o Tab sem tirar o texto da busca.
+        Enquanto a altura recolhe, inert segura o mesmo papel.
 
      4. Esc com o foco dentro da linha fecha e devolve o foco ao nome.
 
+     Com menos-movimento, abrir e fechar também são secos.
      Cliques em links de dentro do painel passam direto. */
   var rows = Array.prototype.filter.call(document.querySelectorAll(".row"), function (r) {
     return !!r.querySelector("button.row-name") && !!r.querySelector(".panel");
@@ -256,6 +278,9 @@
   var mqSemMovimento = window.matchMedia("(prefers-reduced-motion: reduce)");
   var ATE_ACHAR = "onbeforematch" in document.body;
   var FOCAVEIS = "a[href], button, iframe, [tabindex]";
+  /* ficha de chegada: só a última intenção do visitante abre. Um clique
+     numa linha, a busca ou outra chegada matam a que estava a caminho. */
+  var vezDaChegada = 0;
 
   function botaoDe(row) { return row.querySelector("button.row-name"); }
   function painelDe(row) { return row.querySelector(".panel"); }
@@ -270,15 +295,28 @@
     window.scrollTo(0, Math.max(0, y));
     h.scrollBehavior = antes;
   }
-  /* o topo da linha menos o scroll-margin-top dela: o respiro do topo
-     fixo, lido do CSS para não duplicar a medida */
+  /* o topo da linha menos o scroll-margin-top dela (o respiro do topo
+     fixo, lido do CSS para não duplicar a medida). Mede onde a linha VAI
+     assentar: enquanto a lista não foi revelada, cada linha vem 24px
+     abaixo por translateY (.js .cut > *), e o getBoundingClientRect conta
+     o transform. Sem o desconto, quem chegava pelo "Exibido em" ou por
+     #dot parava 24px acima, com o nome debaixo da barra. */
   function alvoDe(row) {
-    var margem = parseFloat(getComputedStyle(row).scrollMarginTop) || 0;
-    return Math.max(0, row.getBoundingClientRect().top + window.pageYOffset - margem);
+    var cs = getComputedStyle(row);
+    var margem = parseFloat(cs.scrollMarginTop) || 0;
+    var dy = 0;
+    if (cs.transform && cs.transform !== "none") {
+      try {
+        var Matriz = window.DOMMatrixReadOnly || window.WebKitCSSMatrix;
+        if (Matriz) { dy = new Matriz(cs.transform).m42; }
+      } catch (err) {}
+    }
+    return Math.max(0, row.getBoundingClientRect().top - dy + window.pageYOffset - margem);
   }
 
   function selar(row) {
     var m = mioloDe(row); if (!m) { return; }
+    m.inert = false;              /* inert tiraria o texto da busca; o selo cuida do Tab */
     if (ATE_ACHAR) { m.setAttribute("hidden", "until-found"); return; }
     m.setAttribute("aria-hidden", "true");
     Array.prototype.forEach.call(m.querySelectorAll(FOCAVEIS), function (el) {
@@ -291,6 +329,7 @@
   function desselar(row) {
     var m = mioloDe(row); if (!m) { return; }
     window.clearTimeout(row._selo);
+    m.inert = false;
     m.removeAttribute("hidden");
     m.removeAttribute("aria-hidden");
     Array.prototype.forEach.call(m.querySelectorAll("[data-tab0]"), function (el) {
@@ -334,7 +373,7 @@
   /* seca = sem a transição de altura, para quem mede a página logo depois */
   function fechar(row, seca) {
     if (!row.classList.contains("open")) { return; }
-    var painel = painelDe(row);
+    var painel = painelDe(row), m = mioloDe(row);
     window.clearTimeout(row._selo);
     if (seca && painel) { painel.style.transition = "none"; }
     row.classList.remove("open");
@@ -344,13 +383,16 @@
       if (painel) { void painel.offsetHeight; painel.style.transition = ""; }
       selar(row);
     } else {
-      /* o miolo só é selado depois que a altura terminou de fechar (.5s
-         no CSS), senão o conteúdo sumiria no meio do movimento */
+      /* inert já no começo: o miolo sai do Tab e do leitor de tela, mas
+         continua desenhado enquanto a altura fecha (.5s no CSS). O selo
+         entra no fim, senão o conteúdo sumiria no meio do movimento. */
+      if (m) { m.inert = true; }
       row._selo = window.setTimeout(function () {
         if (!row.classList.contains("open")) { selar(row); }
       }, 560);
     }
   }
+  /* origem false = retorno (recarga, aba restaurada): abre sem contar */
   function abrirLinha(row, origem, seca) {
     if (row.classList.contains("open")) { return false; }
     var painel = painelDe(row);
@@ -360,7 +402,7 @@
     botaoDe(row).setAttribute("aria-expanded", "true");
     if (seca && painel) { void painel.offsetHeight; painel.style.transition = ""; }
     endereco(row, true);
-    registrar(row, origem);
+    if (origem !== false) { registrar(row, origem); }
     return true;
   }
   /* fecha as outras em corte seco e segura a âncora no lugar: se o painel
@@ -390,10 +432,15 @@
      painel crescendo libera altura e um segundo scrollTo curto encosta a
      linha no lugar. Só roda se ficou longe (>8px).
 
+     Se a pessoa toca, rola ou tecla no meio do caminho, a página é dela:
+     a linha abre onde estiver e nada rola de novo. Os gestos que acionaram
+     o link aconteceram antes destes ouvintes existirem.
+
      seco = salto e abertura imediatos, sem coreografia: é o caso de quem
      chega pelo endereço (a página já abre cortada no trabalho) e de quem
      pediu menos movimento. */
   function chegarEAbrir(row, origem, ancora, seco) {
+    var vez = ++vezDaChegada;
     var btn = botaoDe(row);
     fecharOutras(row, ancora || null);
     var alvo = alvoDe(row);
@@ -403,20 +450,34 @@
       btn.focus({ preventScroll: true });
       return;
     }
+    var largou = false;
+    var GESTOS = ["touchstart", "wheel", "keydown", "mousedown"];
+    var desistir = function () { largou = true; };
+    var soltarGestos = function () {
+      GESTOS.forEach(function (ev) { window.removeEventListener(ev, desistir); });
+    };
     var abrir = function () {
+      if (vez !== vezDaChegada) { soltarGestos(); return; }
+      fecharOutras(row, btn);       /* rede: nada mais pode ter ficado aberto */
       abrirLinha(row, origem, false);
       btn.focus({ preventScroll: true });
+      if (largou) { soltarGestos(); return; }
       window.setTimeout(function () {
-        if (Math.abs(window.pageYOffset - alvo) > 8) {
-          window.scrollTo({ top: alvo, behavior: "smooth" });
+        soltarGestos();
+        if (largou || vez !== vezDaChegada) { return; }
+        var fim = alvoDe(row);
+        if (Math.abs(window.pageYOffset - fim) > 8) {
+          window.scrollTo({ top: fim, behavior: "smooth" });
         }
       }, 120);
     };
     if (Math.abs(window.pageYOffset - alvo) < 4) { abrir(); return; }
+    GESTOS.forEach(function (ev) { window.addEventListener(ev, desistir, { passive: true }); });
     window.scrollTo({ top: alvo, behavior: "smooth" });
     var desde = Date.now();
     var vigiar = function () {
-      if (Math.abs(window.pageYOffset - alvo) < 4 || Date.now() - desde > 1200) { abrir(); return; }
+      if (vez !== vezDaChegada) { soltarGestos(); return; }
+      if (largou || Math.abs(window.pageYOffset - alvo) < 4 || Date.now() - desde > 1200) { abrir(); return; }
       window.requestAnimationFrame(vigiar);
     };
     window.requestAnimationFrame(vigiar);
@@ -436,22 +497,32 @@
          abrir a linha pelo nome. */
       if (e.target.closest(".panel")) { return; }
       if (e.target.closest("a")) { return; }
-      if (row.classList.contains("open")) { fechar(row, false); return; }
+      vezDaChegada++;                 /* uma chegada a caminho morre aqui */
+      var seca = mqSemMovimento.matches;
+      if (row.classList.contains("open")) { fechar(row, seca); return; }
       fecharOutras(row, row);
-      abrirLinha(row, "", false);
+      abrirLinha(row, "", seca);
       /* linha tocada na metade de BAIXO da tela: o painel nasceria abaixo
          da dobra. Só nesse caso a linha sobe até a margem do topo; com o
          cabeçalho na metade de cima a página não se mexe. */
       if (row.getBoundingClientRect().top > window.innerHeight * 0.5) {
         var alvo = alvoDe(row);
-        if (mqSemMovimento.matches) { saltoSeco(alvo); }
+        if (seca) { saltoSeco(alvo); }
         else { window.scrollTo({ top: alvo, behavior: "smooth" }); }
       }
     });
 
     row.addEventListener("keydown", function (e) {
       if (e.key !== "Escape" || !row.classList.contains("open")) { return; }
-      fechar(row, false);
+      var seca = mqSemMovimento.matches;
+      fechar(row, seca);
+      /* foco vindo do pé de um painel alto: o nome ficou acima da tela ou
+         sob o topo fixo. A linha volta à margem antes de receber o foco. */
+      var margem = parseFloat(getComputedStyle(row).scrollMarginTop) || 0;
+      if (row.getBoundingClientRect().top < margem) {
+        if (seca) { saltoSeco(alvoDe(row)); }
+        else { window.scrollTo({ top: alvoDe(row), behavior: "smooth" }); }
+      }
       btn.focus({ preventScroll: true });
     });
 
@@ -461,6 +532,7 @@
     var miolo = mioloDe(row);
     if (miolo && ATE_ACHAR) {
       miolo.addEventListener("beforematch", function () {
+        vezDaChegada++;
         fecharOutras(row, null);
         abrirLinha(row, "busca", true);
       });
@@ -483,10 +555,25 @@
   /* quem chega com o endereço de um trabalho (regisregi.com/#dot) cai na
      linha já aberta. Como fontes e imagens ainda podem empurrar a página
      depois do boot, o pouso é refeito no load, a menos que a pessoa já
-     tenha mexido na página. hashchange cobre o endereço trocado à mão. */
+     tenha mexido na página.
+
+     Recarga, aba restaurada pelo celular ou voltar sem cache NÃO são
+     chegada: o endereço ainda é o da linha que a pessoa deixou aberta. A
+     linha reabre em seco, sem rolar e sem contar, e a restauração de
+     rolagem do navegador mede a página já com ela aberta e devolve a
+     pessoa onde estava. hashchange cobre o endereço trocado à mão. */
   (function () {
     var row = linhaDoHash();
-    if (row) {
+    var tipo = "";
+    try {
+      var pf = window.performance;
+      var nav = pf && pf.getEntriesByType ? pf.getEntriesByType("navigation")[0] : null;
+      tipo = nav ? nav.type : (pf && pf.navigation ? ["navigate", "reload", "back_forward"][pf.navigation.type] || "" : "");
+    } catch (err) {}
+    var retorno = tipo === "reload" || tipo === "back_forward" || document.wasDiscarded === true;
+    if (row && retorno) {
+      abrirLinha(row, false, true);
+    } else if (row) {
       chegarEAbrir(row, "link", null, true);
       var firme = true;
       var soltar = function () { firme = false; };
