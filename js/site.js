@@ -36,6 +36,11 @@
     fbq.loaded = true;
     fbq.version = "2.0";
     fbq.queue = [];
+    /* sem PageView automático a cada troca de endereço: o fbevents.js
+       embrulha history.replaceState e contaria uma visita nova a cada
+       painel aberto ou fechado (#dot, #porta). A carga da página continua
+       contando uma vez, e a abertura de painel segue como ViewContent. */
+    fbq.disablePushState = true;
 
     var s = document.createElement("script");
     s.async = true;
@@ -433,8 +438,12 @@
      linha no lugar. Só roda se ficou longe (>8px).
 
      Se a pessoa toca, rola ou tecla no meio do caminho, a página é dela:
-     a linha abre onde estiver e nada rola de novo. Os gestos que acionaram
-     o link aconteceram antes destes ouvintes existirem.
+     a linha abre onde estiver e nada rola de novo. Se o dedo ou o mouse
+     aperta OUTRA linha ou link, a chegada morre ali mesmo, antes do click,
+     e a rolagem para: senão o painel de destino abria no intervalo entre
+     apertar e soltar e empurrava a linha escolhida para longe do ponteiro.
+     Os gestos que acionaram o link aconteceram antes destes ouvintes
+     existirem.
 
      seco = salto e abertura imediatos, sem coreografia: é o caso de quem
      chega pelo endereço (a página já abre cortada no trabalho) e de quem
@@ -452,7 +461,14 @@
     }
     var largou = false;
     var GESTOS = ["touchstart", "wheel", "keydown", "mousedown"];
-    var desistir = function () { largou = true; };
+    var desistir = function (e) {
+      largou = true;
+      var t = e && e.target;
+      if ((e.type === "mousedown" || e.type === "touchstart") && t && t.closest && t.closest(".row, a")) {
+        vezDaChegada++;
+        saltoSeco(window.pageYOffset || 0);
+      }
+    };
     var soltarGestos = function () {
       GESTOS.forEach(function (ev) { window.removeEventListener(ev, desistir); });
     };
@@ -537,6 +553,19 @@
         abrirLinha(row, "busca", true);
       });
     }
+  });
+
+  /* a troca de idioma leva junto o trabalho aberto: os ids dos painéis são
+     iguais nas duas páginas, então /en/#dot abre a mesma linha. O href é
+     montado na hora do uso (clique, toque, teclado, prévia do link) e só
+     viaja hash que corresponde a uma linha; o de seção muda de nome por
+     idioma (#sobre/#about) e fica de fora. */
+  Array.prototype.forEach.call(document.querySelectorAll(".lang a.lang-bt[href]"), function (a) {
+    var base = a.getAttribute("href").split("#")[0];
+    var ajusta = function () { a.setAttribute("href", base + (linhaDoHash() ? location.hash : "")); };
+    ["click", "focus", "pointerenter", "touchstart"].forEach(function (ev) {
+      a.addEventListener(ev, ajusta, { passive: true });
+    });
   });
 
   /* faixa "Exibido em" (e qualquer link com data-alvo): cada canal leva à
